@@ -1,0 +1,146 @@
+{
+  "categories": [
+    {
+      "id": "stare-misto",
+      "img": "/products/product1.jpg",
+      "name": "ТРОТУАРНА БРУКІВКА \"СТАРЕ МІСТО\"",
+      "products": [
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorStandart",
+          "price": "455 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorStandart",
+          "price": "435 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorMix",
+          "price": "630 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorMix",
+          "price": "580 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorUltra",
+          "price": "530 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorUltra",
+          "price": "485 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        }
+      ]
+    },
+    {
+      "id": "trotuarna-brukivka",
+      "img": "/products/product-sraka.jpg",
+      "name": "ТРОТУАРНА БРУКІВКА \"Цегла\"",
+      "products": [
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorStandart",
+          "price": "455 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorStandart",
+          "price": "435 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorMix",
+          "price": "630 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorMix",
+          "price": "580 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorUltra",
+          "price": "530 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorUltra",
+          "price": "485 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        }
+      ]
+    },
+    {
+      "id": "brukivka-modern",
+      "img": "/products/product-hui.jpg",
+      "name": "ТРОТУАРНА БРУКІВКА \"Модерн\"",
+      "products": [
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorStandart",
+          "price": "455 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 40 мм ColorStandart",
+          "price": "435 грн",
+          "size": "40/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        },
+        {
+          "application": "пішохідна зона, легковий транспорт",
+          "img": "/products/product-hui.jpg",
+          "name": "Тротуарна бруківка “Старе місто” 60 мм ColorMix",
+          "price": "630 грн",
+          "size": "60/180×120 мм",
+          "standard": "ДСТУ Б EN 1338:2016"
+        }
+      ]
+    }
+  ],
+  "title": "Продукція"
+}

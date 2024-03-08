@@ -1,0 +1,64 @@
+{
+    "default": {
+        "applicationLinks": {
+            "account": "Аккаунт",
+            "booking": "Бронювання",
+            "business": "Бізнес",
+            "catalog": "Каталог",
+            "clients": "Клієнти",
+            "dashboard": "Головна",
+            "employees": "Працівники",
+            "entries": "Записи",
+            "object": "Обʼєкт",
+            "people": "Люди"
+        },
+        "forms": {
+            "actions": {
+                "cancel": "Відмінити зміни",
+                "create": "Створити",
+                "resetPass": "Надіслати",
+                "save": "Зберегти",
+                "signIn": "Увійти",
+                "signUp": "Зареєструватися",
+                "submit": "Підтвердити"
+            },
+            "labels": {
+                "confirmNewPassword": "Підтвердження пароля",
+                "currentPassword": "Поточний пароль",
+                "dob": "Дата народження",
+                "email": "E-mail",
+                "firstName": "Ім'я",
+                "lastName": "Прізвище",
+                "newPassword": "Новий пароль",
+                "password": "Пароль",
+                "phone": "Телефон",
+                "role": "Роль",
+                "roleName": "Назва ролі",
+                "services": "Виберіть доступні послуги для юзера",
+                "sex": "Стать",
+                "source": "Джерело"
+            },
+            "placeholders": {
+                "roles": "Оберіть ролі",
+                "services": "Оберіть послуги"
+            }
+        }
+    },
+    "formValidation": {
+        "confirmPassword": "Паролі мають збігатись",
+        "email": "Введіть валідну емейл адресу",
+        "required": "Поле обов'язкове"
+    },
+    "requestErrors": {
+        "signIn": {
+            "invalid": {
+                "description": "Перевірте дані та спробуйте ще раз",
+                "title": "Помилка входу"
+            },
+            "unknownError": {
+                "description": "Зверніться до служби підтримки",
+                "title": "Помилка входу"
+            }
+        }
+    }
+}

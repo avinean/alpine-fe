@@ -1,0 +1,15 @@
+{
+  "logo": "/logo.jpg",
+  "phones": [
+    {
+      "location": "Київ",
+      "phone": "+380 63 401 1986"
+    }
+  ],
+  "sites": [
+    {
+      "address": "https://wooden-dreamhouse.com.ua/",
+      "name": "wooden-dreamhouse.com.ua"
+    }
+  ]
+}
