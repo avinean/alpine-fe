@@ -26,7 +26,7 @@ const { data } = useAsyncData(() => get({ categories: [+route.params.slug], publ
         :key="product.title"
         class="flex flex-col gap-2 bg-white p-2 divide-y"
       >
-        <base-image :src="product.image" :alt="product.title" class="object-cover aspect-square" />
+        <base-image :src="product.image" :alt="product.title" class="object-cover w-full aspect-[1/1]" width="100" height="100" />
         <div class="border-b-1 font-bold">
           {{ product.title }}
         </div>

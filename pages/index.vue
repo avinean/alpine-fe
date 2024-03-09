@@ -43,7 +43,7 @@ const { data: categories } = useAsyncData(
         :key="category.title"
         class="flex flex-col gap-2 bg-white p-2 relative divide-y"
       >
-        <base-image :src="category.image" :alt="category.title" class="object-cover aspect-square" />
+        <base-image :src="category.image" :alt="category.title" class="object-cover aspect-[1/1]" />
         <div class="border-b-1 font-bold">
           {{ category.title }}
         </div>
