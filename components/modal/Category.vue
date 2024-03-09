@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { useCategoryRepository } from '~/composables/useCategoryRepository';
-import { usePhoto } from '~/composables/usePhoto';
+import { useCategoryRepository } from '~/composables/useCategoryRepository'
+import { usePhoto } from '~/composables/usePhoto'
 import type { CategoryEntity } from '~/types/entities'
 
 const props = defineProps<{
-  brandId: number,
   preset?: CategoryEntity | null
 }>()
 const emit = defineEmits<{
@@ -12,9 +11,8 @@ const emit = defineEmits<{
 }>()
 
 defineExpose({
-  title: props.preset?.id ? "Змінити категорію" : "Додати категорію",
+  title: props.preset?.id ? 'Змінити категорію' : 'Додати категорію',
 })
-
 
 const { add, edit } = useCategoryRepository()
 const { photo, add: addPhoto } = usePhoto(props.preset?.image)
@@ -25,13 +23,16 @@ const state: Partial<CategoryEntity> = reactive({
   title: props.preset?.title,
   image: props.preset?.image,
 })
+const brand = ref<number>()
 
 function validate(state: CategoryEntity) {
   const errors = []
   if (!state.description)
-    errors.push({ path: 'description', message: "Обовʼязкове поле" })
+    errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
-    errors.push({ path: 'title', message: "Обовʼязкове поле" })
+    errors.push({ path: 'title', message: 'Обовʼязкове поле' })
+  if (!props.preset?.id && !brand.value)
+    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
 
   return errors
 }
@@ -43,12 +44,12 @@ async function onCreateOrUpdate() {
   const data = {
     ...state,
     image,
-  } as  CategoryEntity
+  } as CategoryEntity
 
   if (props.preset?.id)
     await edit(props.preset.id, data)
   else
-    await add(props.brandId, data)
+    await add(brand.value!, data)
 
   emit('submit')
 }
@@ -67,6 +68,9 @@ async function onCreateOrUpdate() {
         :src="state.image"
         @change="photo = $event"
       />
+      <UFormGroup v-if="preset" label="Бренди" name="brand" class="w-40">
+        <UseBrandSelector v-model="brand" class="w-full" />
+      </UFormGroup>
       <UFormGroup
         label="Назва"
         name="title"

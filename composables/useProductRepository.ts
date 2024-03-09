@@ -1,8 +1,8 @@
 import type { ProductEntity } from '~/types/entities'
 
 export const useProductRepository = createGlobalState(() => {
-  function get(categoryId: number) {
-    return $api<ProductEntity[]>(`/product/${categoryId}`)
+  function get(query: { categories: number[], published?: boolean }) {
+    return $api<ProductEntity[]>(`/product`, { query })
   }
 
   function add(categoryId: number, body: Partial<ProductEntity>) {
@@ -37,6 +37,6 @@ export const useProductRepository = createGlobalState(() => {
     edit,
     publish,
     draft,
-    archive
+    archive,
   }
 })

@@ -1,8 +1,12 @@
 import type { CategoryEntity } from '~/types/entities'
 
 export const useCategoryRepository = createGlobalState(() => {
-  function get(brandId: number) {
-    return $api<CategoryEntity[]>(`/category/${brandId}`)
+  function get(query: { brands: number[], published?: boolean }) {
+    return $api<CategoryEntity[]>(`/category`, { query })
+  }
+
+  function getOne(categoryId: number) {
+    return $api<CategoryEntity>(`/category/${categoryId}`)
   }
 
   function add(brandId: number, body: Partial<CategoryEntity>) {
@@ -33,10 +37,11 @@ export const useCategoryRepository = createGlobalState(() => {
 
   return {
     get,
+    getOne,
     add,
     edit,
     publish,
     draft,
-    archive
+    archive,
   }
 })

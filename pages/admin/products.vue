@@ -1,72 +1,78 @@
 <script setup lang="ts">
-import { ModalProduct} from '#components'
-import type { CategoryEntity, ProductEntity } from '~/types/entities';
-import  { VisibilityStatus } from '~/types/enums';
+import { ModalProduct } from '#components'
+import type { BrandEntity, CategoryEntity, ProductEntity } from '~/types/entities'
+import { VisibilityStatus } from '~/types/enums'
+
 const modalStore = useModalStore()
-
 const router = useRouter()
+const category = router.options.history.state as unknown as CategoryEntity
+console.log(category, category.brand)
+const selectedBrands = ref<number[]>([
+  ...(category?.brand?.id ? [category?.brand?.id] : []),
+])
+const selectedCategories = ref<number[]>([
+  ...(category?.id ? [category?.id] : []),
+])
 
-const category = computed(() => router.options.history.state as unknown as CategoryEntity)
-
-const {get, publish, draft, archive } = useProductRepository()
-const {data, pending, refresh} = useAsyncData(() => get(category.value.id))
+const { get, publish, draft, archive } = useProductRepository()
+const { data, refresh } = useAsyncData(
+  () => get({ categories: selectedCategories.value }),
+  { watch: [selectedCategories] },
+)
 
 function callModal(preset?: ProductEntity) {
   modalStore.open(ModalProduct, {
-    categoryId: category.value.id,
     preset,
-    onSubmit() { refresh() }
+    onSubmit() { refresh() },
   })
 }
 
 const columns = [
-{
-  key: 'status',
-  label: 'Статус',
-},
-{
-  key: 'title',
-  label: 'Назва',
-},
-{
-  key: 'description',
-  label: 'Опис',
-},
-{
-  key: 'price',
-  label: 'Ціна',
-},
-{
-  key: 'image',
-  label: 'Зображення',
-},
-{
-  key: 'createdAt',
-  label: 'Створено',
-},
-{
-  key: 'updatedAt',
-  label: 'Оновлено',
-},
-{
-  key: 'actions',
-  label: 'Дії',
-},
+  {
+    key: 'status',
+    label: 'Статус',
+  },
+  {
+    key: 'title',
+    label: 'Назва',
+  },
+  {
+    key: 'description',
+    label: 'Опис',
+  },
+  {
+    key: 'price',
+    label: 'Ціна',
+  },
+  {
+    key: 'image',
+    label: 'Зображення',
+  },
+  {
+    key: 'createdAt',
+    label: 'Створено',
+  },
+  {
+    key: 'updatedAt',
+    label: 'Оновлено',
+  },
+  {
+    key: 'actions',
+    label: 'Дії',
+  },
 ]
-
 </script>
 
 <template>
   <main class="space-y-2 py-2">
     <div class="flex justify-between items-center">
       <div class="flex gap-2 p-2">
-        <div>
-          <base-image :src="category.image" width="100" height="100"/>
-        </div>
-        <div>
-          <h1>Категорія: <b>{{  category.title }}</b></h1>
-          <h2>{{  category.description }}</h2>
-        </div>
+        <UFormGroup label="Бренди" class="w-40">
+          <UseBrandSelector v-model="selectedBrands" multiple />
+        </UFormGroup>
+        <UFormGroup label="Категорії" class="w-40">
+          <UseCategorySelector v-model="selectedCategories" :brands="selectedBrands" multiple />
+        </UFormGroup>
       </div>
       <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
         Додати продукт
@@ -76,13 +82,13 @@ const columns = [
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик
-        </UBadge> 
+        </UBadge>
         <UBadge v-else-if="row.status === VisibilityStatus.Archived" color="black">
           Архівовано
         </UBadge>
         <UBadge v-else variant="subtle" color="green">
           Опублікований
-        </UBadge> 
+        </UBadge>
       </template>
       <template #title-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
@@ -100,16 +106,16 @@ const columns = [
         </div>
       </template>
       <template #image-data="{ row }">
-        <base-image :src="row.image" width="80" height="80"/>
+        <base-image :src="row.image" width="80" height="80" />
       </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.createdAt"/>
+          <base-datetime :date="row.createdAt" />
         </div>
       </template>
       <template #updatedAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.updatedAt"/>
+          <base-datetime :date="row.updatedAt" />
         </div>
       </template>
       <template #actions-data="{ row }">
@@ -127,7 +133,7 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Draft ? publish(row.id) : draft(row.id))
                   refresh()
-                }
+                },
               },
             ],
             [
@@ -137,9 +143,9 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Archived ? draft(row.id) : archive(row.id))
                   refresh()
-                }
-              }
-            ]
+                },
+              },
+            ],
           ]"
         >
           <UButton color="gray" variant="ghost" icon="i-heroicons-adjustments-horizontal-solid" />

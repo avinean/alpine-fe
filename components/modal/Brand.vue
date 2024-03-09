@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useCategoryRepository } from '~/composables/useCategoryRepository';
 import { usePhoto } from '~/composables/usePhoto';
 import type { BrandEntity } from '~/types/entities'
 

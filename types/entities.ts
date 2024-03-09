@@ -1,4 +1,4 @@
-import type { VisibilityStatus } from "./enums"
+import type { VisibilityStatus } from './enums'
 
 export interface BrandEntity {
   id: number
@@ -27,6 +27,9 @@ export interface ProductEntity {
   id: number
   title: string
   description: string
+  size: string
+  application: string
+  standart: string
   image: string
   price: number
   createdAt: Date

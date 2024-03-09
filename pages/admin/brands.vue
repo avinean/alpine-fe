@@ -1,58 +1,56 @@
 <script setup lang="ts">
-import {ModalBrand} from '#components'
-import type { BrandEntity } from '~/types/entities';
-import  { VisibilityStatus } from '~/types/enums';
+import { ModalBrand } from '#components'
+import type { BrandEntity } from '~/types/entities'
+import { VisibilityStatus } from '~/types/enums'
+
 const modalStore = useModalStore()
 
-const route = useRoute()
 const router = useRouter()
-const {get, publish, draft, archive } = useBrandRepository()
-const {data, pending, refresh} = useAsyncData(() => get())
+const { get, publish, draft, archive } = useBrandRepository()
+const { data, refresh } = useAsyncData(() => get())
 
 function callModal(preset?: BrandEntity) {
   modalStore.open(ModalBrand, {
     preset,
-    onSubmit() { refresh() }
+    onSubmit() { refresh() },
   })
 }
 
 const columns = [
-{
-  key: 'status',
-  label: 'Статус',
-},
-{
-  key: 'title',
-  label: 'Назва',
-},
-{
-  key: 'description',
-  label: 'Опис',
-},
-{
-  key: 'image',
-  label: 'Зображення',
-},
-{
-  key: 'createdAt',
-  label: 'Створено',
-},
-{
-  key: 'updatedAt',
-  label: 'Оновлено',
-},
-{
-  key: 'actions',
-  label: 'Дії',
-},
+  {
+    key: 'status',
+    label: 'Статус',
+  },
+  {
+    key: 'title',
+    label: 'Назва',
+  },
+  {
+    key: 'description',
+    label: 'Опис',
+  },
+  {
+    key: 'image',
+    label: 'Зображення',
+  },
+  {
+    key: 'createdAt',
+    label: 'Створено',
+  },
+  {
+    key: 'updatedAt',
+    label: 'Оновлено',
+  },
+  {
+    key: 'actions',
+    label: 'Дії',
+  },
 ]
-
 </script>
 
 <template>
   <main class="space-y-2 py-2">
-    <div class="flex justify-between items-center">
-      <h1>Категорії продуктів</h1>
+    <div class="flex justify-end items-center">
       <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
         Додати бренд
       </UButton>
@@ -61,13 +59,13 @@ const columns = [
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик
-        </UBadge> 
+        </UBadge>
         <UBadge v-else-if="row.status === VisibilityStatus.Archived" color="black">
           Архівовано
         </UBadge>
         <UBadge v-else variant="subtle" color="green">
           Опублікований
-        </UBadge> 
+        </UBadge>
       </template>
       <template #title-data="{ row }">
         <UTooltip text="Перейти на сторінку товарів категорії">
@@ -82,16 +80,16 @@ const columns = [
         </div>
       </template>
       <template #image-data="{ row }">
-        <base-image :src="row.image" width="80" height="80"/>
+        <base-image :src="row.image" width="80" height="80" />
       </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.createdAt"/>
+          <base-datetime :date="row.createdAt" />
         </div>
       </template>
       <template #updatedAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.updatedAt"/>
+          <base-datetime :date="row.updatedAt" />
         </div>
       </template>
       <template #actions-data="{ row }">
@@ -109,7 +107,7 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Draft ? publish(row.id) : draft(row.id))
                   refresh()
-                }
+                },
               },
             ],
             [
@@ -119,9 +117,9 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Archived ? draft(row.id) : archive(row.id))
                   refresh()
-                }
-              }
-            ]
+                },
+              },
+            ],
           ]"
         >
           <UButton color="gray" variant="ghost" icon="i-heroicons-adjustments-horizontal-solid" />

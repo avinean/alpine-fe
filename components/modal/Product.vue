@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { usePhoto } from '~/composables/usePhoto';
+import { usePhoto } from '~/composables/usePhoto'
 import type { ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
-  categoryId: number,
   preset?: ProductEntity | null
 }>()
 const emit = defineEmits<{
@@ -11,7 +10,7 @@ const emit = defineEmits<{
 }>()
 
 defineExpose({
-  title: props.preset?.id ? "Змінити продукт" : "Додати продукт",
+  title: props.preset?.id ? 'Змінити продукт' : 'Додати продукт',
 })
 
 const { add, edit } = useProductRepository()
@@ -22,17 +21,32 @@ const state: Partial<ProductEntity> = reactive({
   description: props.preset?.description,
   title: props.preset?.title,
   image: props.preset?.image,
-  price: props.preset?.price
+  price: props.preset?.price,
+  application: props.preset?.application,
+  size: props.preset?.size,
+  standart: props.preset?.standart,
 })
+const brand = ref<number>()
+const category = ref<number>()
 
 function validate(state: ProductEntity) {
   const errors = []
   if (!state.description)
-    errors.push({ path: 'description', message: "Обовʼязкове поле" })
+    errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
-    errors.push({ path: 'title', message: "Обовʼязкове поле" })
+    errors.push({ path: 'title', message: 'Обовʼязкове поле' })
   if (!state.price)
-    errors.push({ path: 'price', message: "Обовʼязкове поле" })
+    errors.push({ path: 'price', message: 'Обовʼязкове поле' })
+  if (!brand.value)
+    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
+  if (!category.value)
+    errors.push({ path: 'category', message: 'Обовʼязкове поле' })
+  if (!state.application)
+    errors.push({ path: 'application', message: 'Обовʼязкове поле' })
+  if (!state.size)
+    errors.push({ path: 'size', message: 'Обовʼязкове поле' })
+  if (!state.standart)
+    errors.push({ path: 'standart', message: 'Обовʼязкове поле' })
 
   return errors
 }
@@ -44,12 +58,12 @@ async function onCreateOrUpdate() {
   const data = {
     ...state,
     image,
-  } as  ProductEntity
+  } as ProductEntity
 
   if (props.preset?.id)
     await edit(props.preset.id, data)
   else
-    await add(props.categoryId, data)
+    await add(category.value!, data)
 
   emit('submit')
 }
@@ -68,6 +82,14 @@ async function onCreateOrUpdate() {
         :src="state.image"
         @change="photo = $event"
       />
+      <template v-if="!preset">
+        <UFormGroup label="Бренди" name="brand" class="w-40">
+          <UseBrandSelector v-model="brand" />
+        </UFormGroup>
+        <UFormGroup label="Категорії" name="category" class="w-40">
+          <UseCategorySelector v-model="category" :brands="brand ? [brand] : []" />
+        </UFormGroup>
+      </template>
       <UFormGroup
         label="Назва"
         name="title"
@@ -81,6 +103,27 @@ async function onCreateOrUpdate() {
         required
       >
         <UInput v-model="state.description" />
+      </UFormGroup>
+      <UFormGroup
+        label="Застосування"
+        name="application"
+        required
+      >
+        <UInput v-model="state.application" />
+      </UFormGroup>
+      <UFormGroup
+        label="Розмір"
+        name="size"
+        required
+      >
+        <UInput v-model="state.size" />
+      </UFormGroup>
+      <UFormGroup
+        label="Стандарт"
+        name="standart"
+        required
+      >
+        <UInput v-model="state.standart" />
       </UFormGroup>
       <UFormGroup
         label="Ціна"

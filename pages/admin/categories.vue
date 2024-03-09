@@ -1,84 +1,83 @@
 <script setup lang="ts">
-import {ModalCategory} from '#components'
-import type { BrandEntity, CategoryEntity } from '~/types/entities';
-import  { VisibilityStatus } from '~/types/enums';
-const modalStore = useModalStore()
+import { ModalCategory } from '#components'
+import type { CategoryEntity } from '~/types/entities'
+import { VisibilityStatus } from '~/types/enums'
 
+const { open } = useModalStore()
 const router = useRouter()
+const { get, publish, draft, archive } = useCategoryRepository()
 
-const brand = computed(() => router.options.history.state as unknown as BrandEntity)
+const selectedBrands = ref<number[]>([
+  ...(router.options.history.state.id ? [+router.options.history.state.id] : []),
+])
 
-const {get, publish, draft, archive } = useCategoryRepository()
-const {data, pending, refresh} = useAsyncData(() => get(brand.value.id))
+const { data: categories, refresh } = useAsyncData(
+  () => get({ brands: selectedBrands.value }),
+  { watch: [selectedBrands] },
+)
 
 function callModal(preset?: CategoryEntity) {
-  modalStore.open(ModalCategory, {
-    brandId: brand.value.id,
+  open(ModalCategory, {
     preset,
-    onSubmit() { refresh() }
+    onSubmit() { refresh() },
   })
 }
 
 const columns = [
-{
-  key: 'status',
-  label: 'Статус',
-},
-{
-  key: 'title',
-  label: 'Назва',
-},
-{
-  key: 'description',
-  label: 'Опис',
-},
-{
-  key: 'image',
-  label: 'Зображення',
-},
-{
-  key: 'createdAt',
-  label: 'Створено',
-},
-{
-  key: 'updatedAt',
-  label: 'Оновлено',
-},
-{
-  key: 'actions',
-  label: 'Дії',
-},
+  {
+    key: 'status',
+    label: 'Статус',
+  },
+  {
+    key: 'title',
+    label: 'Назва',
+  },
+  {
+    key: 'description',
+    label: 'Опис',
+  },
+  {
+    key: 'image',
+    label: 'Зображення',
+  },
+  {
+    key: 'createdAt',
+    label: 'Створено',
+  },
+  {
+    key: 'updatedAt',
+    label: 'Оновлено',
+  },
+  {
+    key: 'actions',
+    label: 'Дії',
+  },
 ]
-
 </script>
 
 <template>
   <main class="space-y-2 py-2">
     <div class="flex justify-between items-center">
       <div class="flex gap-2 p-2">
-        <div>
-          <base-image :src="brand.image" width="100" height="100"/>
-        </div>
-        <div>
-          <h1>Категорія: <b>{{  brand.title }}</b></h1>
-          <h2>{{  brand.description }}</h2>
-        </div>
+        <UFormGroup label="Бренди" class="w-40">
+          <UseBrandSelector v-model="selectedBrands" multiple />
+        </UFormGroup>
       </div>
       <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
         Додати категорію
       </UButton>
     </div>
-    <UTable v-if="data" :rows="data" :columns="columns">
+    <UTable v-if="categories" :rows="categories" :columns="columns">
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик
-        </UBadge> 
+        </UBadge>
         <UBadge v-else-if="row.status === VisibilityStatus.Archived" color="black">
           Архівовано
         </UBadge>
         <UBadge v-else variant="subtle" color="green">
           Опублікований
-        </UBadge> 
+        </UBadge>
       </template>
       <template #title-data="{ row }">
         <UTooltip text="Перейти на сторінку товарів категорії">
@@ -93,16 +92,16 @@ const columns = [
         </div>
       </template>
       <template #image-data="{ row }">
-        <base-image :src="row.image" width="80" height="80"/>
+        <base-image :src="row.image" width="80" height="80" />
       </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.createdAt"/>
+          <base-datetime :date="row.createdAt" />
         </div>
       </template>
       <template #updatedAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
-          <base-datetime :date="row.updatedAt"/>
+          <base-datetime :date="row.updatedAt" />
         </div>
       </template>
       <template #actions-data="{ row }">
@@ -120,7 +119,7 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Draft ? publish(row.id) : draft(row.id))
                   refresh()
-                }
+                },
               },
             ],
             [
@@ -130,9 +129,9 @@ const columns = [
                 click: async () => {
                   await (row.status === VisibilityStatus.Archived ? draft(row.id) : archive(row.id))
                   refresh()
-                }
-              }
-            ]
+                },
+              },
+            ],
           ]"
         >
           <UButton color="gray" variant="ghost" icon="i-heroicons-adjustments-horizontal-solid" />
