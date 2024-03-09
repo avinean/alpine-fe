@@ -2,6 +2,6 @@ import type { NuxtConfig } from 'nuxt/schema'
 
 export default {
   '/api/**': {
-    proxy: 'http://localhost:5050/api/**',
+    proxy: `${process.env.API_BASE_URL}/api/**`,
   },
 } satisfies NuxtConfig['routeRules']

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'admin',
-  redirect: '/admin/brands'
+  redirect: '/admin/brands',
+  middleware: 'requires-auth'
 })
 </script>
 
