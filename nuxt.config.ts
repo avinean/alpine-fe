@@ -1,5 +1,4 @@
 import modules from './config/modules'
-import image from './config/image'
 import app from './config/app'
 import runtimeConfig from './config/runtimeConfig'
 import pinia from './config/pinia'
@@ -11,7 +10,6 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
   modules,
-  image,
   app,
   runtimeConfig,
   devtools: { enabled: false },
