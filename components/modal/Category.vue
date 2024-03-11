@@ -83,7 +83,7 @@ async function onCreateOrUpdate() {
         name="description"
         required
       >
-        <UInput v-model="state.description" />
+        <UTextarea v-model="state.description" />
       </UFormGroup>
 
       <UButton

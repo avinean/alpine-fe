@@ -22,12 +22,11 @@ const { data: categories } = useAsyncData(
   <div class="divide-y">
     <nav
       v-if="brands"
-      class="flex md:grid gap-4 py-2 overflow-x-auto"
-      :style="{ gridTemplateColumns: `repeat(${brands.length}, 1fr)` }"
+      class="flex justify-around gap-4 py-2 overflow-x-auto"
     >
       <button
         v-for="_brand in brands" :key="_brand.id"
-        class="flex gap-2 p-2 items-center"
+        class="flex gap-2 p-2 items-center whitespace-nowrap"
         :class="{ 'bg-white': brand === _brand }"
         @click="brand = _brand"
       >
@@ -35,7 +34,7 @@ const { data: categories } = useAsyncData(
         {{ _brand.title }}
       </button>
     </nav>
-    <div v-if="brand" class="flex-col md:flex-row flex gap-2 justify-between py-2">
+    <div v-if="brand" class="flex-col md:flex-row flex gap-2 items-start justify-between py-2">
       <div class="space-y-2">
         <div class="text-2xl">
           Виробник {{ brand.title }}
