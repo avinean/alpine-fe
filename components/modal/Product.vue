@@ -13,8 +13,9 @@ defineExpose({
   title: props.preset?.id ? 'Змінити продукт' : 'Додати продукт',
 })
 
+const toast = useToast()
 const { add, edit } = useProductRepository()
-const { photo, add: addPhoto } = usePhoto(props.preset?.image)
+const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
 
 const loading = ref(false)
 const state: Partial<ProductEntity> = reactive({
@@ -31,7 +32,7 @@ const category = ref<number>()
 
 function validate(state: ProductEntity) {
   const errors = []
-  
+
   if (!brand.value && !props.preset)
     errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
   if (!category.value && !props.preset)
@@ -48,26 +49,44 @@ function validate(state: ProductEntity) {
     errors.push({ path: 'size', message: 'Обовʼязкове поле' })
   if (!state.standart)
     errors.push({ path: 'standart', message: 'Обовʼязкове поле' })
-  
+
   return errors
 }
 
 async function onCreateOrUpdate() {
   loading.value = true
-  const image = await addPhoto()
+  try {
+    await addPhoto()
+  }
+  catch (error: any) {
+    toast.add({
+      title: 'Помилка завантаження фото',
+      description: error.message,
+    })
+  }
 
   const data = {
     ...state,
-    image,
+    image: url.value,
   } as ProductEntity
 
-  if (props.preset?.id)
-    await edit(props.preset.id, data)
-  else
-    await add(category.value!, data)
+  try {
+    if (props.preset?.id)
+      await edit(props.preset.id, data)
+    else
+      await add(category.value!, data)
 
-  loading.value = false
-  emit('submit')
+    emit('submit')
+  }
+  catch (error: any) {
+    toast.add({
+      title: 'Не вдалось додати/змінити продукт',
+      description: error.message,
+    })
+  }
+  finally {
+    loading.value = false
+  }
 }
 </script>
 

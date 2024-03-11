@@ -1,8 +1,9 @@
 export function usePhoto(name?: string) {
   const toast = useToast()
   const photo = ref()
+  const url = ref<string>()
 
-  function add() {
+  async function add() {
     if (photo.value) {
       try {
         const body = new FormData()
@@ -13,10 +14,12 @@ export function usePhoto(name?: string) {
         const endpoint = name ? `/util/photo/${encodeURIComponent(name)}` : '/util/photo'
         const method = name ? 'PUT' : 'POST'
 
-        return $api<string>(endpoint, {
+        url.value = await $api<string>(endpoint, {
           method,
           body,
         })
+
+        return url.value
       }
       catch (e) {
         toast.add({
@@ -29,6 +32,7 @@ export function usePhoto(name?: string) {
 
   return {
     photo,
+    url,
     add,
   }
 }

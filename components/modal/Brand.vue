@@ -14,8 +14,9 @@ defineExpose({
   title: props.preset?.id ? 'Змінити бренд' : 'Додати бренд',
 })
 
+const toast = useToast()
 const { add, edit } = useBrandRepository()
-const { photo, add: addPhoto } = usePhoto(props.preset?.image)
+const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
 
 const isMaterialBrand = ref(false)
 
@@ -28,20 +29,40 @@ const state: Partial<BrandEntity> = reactive({
 
 async function onCreateOrUpdate() {
   loading.value = true
-  const image = await addPhoto()
+  try {
+    await addPhoto()
+  }
+  catch (error: any) {
+    toast.add({
+      title: 'Помилка завантаження фото',
+      description: error.message,
+    })
+  }
 
   const data = {
     ...state,
     type: isMaterialBrand.value ? BrandType.Material : BrandType.Product,
-    image,
+    image: url.value,
   } as BrandEntity
 
-  if (props.preset?.id)
-    await edit(props.preset.id, data)
-  else
-    await add(data)
-  loading.value = false
-  emit('submit')
+  try {
+    if (props.preset?.id)
+      await edit(props.preset.id, data)
+    else
+      await add(data)
+
+    emit('submit')
+  }
+  catch (error: any) {
+    console.log(error)
+    toast.add({
+      title: 'Не вдалось додати/змінити бренд',
+      description: error.message,
+    })
+  }
+  finally {
+    loading.value = false
+  }
 }
 </script>
 

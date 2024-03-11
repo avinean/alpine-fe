@@ -14,8 +14,9 @@ defineExpose({
   title: props.preset?.id ? 'Змінити категорію' : 'Додати категорію',
 })
 
+const toast = useToast()
 const { add, edit } = useCategoryRepository()
-const { photo, add: addPhoto } = usePhoto(props.preset?.image)
+const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
 
 const loading = ref(false)
 const state: Partial<CategoryEntity> = reactive({
@@ -39,19 +40,37 @@ function validate(state: CategoryEntity) {
 
 async function onCreateOrUpdate() {
   loading.value = true
-  const image = await addPhoto()
+  try {
+    await addPhoto()
+  }
+  catch (error: any) {
+    toast.add({
+      title: 'Помилка завантаження фото',
+      description: error.message,
+    })
+  }
 
   const data = {
     ...state,
-    image,
+    image: url.value,
   } as CategoryEntity
 
-  if (props.preset?.id)
-    await edit(props.preset.id, data)
-  else
-    await add(brand.value!, data)
-  loading.value = false
-  emit('submit')
+  try {
+    if (props.preset?.id)
+      await edit(props.preset.id, data)
+    else
+      await add(brand.value!, data)
+    emit('submit')
+  }
+  catch (error: any) {
+    toast.add({
+      title: 'Не вдалось додати/змінити категорію',
+      description: error.message,
+    })
+  }
+  finally {
+    loading.value = false
+  }
 }
 </script>
 
