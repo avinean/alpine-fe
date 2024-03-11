@@ -10,7 +10,7 @@ export function usePhoto(name?: string) {
 
         photo.value = null
 
-        const endpoint = name ? `/util/photo/${name}` : '/util/photo'
+        const endpoint = name ? `/util/photo/${encodeURIComponent(name)}` : '/util/photo'
         const method = name ? 'PUT' : 'POST'
 
         return $api<string>(endpoint, {

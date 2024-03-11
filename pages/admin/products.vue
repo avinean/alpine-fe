@@ -5,8 +5,12 @@ import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
 const router = useRouter()
+const statuses = ref<VisibilityStatus[]>([
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+])
 const category = router.options.history.state as unknown as CategoryEntity
-console.log(category, category.brand)
+
 const selectedBrands = ref<number[]>([
   ...(category?.brand?.id ? [category?.brand?.id] : []),
 ])
@@ -16,8 +20,8 @@ const selectedCategories = ref<number[]>([
 
 const { get, publish, draft, archive } = useProductRepository()
 const { data, refresh } = useAsyncData(
-  () => get({ categories: selectedCategories.value }),
-  { watch: [selectedCategories] },
+  () => get({ categories: selectedCategories.value, statuses: statuses.value }),
+  { watch: [selectedCategories, statuses] },
 )
 
 function callModal(preset?: ProductEntity) {
@@ -67,6 +71,9 @@ const columns = [
   <main class="space-y-2 py-2">
     <div class="flex justify-between items-center">
       <div class="flex gap-2 p-2">
+        <UFormGroup label="Статуси" class="w-40">
+          <UseStatusSelector v-model="statuses" />
+        </UFormGroup>
         <UFormGroup label="Бренди" class="w-40">
           <UseBrandSelector v-model="selectedBrands" multiple />
         </UFormGroup>

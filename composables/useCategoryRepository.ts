@@ -1,7 +1,8 @@
 import type { CategoryEntity } from '~/types/entities'
+import type { VisibilityStatus } from '~/types/enums'
 
 export const useCategoryRepository = createGlobalState(() => {
-  function get(query: { brands: number[], published?: boolean }) {
+  function get(query: { brands: number[], statuses?: VisibilityStatus[] }) {
     return $api<CategoryEntity[]>(`/category`, { query })
   }
 

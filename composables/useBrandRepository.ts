@@ -1,8 +1,9 @@
 import type { BrandEntity } from '~/types/entities'
+import type { VisibilityStatus } from '~/types/enums'
 
 export const useBrandRepository = createGlobalState(() => {
-  function get() {
-    return $api<BrandEntity[]>('/brand')
+  function get(query?: { statuses?: VisibilityStatus[] }) {
+    return $api<BrandEntity[]>('/brand', { query })
   }
 
   function add(body: Partial<BrandEntity>) {
@@ -37,6 +38,6 @@ export const useBrandRepository = createGlobalState(() => {
     edit,
     publish,
     draft,
-    archive
+    archive,
   }
 })

@@ -5,6 +5,10 @@ import { VisibilityStatus } from '~/types/enums'
 
 const { open } = useModalStore()
 const router = useRouter()
+const statuses = ref<VisibilityStatus[]>([
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+])
 const { get, publish, draft, archive } = useCategoryRepository()
 
 const selectedBrands = ref<number[]>([
@@ -12,8 +16,8 @@ const selectedBrands = ref<number[]>([
 ])
 
 const { data: categories, refresh } = useAsyncData(
-  () => get({ brands: selectedBrands.value }),
-  { watch: [selectedBrands] },
+  () => get({ brands: selectedBrands.value, statuses: statuses.value }),
+  { watch: [selectedBrands, statuses] },
 )
 
 function callModal(preset?: CategoryEntity) {
@@ -59,6 +63,9 @@ const columns = [
   <main class="space-y-2 py-2">
     <div class="flex justify-between items-center">
       <div class="flex gap-2 p-2">
+        <UFormGroup label="Статуси" class="w-40">
+          <UseStatusSelector v-model="statuses" />
+        </UFormGroup>
         <UFormGroup label="Бренди" class="w-40">
           <UseBrandSelector v-model="selectedBrands" multiple />
         </UFormGroup>

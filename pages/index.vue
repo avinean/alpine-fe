@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import type { BrandEntity } from '~/types/entities'
 
-const { data: brands } = await useAsyncData(() => useBrandRepository().get())
-
+const global = useGlobalStore()
+const { data: brands } = await useAsyncData(
+  () => useBrandRepository().get({ statuses: global.statuses }),
+  { watch: [() => global.statuses] },
+)
 const brand = ref<BrandEntity>(brands.value?.[0] as BrandEntity)
 
+watch(brands, () => {
+  brand.value = brands.value?.[0] as BrandEntity
+})
+
 const { data: categories } = useAsyncData(
-  () => useCategoryRepository().get({ brands: [brand.value.id], published: true }),
-  { watch: [brand] },
+  () => useCategoryRepository().get({ brands: [brand.value.id], statuses: global.statuses }),
+  { watch: [brand, () => global.statuses] },
 )
 </script>
 

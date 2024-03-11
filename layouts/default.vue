@@ -1,4 +1,10 @@
 <script setup lang="ts">
+const global = useGlobalStore()
+
+onMounted(() => {
+  global.checkLogin()
+})
+
 const startYear = 2024
 const currentYear = new Date().getFullYear()
 const yearString = startYear === currentYear ? currentYear : `${startYear}-${currentYear}`
@@ -7,6 +13,15 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
 <template>
   <div class="bg-gray-100 min-h-screen flex flex-col">
     <div class="border-b-1 bg-white">
+      <div v-if="global.isLoggedIn" class="flex items-center md:justify-between p-2 bg-gray-300">
+        <nuxt-link to="/admin" class="flex items-center gap-2">
+          <i class="i-heroicons-arrow-left-on-rectangle-20-solid text-2xl text-gray" />
+          Перейти до адмін панелі
+        </nuxt-link>
+        <div class="flex items-center gap-2">
+          Режим попереднього перегляду <UToggle color="primary" v-model="global.isPreview" />
+        </div>
+      </div>
       <div class="container flex items-center justify-center md:justify-between mx-auto p-2">
         <nuxt-link to="/">
           <img src="/logo.jpg" alt="logo" class="h-24">

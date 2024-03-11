@@ -6,8 +6,15 @@ import { VisibilityStatus } from '~/types/enums'
 const modalStore = useModalStore()
 
 const router = useRouter()
+const statuses = ref<VisibilityStatus[]>([
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+])
 const { get, publish, draft, archive } = useBrandRepository()
-const { data, refresh } = useAsyncData(() => get())
+const { data, refresh } = useAsyncData(
+  () => get({ statuses: statuses.value }),
+  { watch: [statuses] },
+)
 
 function callModal(preset?: BrandEntity) {
   modalStore.open(ModalBrand, {
@@ -50,7 +57,10 @@ const columns = [
 
 <template>
   <main class="space-y-2 py-2">
-    <div class="flex justify-end items-center">
+    <div class="flex justify-between items-center">
+        <UFormGroup label="Статуси" class="w-40">
+          <UseStatusSelector v-model="statuses" />
+        </UFormGroup>
       <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
         Додати бренд
       </UButton>
