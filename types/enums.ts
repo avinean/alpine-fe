@@ -3,3 +3,9 @@ export enum VisibilityStatus {
     Published = 'published',
     Archived = 'archived'
 }
+
+
+export enum BrandType {
+  Product = 'product',
+  Material = 'material',
+}

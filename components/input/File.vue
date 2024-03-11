@@ -30,15 +30,7 @@ function handleFileChange(event: any) {
       @change="handleFileChange"
     >
     <base-image
-      v-if="imageUrl"
-      :src="imageUrl"
-      alt="Preview"
-      width="100%"
-      height="100%"
-    />
-    <base-image
-      v-else
-      :src="src"
+      :src="imageUrl || src"
       width="100%"
       height="100%"
     />

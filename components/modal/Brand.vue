@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { usePhoto } from '~/composables/usePhoto';
+import { usePhoto } from '~/composables/usePhoto'
 import type { BrandEntity } from '~/types/entities'
+import { BrandType } from '~/types/enums'
 
 const props = defineProps<{
   preset?: BrandEntity | null
@@ -10,12 +11,13 @@ const emit = defineEmits<{
 }>()
 
 defineExpose({
-  title: props.preset?.id ? "Змінити бренд" : "Додати бренд",
+  title: props.preset?.id ? 'Змінити бренд' : 'Додати бренд',
 })
-
 
 const { add, edit } = useBrandRepository()
 const { photo, add: addPhoto } = usePhoto(props.preset?.image)
+
+const isMaterialBrand = ref(false)
 
 const loading = ref(false)
 const state: Partial<BrandEntity> = reactive({
@@ -24,24 +26,15 @@ const state: Partial<BrandEntity> = reactive({
   image: props.preset?.image,
 })
 
-function validate(state: BrandEntity) {
-  const errors = []
-  if (!state.description)
-    errors.push({ path: 'description', message: "Обовʼязкове поле" })
-  if (!state.title)
-    errors.push({ path: 'title', message: "Обовʼязкове поле" })
-
-  return errors
-}
-
 async function onCreateOrUpdate() {
   loading.value = true
   const image = await addPhoto()
 
   const data = {
     ...state,
+    type: isMaterialBrand.value ? BrandType.Material : BrandType.Product,
     image,
-  } as  BrandEntity
+  } as BrandEntity
 
   if (props.preset?.id)
     await edit(props.preset.id, data)
@@ -55,7 +48,6 @@ async function onCreateOrUpdate() {
 <template>
   <UForm
     :state="state"
-    :validate="validate"
     class="grid gap-2"
     @submit="onCreateOrUpdate"
   >
@@ -66,16 +58,20 @@ async function onCreateOrUpdate() {
         @change="photo = $event"
       />
       <UFormGroup
+        label="Бренд матеріалу"
+        name="isMaterialBrand"
+      >
+        <UCheckbox v-model="isMaterialBrand" />
+      </UFormGroup>
+      <UFormGroup
         label="Назва"
         name="title"
-        required
       >
         <UInput v-model="state.title" />
       </UFormGroup>
       <UFormGroup
         label="Опис"
         name="description"
-        required
       >
         <UTextarea v-model="state.description" />
       </UFormGroup>

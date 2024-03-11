@@ -1,3 +1,9 @@
+<script setup lang="ts">
+defineProps<{
+  src?: string
+}>()
+</script>
+
 <template>
-  <img v-bind="$attrs" :src="$attrs.src?.toString() || '/placeholder.jpg'">
+  <img :src="src || '/placeholder.jpg'">
 </template>

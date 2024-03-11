@@ -1,10 +1,11 @@
-import type { VisibilityStatus } from './enums'
+import type { BrandType, VisibilityStatus } from './enums'
 
 export interface BrandEntity {
   id: number
   title: string
   description: string
   image: string
+  type: BrandType
   createdAt: Date
   updatedAt: Date
   status: VisibilityStatus
