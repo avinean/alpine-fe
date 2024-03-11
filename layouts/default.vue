@@ -14,18 +14,26 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
   <div class="bg-gray-100 min-h-screen flex flex-col">
     <div class="border-b-1 bg-white">
       <div v-if="global.isLoggedIn" class="flex items-center md:justify-between p-2 bg-gray-300">
-        <nuxt-link to="/admin" class="flex items-center gap-2">
+        <ULink to="/admin" class="flex items-center gap-2">
           <i class="i-heroicons-arrow-left-on-rectangle-20-solid text-2xl text-gray" />
           Перейти до адмін панелі
-        </nuxt-link>
+        </ULink>
         <div class="flex items-center gap-2">
-          Режим попереднього перегляду <UToggle color="primary" v-model="global.isPreview" />
+          Режим попереднього перегляду <UToggle v-model="global.isPreview" color="primary" />
         </div>
       </div>
-      <div class="container flex items-center justify-center md:justify-between mx-auto p-2">
-        <nuxt-link to="/">
+      <div class="container flex gap-4 items-center justify-center md:justify-between mx-auto p-2">
+        <ULink to="/">
           <img src="/logo.jpg" alt="logo" class="h-24">
-        </nuxt-link>
+        </ULink>
+        <nav class="flex gap-4">
+          <ULink to="/material" active-class="border-b-2">
+            Матеріали
+          </ULink>
+          <ULink to="/product" active-class="border-b-2">
+            Вироби
+          </ULink>
+        </nav>
         <div class="hidden md:flex gap-4">
           <UseCall />
           <div class="flex gap-2 items-center">
@@ -52,9 +60,9 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
 
     <div class="border-t-1 bg-white">
       <div class="container flex flex-col gap-4 p-2 items-center justify-center mx-auto">
-        <nuxt-link to="/">
+        <ULink to="/">
           <img src="/logo.jpg" alt="logo" class="h-24">
-        </nuxt-link>
+        </ULink>
         <div class="flex gap-2 items-center">
           <div class="grid text-black/70">
             <a href="tel:+380 63 401 1986">

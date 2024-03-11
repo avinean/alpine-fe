@@ -68,7 +68,7 @@ async function onCreateOrUpdate() {
         :src="state.image"
         @change="photo = $event"
       />
-      <UFormGroup v-if="preset" label="Бренди" name="brand" class="w-40">
+      <UFormGroup v-if="!preset" label="Бренди" name="brand" class="w-40">
         <UseBrandSelector v-model="brand" class="w-full" />
       </UFormGroup>
       <UFormGroup

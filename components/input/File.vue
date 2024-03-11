@@ -29,13 +29,13 @@ function handleFileChange(event: any) {
       hidden
       @change="handleFileChange"
     >
-    <img
+    <base-image
       v-if="imageUrl"
       :src="imageUrl"
       alt="Preview"
       width="100%"
       height="100%"
-    >
+    />
     <base-image
       v-else
       :src="src"
