@@ -31,23 +31,24 @@ const category = ref<number>()
 
 function validate(state: ProductEntity) {
   const errors = []
+  
+  if (!brand.value && !props.preset)
+    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
+  if (!category.value && !props.preset)
+    errors.push({ path: 'category', message: 'Обовʼязкове поле' })
   if (!state.description)
     errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
     errors.push({ path: 'title', message: 'Обовʼязкове поле' })
   if (!state.price)
     errors.push({ path: 'price', message: 'Обовʼязкове поле' })
-  if (!brand.value)
-    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
-  if (!category.value)
-    errors.push({ path: 'category', message: 'Обовʼязкове поле' })
   if (!state.application)
     errors.push({ path: 'application', message: 'Обовʼязкове поле' })
   if (!state.size)
     errors.push({ path: 'size', message: 'Обовʼязкове поле' })
   if (!state.standart)
     errors.push({ path: 'standart', message: 'Обовʼязкове поле' })
-
+  
   return errors
 }
 
@@ -65,12 +66,14 @@ async function onCreateOrUpdate() {
   else
     await add(category.value!, data)
 
+  loading.value = false
   emit('submit')
 }
 </script>
 
 <template>
   <UForm
+
     :state="state"
     :validate="validate"
     class="grid gap-2"
@@ -138,6 +141,7 @@ async function onCreateOrUpdate() {
       </UFormGroup>
 
       <UButton
+        :loading="loading"
         type="submit"
         class="flex justify-center"
       >

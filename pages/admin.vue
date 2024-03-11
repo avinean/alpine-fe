@@ -7,6 +7,7 @@ definePageMeta({
 </script>
 
 <template>
+  <div>
   <UHorizontalNavigation
     :links="[
       {
@@ -25,4 +26,5 @@ definePageMeta({
     class="border-b border-gray-200 dark:border-gray-800"
   />
   <NuxtPage />
+  </div>
 </template>

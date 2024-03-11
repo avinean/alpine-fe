@@ -50,7 +50,7 @@ async function onCreateOrUpdate() {
     await edit(props.preset.id, data)
   else
     await add(brand.value!, data)
-
+  loading.value = false
   emit('submit')
 }
 </script>
@@ -87,6 +87,7 @@ async function onCreateOrUpdate() {
       </UFormGroup>
 
       <UButton
+        :loading="loading"
         type="submit"
         class="flex justify-center"
       >
