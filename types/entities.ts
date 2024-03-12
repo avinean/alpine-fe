@@ -36,6 +36,7 @@ export interface ProductEntity {
   standart: string
   image: string
   price: number
+  tags: string
   createdAt: Date
   updatedAt: Date
   status: VisibilityStatus

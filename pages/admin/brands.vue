@@ -79,7 +79,7 @@ const columns = [
       </template>
       <template #title-data="{ row }">
         <UTooltip text="Перейти на сторінку товарів категорії">
-          <ULink @click="router.push({ path: `/admin/categories`, state: row })">
+          <ULink :to="`/admin/categories?brands=${row.id}`">
             {{ row.title }}
           </ULink>
         </UTooltip>

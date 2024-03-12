@@ -5,15 +5,21 @@ import { VisibilityStatus } from '~/types/enums'
 
 const { open } = useModalStore()
 const router = useRouter()
+const route = useRoute()
 const statuses = ref<VisibilityStatus[]>([
   VisibilityStatus.Published,
   VisibilityStatus.Draft,
 ])
 const { get, publish, draft, archive } = useCategoryRepository()
 
-const selectedBrands = ref<number[]>([
-  ...(router.options.history.state.id ? [+router.options.history.state.id] : []),
-])
+const selectedBrands = computed({
+  get() {
+    return route.query.brands?.toString()?.split(',').map(Number) || []
+  },
+  set(ids: number[]) {
+    router.replace({ query: { ...route.query, brands: ids.join(',') } })
+  },
+})
 
 const { data: categories, refresh } = useAsyncData(
   () => get({ brands: selectedBrands.value, statuses: statuses.value }),
@@ -88,7 +94,7 @@ const columns = [
       </template>
       <template #title-data="{ row }">
         <UTooltip text="Перейти на сторінку товарів категорії">
-          <ULink @click="router.push({ path: `/admin/products`, state: row })">
+          <ULink :to="`/admin/products?brands=${row.brand?.id}&categories=${row.id}`">
             {{ row.title }}
           </ULink>
         </UTooltip>

@@ -26,6 +26,7 @@ const state: Partial<ProductEntity> = reactive({
   application: props.preset?.application,
   size: props.preset?.size,
   standart: props.preset?.standart,
+  tags: props.preset?.tags,
 })
 const brand = ref<number>()
 const category = ref<number>()
@@ -100,18 +101,18 @@ async function onCreateOrUpdate() {
   >
     <div class="grid grid-cols-2 gap-x-4 gap-y-2">
       <input-file
-        class="row-span-6"
+        class="row-span-10"
         :src="state.image"
         @change="photo = $event"
       />
-      <template v-if="!preset">
-        <UFormGroup label="Бренди" name="brand" class="w-40">
-          <UseBrandSelector v-model="brand" />
-        </UFormGroup>
-        <UFormGroup label="Категорії" name="category" class="w-40">
-          <UseCategorySelector v-model="category" :brands="brand ? [brand] : []" />
-        </UFormGroup>
-      </template>
+      <UFormGroup label="Бренди" name="brand" class="w-40" :disabled="!!preset">
+        <UseBrandSelector v-model="brand" />
+      </UFormGroup>
+
+      <UFormGroup label="Категорії" name="category" class="w-40">
+        <UseCategorySelector v-model="category" :brands="brand ? [brand] : []" :disabled="!!preset" />
+      </UFormGroup>
+
       <UFormGroup
         label="Назва"
         name="title"
@@ -152,11 +153,18 @@ async function onCreateOrUpdate() {
         name="price"
         required
       >
-        <UInput v-model="state.price" type="number">
+        <UInput v-model.number="state.price" type="number" step="any">
           <template #trailing>
             <span class="text-gray-500 dark:text-gray-400 text-xs">ГРН</span>
           </template>
         </UInput>
+      </UFormGroup>
+      <UFormGroup
+        label="Теги для пошуку"
+        name="tags"
+        required
+      >
+        <InputTags v-model="state.tags" />
       </UFormGroup>
 
       <UButton

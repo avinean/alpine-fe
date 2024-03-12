@@ -1,22 +1,42 @@
 <script setup lang="ts">
 import { ModalProduct } from '#components'
-import type { BrandEntity, CategoryEntity, ProductEntity } from '~/types/entities'
+import type { CategoryEntity, ProductEntity } from '~/types/entities'
 import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
 const router = useRouter()
+const route = useRoute()
 const statuses = ref<VisibilityStatus[]>([
   VisibilityStatus.Published,
   VisibilityStatus.Draft,
 ])
-const category = router.options.history.state as unknown as CategoryEntity
-
-const selectedBrands = ref<number[]>([
-  ...(category?.brand?.id ? [category?.brand?.id] : []),
-])
-const selectedCategories = ref<number[]>([
-  ...(category?.id ? [category?.id] : []),
-])
+const selectedBrands = computed({
+  get() {
+    return route.query.brands?.toString()?.split(',').map(Number) || []
+  },
+  set(ids: number[]) {
+    router.replace({
+      query: {
+        ...route.query,
+        brands: ids.length ? ids.join(',') : undefined,
+        categories: undefined,
+      },
+    })
+  },
+})
+const selectedCategories = computed({
+  get() {
+    return route.query.categories?.toString()?.split(',').map(Number) || []
+  },
+  set(ids: number[]) {
+    router.replace({
+      query: {
+        ...route.query,
+        categories: ids.length ? ids.join(',') : undefined,
+      },
+    })
+  },
+})
 
 const { get, publish, draft, archive } = useProductRepository()
 const { data, refresh } = useAsyncData(
