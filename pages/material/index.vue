@@ -12,7 +12,7 @@ const brand = ref<BrandEntity>(brands.value?.[0] as BrandEntity)
 watch(brands, () => {
   brand.value = brands.value?.[0] as BrandEntity
 })
-console.log('index page')
+
 const { data: categories } = useAsyncData(
   () => useCategoryRepository().get({ brands: [brand.value.id], statuses: global.statuses }),
   { watch: [brand, () => global.statuses] },
@@ -46,7 +46,7 @@ const { data: categories } = useAsyncData(
         <base-image :src="brand.image" class="md:w-40" />
       </div>
     </template>
-    <ul class="grid gap-2 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <ul v-if="categories" class="grid gap-2 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <li
         v-for="category in categories"
         :key="category.title"
@@ -59,7 +59,7 @@ const { data: categories } = useAsyncData(
         <ul class="text-sm flex-1">
           <li>{{ category.description }}</li>
         </ul>
-        <ULink class="absolute inset-0" :to="`/material/${category?.id}`" />
+        <ULink class="absolute inset-0" :to="`/material/${category?.slug}`" />
       </li>
     </ul>
   </div>

@@ -59,7 +59,7 @@ const { data: categories } = useAsyncData(
         <ul class="text-sm flex-1">
           <li>{{ category.description }}</li>
         </ul>
-        <ULink class="absolute inset-0" :to="`/product/${category?.id}`" />
+        <ULink class="absolute inset-0" :to="`/product/${category?.slug}`" />
       </li>
     </ul>
   </div>

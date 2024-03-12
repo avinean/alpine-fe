@@ -2,6 +2,7 @@ import type { BrandType, VisibilityStatus } from './enums'
 
 export interface BrandEntity {
   id: number
+  slug: string
   title: string
   description: string
   image: string
@@ -14,6 +15,7 @@ export interface BrandEntity {
 
 export interface CategoryEntity {
   id: number
+  slug: string
   title: string
   description: string
   image: string
@@ -26,6 +28,7 @@ export interface CategoryEntity {
 
 export interface ProductEntity {
   id: number
+  slug: string
   title: string
   description: string
   size: string

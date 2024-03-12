@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { VisibilityStatus } from '~/types/enums'
-
 const global = useGlobalStore()
 const route = useRoute()
-const { data: category } = await useAsyncData(() => useCategoryRepository().getOne(+route.params.slug))
+const { data: category } = await useAsyncData(() => useCategoryRepository().getOne(route.params.slug as string | number))
 const { get } = useProductRepository()
+
 const { data } = useAsyncData(
-  () => get({ categories: [+route.params.slug], statuses: global.statuses }),
+  () => get({ categories: category.value?.id ? [category.value?.id] : [], statuses: global.statuses }),
   { watch: [() => global.statuses] },
 )
 </script>

@@ -6,8 +6,8 @@ export const useCategoryRepository = createGlobalState(() => {
     return $api<CategoryEntity[]>(`/category`, { query })
   }
 
-  function getOne(categoryId: number) {
-    return $api<CategoryEntity>(`/category/${categoryId}`)
+  function getOne(categoryIdOrSlug: number | string) {
+    return $api<CategoryEntity>(`/category/${categoryIdOrSlug}`)
   }
 
   function add(brandId: number, body: Partial<CategoryEntity>) {
