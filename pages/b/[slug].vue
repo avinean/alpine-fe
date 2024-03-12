@@ -1,22 +1,32 @@
 <script setup lang="ts">
 import type { BrandEntity } from '~/types/entities'
-import { BrandType } from '~/types/enums'
+import type { BrandType } from '~/types/enums'
 
+const route = useRoute()
+const router = useRouter()
 const global = useGlobalStore()
 const { data: brands } = await useAsyncData(
-  () => useBrandRepository().get({ statuses: global.statuses, type: BrandType.Product }),
+  () => useBrandRepository().get({ statuses: global.statuses, type: route.params.slug as BrandType }),
   { watch: [() => global.statuses] },
 )
-const brand = ref<BrandEntity>(brands.value?.[0] as BrandEntity)
+const brand = ref(currentBrand())
 
-watch(brands, () => {
-  brand.value = brands.value?.[0] as BrandEntity
-})
+watch(brands, () => brand.value = currentBrand())
 
 const { data: categories } = useAsyncData(
   () => useCategoryRepository().get({ brands: [brand.value.id], statuses: global.statuses }),
   { watch: [brand, () => global.statuses] },
 )
+
+function currentBrand() {
+  const slug = route.query.brand
+  return (brands.value?.find(b => b.slug === slug) || brands.value?.[0]) as BrandEntity
+}
+
+function selectBrand(_brand: BrandEntity) {
+  brand.value = _brand
+  router.push({ query: { brand: _brand.slug } })
+}
 </script>
 
 <template>
@@ -30,7 +40,7 @@ const { data: categories } = useAsyncData(
           v-for="_brand in brands" :key="_brand.id"
           class="flex gap-2 p-2 items-center whitespace-nowrap"
           :class="{ 'bg-white': brand === _brand }"
-          @click="brand = _brand"
+          @click="selectBrand(_brand)"
         >
           <base-image :src="_brand.image" :alt="_brand.title" class="h-10" />
           {{ _brand.title }}
@@ -59,7 +69,7 @@ const { data: categories } = useAsyncData(
         <ul class="text-sm flex-1">
           <li>{{ category.description }}</li>
         </ul>
-        <ULink class="absolute inset-0" :to="`/product/${category?.slug}`" />
+        <ULink class="absolute inset-0" :to="`/c/${category?.slug}`" />
       </li>
     </ul>
   </div>

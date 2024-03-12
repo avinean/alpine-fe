@@ -27,10 +27,10 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
           <img src="/logo.jpg" alt="logo" class="h-24">
         </ULink>
         <nav class="flex gap-4">
-          <ULink to="/material" active-class="border-b-2">
+          <ULink to="/b/material" active-class="border-b-2">
             Матеріали
           </ULink>
-          <ULink to="/product" active-class="border-b-2">
+          <ULink to="/b/product" active-class="border-b-2">
             Вироби
           </ULink>
         </nav>

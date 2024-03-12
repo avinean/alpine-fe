@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  redirect: '/material',
+  redirect: '/b/material',
 })
 </script>
 
