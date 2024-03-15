@@ -8,23 +8,27 @@ definePageMeta({
 
 <template>
   <div>
-  <UHorizontalNavigation
-    :links="[
-      {
-        label: 'Бренди',
-        to: '/admin/brands',
-      },
-      {
-        label: 'Категорії',
-        to: '/admin/categories',
-      },
-      {
-        label: 'Продукти',
-        to: '/admin/products',
-      }
+    <UHorizontalNavigation
+      :links="[
+        {
+          label: 'Бренди',
+          to: '/admin/brands',
+        },
+        {
+          label: 'Категорії',
+          to: '/admin/categories',
+        },
+        {
+          label: 'Продукти',
+          to: '/admin/products',
+        },
+        {
+          label: 'Характеристики продуктів',
+          to: '/admin/products-meta',
+        },
       ]"
-    class="border-b border-gray-200 dark:border-gray-800"
-  />
-  <NuxtPage />
+      class="border-b border-gray-200 dark:border-gray-800"
+    />
+    <NuxtPage />
   </div>
 </template>

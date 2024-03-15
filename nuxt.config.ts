@@ -1,5 +1,4 @@
 import modules from './config/modules'
-import app from './config/app'
 import runtimeConfig from './config/runtimeConfig'
 import pinia from './config/pinia'
 import routeRules from './config/routeRules'
@@ -10,7 +9,6 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
   modules,
-  app,
   runtimeConfig,
   devtools: { enabled: true },
   pinia,

@@ -10,14 +10,14 @@ const props = withDefaults(
 const { configs, close } = useModalStore()
 const modal = computed(() => configs[props.index])
 
-const modalContent = ref<{ title: string } | null>(null)
+const modalContent = ref<{ title: string, ui: any } | null>(null)
 </script>
 
 <template>
   <UModal
     :model-value="!!modal"
-    :ui="{ width: 'sm:max-w-4xl' }"
     prevent-close
+    :ui="modalContent?.ui"
     @close="close"
   >
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">

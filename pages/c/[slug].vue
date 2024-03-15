@@ -4,7 +4,7 @@ const route = useRoute()
 const { data: category } = await useAsyncData(() => useCategoryRepository().getOne(route.params.slug as string | number))
 const { get } = useProductRepository()
 
-const { data } = useAsyncData(
+const { data } = await useAsyncData(
   () => get({ categories: category.value?.id ? [category.value?.id] : [], statuses: global.statuses }),
   { watch: [() => global.statuses] },
 )

@@ -37,8 +37,32 @@ export interface ProductEntity {
   image: string
   price: number
   tags: string
+  colors: ColorEntity[]
+  parameters: ParameterEntity[]
   createdAt: Date
   updatedAt: Date
   status: VisibilityStatus
   category: CategoryEntity
+}
+
+export interface ColorEntity {
+  id: number
+  slug: string
+  title: string
+  value: string
+  image?: string
+  createdAt: Date
+  updatedAt: Date
+  products: ProductEntity[]
+}
+
+export interface ParameterEntity {
+  id: number
+  slug: string
+  type: string
+  unit?: string
+  value?: string
+  createdAt: Date
+  updatedAt: Date
+  products: ProductEntity[]
 }

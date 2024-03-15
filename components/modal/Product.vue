@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { usePhoto } from '~/composables/usePhoto'
-import type { ProductEntity } from '~/types/entities'
+import type { ColorEntity, ParameterEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: ProductEntity | null
@@ -11,6 +10,7 @@ const emit = defineEmits<{
 
 defineExpose({
   title: props.preset?.id ? 'Змінити продукт' : 'Додати продукт',
+  ui: { width: 'sm:max-w-4xl' },
 })
 
 const toast = useToast()
@@ -27,9 +27,27 @@ const state: Partial<ProductEntity> = reactive({
   size: props.preset?.size,
   standart: props.preset?.standart,
   tags: props.preset?.tags,
+  colors: props.preset?.colors,
+  parameters: props.preset?.parameters,
 })
 const brand = ref<number>()
 const category = ref<number>()
+const colors = computed({
+  get() {
+    return state.colors?.map(color => color.id) || []
+  },
+  set(value: number[]) {
+    state.colors = value.map(id => ({ id } as ColorEntity))
+  },
+})
+const parameters = computed({
+  get() {
+    return state.parameters?.map(parameter => parameter.id) || []
+  },
+  set(value: number[]) {
+    state.parameters = value.map(id => ({ id } as ParameterEntity))
+  },
+})
 
 function validate(state: ProductEntity) {
   const errors = []
@@ -93,23 +111,22 @@ async function onCreateOrUpdate() {
 
 <template>
   <UForm
-
     :state="state"
     :validate="validate"
-    class="grid gap-2"
+    class="space-y-2"
     @submit="onCreateOrUpdate"
   >
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+    <div class="grid grid-cols-2 gap-2">
       <input-file
-        class="row-span-10"
+        class="block w-40 m-auto row-span-3"
         :src="state.image"
         @change="photo = $event"
       />
-      <UFormGroup label="Бренди" name="brand" class="w-40" :disabled="!!preset">
-        <UseBrandSelector v-model="brand" />
+      <UFormGroup label="Бренди" name="brand">
+        <UseBrandSelector v-model="brand" :disabled="!!preset" />
       </UFormGroup>
 
-      <UFormGroup label="Категорії" name="category" class="w-40">
+      <UFormGroup label="Категорії" name="category">
         <UseCategorySelector v-model="category" :brands="brand ? [brand] : []" :disabled="!!preset" />
       </UFormGroup>
 
@@ -124,8 +141,23 @@ async function onCreateOrUpdate() {
         label="Опис"
         name="description"
         required
+        class="row-span-3"
       >
-        <UTextarea v-model="state.description" />
+        <UTextarea v-model="state.description" :rows="6" />
+      </UFormGroup>
+      <UFormGroup
+        label="Колір"
+        name="colors"
+        required
+      >
+        <UseColorSelector v-model="colors" multiple />
+      </UFormGroup>
+      <UFormGroup
+        label="Характеристики"
+        name="parameters"
+        required
+      >
+        <UseParameterSelector v-model="parameters" multiple />
       </UFormGroup>
       <UFormGroup
         label="Застосування"
@@ -166,7 +198,8 @@ async function onCreateOrUpdate() {
       >
         <InputTags v-model="state.tags" />
       </UFormGroup>
-
+    </div>
+    <div class="flex justify-end">
       <UButton
         :loading="loading"
         type="submit"

@@ -69,41 +69,39 @@ async function onCreateOrUpdate() {
 <template>
   <UForm
     :state="state"
-    class="grid gap-2"
+    class="space-y-2"
     @submit="onCreateOrUpdate"
   >
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-      <input-file
-        class="row-span-6"
-        :src="state.image"
-        @change="photo = $event"
-      />
-      <UFormGroup
-        label="Бренд матеріалу"
-        name="isMaterialBrand"
-      >
-        <UCheckbox v-model="isMaterialBrand" />
-      </UFormGroup>
-      <UFormGroup
-        label="Назва"
-        name="title"
-      >
-        <UInput v-model="state.title" />
-      </UFormGroup>
-      <UFormGroup
-        label="Опис"
-        name="description"
-      >
-        <UTextarea v-model="state.description" />
-      </UFormGroup>
+    <input-file
+      class="block w-40 m-auto"
+      :src="state.image"
+      @change="photo = $event"
+    />
+    <UFormGroup
+      label="Бренд матеріалу"
+      name="isMaterialBrand"
+    >
+      <UCheckbox v-model="isMaterialBrand" />
+    </UFormGroup>
+    <UFormGroup
+      label="Назва"
+      name="title"
+    >
+      <UInput v-model="state.title" />
+    </UFormGroup>
+    <UFormGroup
+      label="Опис"
+      name="description"
+    >
+      <UTextarea v-model="state.description" />
+    </UFormGroup>
 
-      <UButton
-        :loading="loading"
-        type="submit"
-        class="flex justify-center"
-      >
-        Зберегти
-      </UButton>
-    </div>
+    <UButton
+      :loading="loading"
+      type="submit"
+      class="flex justify-center"
+    >
+      Зберегти
+    </UButton>
   </UForm>
 </template>

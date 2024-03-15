@@ -66,19 +66,22 @@ const columns = [
 </script>
 
 <template>
-  <main class="space-y-2 py-2">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-2 p-2">
-        <UFormGroup label="Статуси" class="w-40">
-          <UseStatusSelector v-model="statuses" />
-        </UFormGroup>
-        <UFormGroup label="Бренди" class="w-40">
-          <UseBrandSelector v-model="selectedBrands" multiple />
-        </UFormGroup>
+  <UCard>
+    <template #header>
+      <div class="flex justify-between">
+        <span class="text-2xl">Категорії товарів</span>
+        <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
+          Додати категорію
+        </UButton>
       </div>
-      <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
-        Додати категорію
-      </UButton>
+    </template>
+    <div class="border-b pb-2 flex gap-2">
+      <UFormGroup label="Статуси" class="w-40">
+        <UseStatusSelector v-model="statuses" />
+      </UFormGroup>
+      <UFormGroup label="Бренди" class="w-40">
+        <UseBrandSelector v-model="selectedBrands" multiple />
+      </UFormGroup>
     </div>
     <UTable v-if="categories" :rows="categories" :columns="columns">
       <template #status-data="{ row }">
@@ -151,5 +154,5 @@ const columns = [
         </UDropdown>
       </template>
     </UTable>
-  </main>
+  </UCard>
 </template>

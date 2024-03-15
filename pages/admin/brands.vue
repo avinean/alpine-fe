@@ -5,7 +5,6 @@ import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
 
-const router = useRouter()
 const statuses = ref<VisibilityStatus[]>([
   VisibilityStatus.Published,
   VisibilityStatus.Draft,
@@ -56,14 +55,19 @@ const columns = [
 </script>
 
 <template>
-  <main class="space-y-2 py-2">
-    <div class="flex justify-between items-center">
-        <UFormGroup label="Статуси" class="w-40">
-          <UseStatusSelector v-model="statuses" />
-        </UFormGroup>
-      <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
-        Додати бренд
-      </UButton>
+  <UCard>
+    <template #header>
+      <div class="flex justify-between">
+        <span class="text-2xl">Бренди</span>
+        <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
+          Додати бренд
+        </UButton>
+      </div>
+    </template>
+    <div class="border-b pb-2">
+      <UFormGroup label="Статуси" class="w-40">
+        <UseStatusSelector v-model="statuses" />
+      </UFormGroup>
     </div>
     <UTable v-if="data" :rows="data" :columns="columns">
       <template #status-data="{ row }">
@@ -136,5 +140,5 @@ const columns = [
         </UDropdown>
       </template>
     </UTable>
-  </main>
+  </UCard>
 </template>

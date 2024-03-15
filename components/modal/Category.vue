@@ -78,40 +78,38 @@ async function onCreateOrUpdate() {
   <UForm
     :state="state"
     :validate="validate"
-    class="grid gap-2"
+    class="space-y-2"
     @submit="onCreateOrUpdate"
   >
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-      <input-file
-        class="row-span-6"
-        :src="state.image"
-        @change="photo = $event"
-      />
-      <UFormGroup v-if="!preset" label="Бренди" name="brand" class="w-40">
-        <UseBrandSelector v-model="brand" class="w-full" />
-      </UFormGroup>
-      <UFormGroup
-        label="Назва"
-        name="title"
-        required
-      >
-        <UInput v-model="state.title" />
-      </UFormGroup>
-      <UFormGroup
-        label="Опис"
-        name="description"
-        required
-      >
-        <UTextarea v-model="state.description" />
-      </UFormGroup>
+    <input-file
+      class="block w-40 m-auto"
+      :src="state.image"
+      @change="photo = $event"
+    />
+    <UFormGroup v-if="!preset" label="Бренди" name="brand">
+      <UseBrandSelector v-model="brand" class="w-full" />
+    </UFormGroup>
+    <UFormGroup
+      label="Назва"
+      name="title"
+      required
+    >
+      <UInput v-model="state.title" />
+    </UFormGroup>
+    <UFormGroup
+      label="Опис"
+      name="description"
+      required
+    >
+      <UTextarea v-model="state.description" />
+    </UFormGroup>
 
-      <UButton
-        :loading="loading"
-        type="submit"
-        class="flex justify-center"
-      >
-        Зберегти
-      </UButton>
-    </div>
+    <UButton
+      :loading="loading"
+      type="submit"
+      class="flex justify-center"
+    >
+      Зберегти
+    </UButton>
   </UForm>
 </template>

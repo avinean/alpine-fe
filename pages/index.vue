@@ -5,5 +5,5 @@ definePageMeta({
 </script>
 
 <template>
-  <div>Головна</div>
+  <div>Under construction!</div>
 </template>

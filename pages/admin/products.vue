@@ -88,23 +88,27 @@ const columns = [
 </script>
 
 <template>
-  <main class="space-y-2 py-2">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-2 p-2">
-        <UFormGroup label="Статуси" class="w-40">
-          <UseStatusSelector v-model="statuses" />
-        </UFormGroup>
-        <UFormGroup label="Бренди" class="w-40">
-          <UseBrandSelector v-model="selectedBrands" multiple />
-        </UFormGroup>
-        <UFormGroup label="Категорії" class="w-40">
-          <UseCategorySelector v-model="selectedCategories" :brands="selectedBrands" multiple />
-        </UFormGroup>
+  <UCard>
+    <template #header>
+      <div class="flex justify-between">
+        <span class="text-2xl">Товари</span>
+        <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
+          Додати продукт
+        </UButton>
       </div>
-      <UButton icon="i-heroicons-folder-plus-16-solid" @click="() => callModal()">
-        Додати продукт
-      </UButton>
+    </template>
+    <div class="border-b pb-2 flex gap-2">
+      <UFormGroup label="Статуси" class="w-40">
+        <UseStatusSelector v-model="statuses" />
+      </UFormGroup>
+      <UFormGroup label="Бренди" class="w-40">
+        <UseBrandSelector v-model="selectedBrands" multiple />
+      </UFormGroup>
+      <UFormGroup label="Категорії" class="w-40">
+        <UseCategorySelector v-model="selectedCategories" :brands="selectedBrands" multiple />
+      </UFormGroup>
     </div>
+
     <UTable v-if="data" :rows="data" :columns="columns">
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
@@ -179,5 +183,5 @@ const columns = [
         </UDropdown>
       </template>
     </UTable>
-  </main>
+  </UCard>
 </template>
