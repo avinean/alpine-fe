@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ColorEntity, ParameterEntity, ProductEntity } from '~/types/entities'
+import type { ApplicationEntity, ColorEntity, ParameterEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: ProductEntity | null
@@ -27,8 +27,9 @@ const state: Partial<ProductEntity> = reactive({
   size: props.preset?.size,
   standart: props.preset?.standart,
   tags: props.preset?.tags,
-  colors: props.preset?.colors,
-  parameters: props.preset?.parameters,
+  colors: props.preset?.colors || [],
+  parameters: props.preset?.parameters || [],
+  applications: props.preset?.applications || [],
 })
 const brand = ref<number>()
 const category = ref<number>()
@@ -48,6 +49,14 @@ const parameters = computed({
     state.parameters = value.map(id => ({ id } as ParameterEntity))
   },
 })
+const applications = computed({
+  get() {
+    return state.applications?.map(applications => applications.id) || []
+  },
+  set(value: number[]) {
+    state.applications = value.map(id => ({ id } as ApplicationEntity))
+  },
+})
 
 function validate(state: ProductEntity) {
   const errors = []
@@ -62,12 +71,6 @@ function validate(state: ProductEntity) {
     errors.push({ path: 'title', message: 'Обовʼязкове поле' })
   if (!state.price)
     errors.push({ path: 'price', message: 'Обовʼязкове поле' })
-  if (!state.application)
-    errors.push({ path: 'application', message: 'Обовʼязкове поле' })
-  if (!state.size)
-    errors.push({ path: 'size', message: 'Обовʼязкове поле' })
-  if (!state.standart)
-    errors.push({ path: 'standart', message: 'Обовʼязкове поле' })
 
   return errors
 }
@@ -148,35 +151,30 @@ async function onCreateOrUpdate() {
       <UFormGroup
         label="Колір"
         name="colors"
-        required
       >
         <UseColorSelector v-model="colors" multiple />
       </UFormGroup>
       <UFormGroup
         label="Характеристики"
         name="parameters"
-        required
       >
         <UseParameterSelector v-model="parameters" multiple />
       </UFormGroup>
       <UFormGroup
         label="Застосування"
         name="application"
-        required
       >
-        <UInput v-model="state.application" />
+        <UseApplicationSelector v-model="applications" multiple />
       </UFormGroup>
       <UFormGroup
         label="Розмір"
         name="size"
-        required
       >
         <UInput v-model="state.size" />
       </UFormGroup>
       <UFormGroup
         label="Стандарт"
         name="standart"
-        required
       >
         <UInput v-model="state.standart" />
       </UFormGroup>
@@ -194,7 +192,6 @@ async function onCreateOrUpdate() {
       <UFormGroup
         label="Теги для пошуку"
         name="tags"
-        required
       >
         <InputTags v-model="state.tags" />
       </UFormGroup>

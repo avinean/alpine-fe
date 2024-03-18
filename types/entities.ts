@@ -39,6 +39,7 @@ export interface ProductEntity {
   tags: string
   colors: ColorEntity[]
   parameters: ParameterEntity[]
+  applications: ApplicationEntity[]
   createdAt: Date
   updatedAt: Date
   status: VisibilityStatus
@@ -62,6 +63,16 @@ export interface ParameterEntity {
   type: string
   unit?: string
   value?: string
+  createdAt: Date
+  updatedAt: Date
+  products: ProductEntity[]
+}
+
+export interface ApplicationEntity {
+  id: number
+  slug: string
+  title: string
+  description?: string
   createdAt: Date
   updatedAt: Date
   products: ProductEntity[]

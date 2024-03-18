@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ModalColor, ModalParameter } from '#components'
+import { ModalApplication, ModalColor, ModalParameter } from '#components'
 
 const colorRepository = useColorRepository()
 const parameterRepository = useParameterRepository()
+const applicationRepository = useApplicationRepository()
 const { open } = useModalStore()
 
 const { data: colors, refresh: refreshColors } = useAsyncData(() => colorRepository.get())
 const { data: parameters, refresh: refreshParameters } = useAsyncData(() => parameterRepository.get())
+const { data: applications, refresh: refreshApplications } = useAsyncData(() => applicationRepository.get())
 
 function addColor() {
   open(ModalColor, {
@@ -17,6 +19,12 @@ function addColor() {
 function addParameter() {
   open(ModalParameter, {
     onSubmit() { refreshParameters() },
+  })
+}
+
+function addApplication() {
+  open(ModalApplication, {
+    onSubmit() { refreshApplications() },
   })
 }
 </script>
@@ -115,6 +123,30 @@ function addParameter() {
           </div>
         </template>
       </UTable>
+    </UCard>
+    <UCard>
+      <template #header>
+        <div class="flex justify-between">
+          <span class="text-2xl">Вид застосування</span>
+          <UButton icon="i-heroicons-folder-plus-16-solid" @click="addApplication">
+            Додати вид застосування
+          </UButton>
+        </div>
+      </template>
+      <UTable
+        v-if="applications"
+        :rows="applications"
+        :columns="[
+          {
+            key: 'title',
+            label: 'Назва',
+          },
+          {
+            key: 'description',
+            label: 'Опис',
+          },
+        ]"
+      />
     </UCard>
   </main>
 </template>
