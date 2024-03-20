@@ -26,6 +26,14 @@ definePageMeta({
           label: 'Характеристики продуктів',
           to: '/admin/products-meta',
         },
+        {
+          label: 'Контакти',
+          to: '/admin/contacts',
+        },
+        {
+          label: 'Послуги',
+          to: '/admin/services',
+        },
       ]"
       class="border-b border-gray-200 dark:border-gray-800"
     />

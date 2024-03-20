@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+
 const global = useGlobalStore()
+
+const { md } = useBreakpoints(breakpointsTailwind)
+const menuOpen = ref(!!md.value)
 
 onMounted(() => {
   global.checkLogin()
@@ -11,8 +16,8 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
 </script>
 
 <template>
-  <div class="bg-gray-100 min-h-screen flex flex-col">
-    <div class="border-b-1 bg-white">
+  <div class="min-h-screen flex flex-col">
+    <div class="border-b bg-white sticky top-0 z-10">
       <div v-if="global.isLoggedIn" class="flex items-center md:justify-between p-2 bg-gray-300">
         <ULink to="/admin" class="flex items-center gap-2">
           <i class="i-heroicons-arrow-left-on-rectangle-20-solid text-2xl text-gray" />
@@ -22,66 +27,110 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
           Режим попереднього перегляду <UToggle v-model="global.isPreview" color="primary" />
         </div>
       </div>
-      <div class="container flex gap-4 items-center justify-center md:justify-between mx-auto p-2">
+      <header class="container flex flex-wrap gap-4 items-center justify-between mx-auto p-2">
         <ULink to="/">
           <img src="/logo.jpg" alt="logo" class="h-24">
         </ULink>
-        <nav class="flex gap-4">
-          <ULink to="/b/material" active-class="border-b-2">
-            Матеріали
-          </ULink>
-          <ULink to="/b/product" active-class="border-b-2">
-            Вироби
-          </ULink>
-        </nav>
-        <div class="hidden md:flex gap-4">
-          <UseCall />
-          <div class="flex gap-2 items-center">
-            <div class="grid text-black/70">
-              <a href="tel:+380 63 401 1986">
-                +380 63 401 1986
-                Київ
-              </a>
-            </div>
-            <i class="i-heroicons-phone text-2xl text-gray" />
-          </div>
-        </div>
-      </div>
+
+        <button class="flex md:hidden" @click="menuOpen = !menuOpen">
+          <i v-if="menuOpen" class="i-heroicons-x-mark-16-solid text-4xl text-gray" />
+          <i v-else class="i-heroicons-bars-3-16-solid text-4xl text-gray" />
+        </button>
+
+        <transition name="fade">
+          <nav
+            v-if="md || menuOpen"
+            class="flex"
+            :class="{ 'w-full flex-col items-center': !md }"
+            @click="menuOpen = !menuOpen"
+          >
+            <ULink to="/b/product" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+              Продукція
+            </ULink>
+            <ULink to="/service" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+              Послуги
+            </ULink>
+            <ULink to="/delivery" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+              Доставка
+            </ULink>
+            <!-- <ULink to="/b/material" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+              Матеріали
+            </ULink> -->
+            <ULink to="/contacts" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+              Контакти
+            </ULink>
+          </nav>
+        </transition>
+      </header>
     </div>
 
     <main class="container flex-1 mx-auto p-2">
       <NuxtPage />
       <div class="fixed bottom-12 right-5 animate-bounce rounded bg-white border">
-        <UseCall>
-          <i class="i-heroicons-phone text-6xl text-gray" />
+        <UseCall v-slot="{ call }">
+          <button @click="call">
+            <i class="i-heroicons-phone text-6xl text-gray" />
+          </button>
         </UseCall>
       </div>
     </main>
 
-    <div class="border-t-1 bg-white">
-      <div class="container flex flex-col gap-4 p-2 items-center justify-center mx-auto">
+    <div class="border-t bg-white">
+      <div class="container grid md:grid-cols-3 gap-4 p-2 items-center justify-center mx-auto">
         <ULink to="/">
-          <img src="/logo.jpg" alt="logo" class="h-24">
+          <img src="/logo.jpg" alt="logo" class="h-24 mx-auto">
         </ULink>
-        <div class="flex gap-2 items-center">
-          <div class="grid text-black/70">
-            <a href="tel:+380 63 401 1986">
-              +380 63 401 1986
-              Київ
-            </a>
-          </div>
-          <i class="i-heroicons-phone text-2xl text-gray" />
-        </div>
-        <div class="flex gap-2 items-center">
+        <nav class="grid text-center">
+          <h2 class="font-bold">
+            Меню
+          </h2>
+          <ULink to="/b/product" class="p-2">
+            Продукція
+          </ULink>
+          <ULink to="/service" class="p-2">
+            Послуги
+          </ULink>
+          <ULink to="/delivery" class="p-2">
+            Доставка
+          </ULink>
+          <ULink to="/contacts" class="p-2">
+            Контакти
+          </ULink>
+        </nav>
+        <div class="space-y-2 text-center">
+          <h2 class="font-bold">
+            Контакти
+          </h2>
+          <ul v-if="global.contacts" class="space-y-1">
+            <li v-for="contact in global.contacts" :key="contact.address" class="grid items-center md:grid-cols-2">
+              <div>{{ contact.address }}</div>
+              <div class="grid gap-1">
+                <a
+                  v-for="phone in contact.phones.split(',')"
+                  :key="phone"
+                  :href="`tel:${phone}`"
+                >
+                  {{ phone }}
+                </a>
+                <a
+                  v-for="email in contact.emails.split(',')"
+                  :key="email"
+                  :href="`mailto:${email}`"
+                >
+                  {{ email }}
+                </a>
+              </div>
+            </li>
+          </ul>
           <div class="grid text-black/70">
             <a href="https://wooden-dreamhouse.com.ua">
               wooden-dreamhouse.com.ua
             </a>
           </div>
         </div>
-        <div>
-          {{ yearString }}
-        </div>
+      </div>
+      <div class="p-2 text-center">
+        {{ yearString }}
       </div>
     </div>
   </div>

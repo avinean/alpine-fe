@@ -21,10 +21,17 @@ export const useGlobalStore = defineStore('global', () => {
     return isLoggedIn.value
   }
 
+  const { get } = useContactRepository()
+  const { data: contacts } = useAsyncData(
+    () => get({ statuses: statuses.value }),
+    { watch: [statuses] },
+  )
+
   return {
     checkLogin,
     isLoggedIn,
     isPreview,
     statuses,
+    contacts
   }
 })

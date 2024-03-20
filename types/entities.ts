@@ -77,3 +77,33 @@ export interface ApplicationEntity {
   updatedAt: Date
   products: ProductEntity[]
 }
+
+export interface PageEntity {
+  id: number
+  slug: string
+  title: string
+  content?: string
+  status: VisibilityStatus
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface ContactEntity {
+  id: number
+  address: string
+  phones: string
+  emails: string
+  status: VisibilityStatus
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface ServiceEntity {
+  id: number
+  title: string
+  description: string
+  image: string
+  status: VisibilityStatus
+  createdAt: Date
+  updatedAt: Date
+}

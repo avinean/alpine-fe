@@ -2,6 +2,7 @@ import modules from './config/modules'
 import runtimeConfig from './config/runtimeConfig'
 import pinia from './config/pinia'
 import routeRules from './config/routeRules'
+import css from './config/css'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -18,6 +19,7 @@ export default defineNuxtConfig({
     classSuffix: '-mode',
     storageKey: 'nuxt-color-mode',
   },
+  css,
   modules,
   runtimeConfig,
   devtools: { enabled: true },
