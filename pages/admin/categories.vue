@@ -22,7 +22,7 @@ const selectedBrands = computed({
 })
 
 const { data: categories, refresh } = useAsyncData(
-  () => get({ brands: selectedBrands.value, statuses: statuses.value }),
+  () => get({ statuses: statuses.value }),
   { watch: [selectedBrands, statuses] },
 )
 

@@ -31,8 +31,8 @@ const state: Partial<ProductEntity> = reactive({
   parameters: props.preset?.parameters || [],
   applications: props.preset?.applications || [],
 })
-const brand = ref<number>()
-const category = ref<number>()
+const brand = ref<number | undefined>(props.preset?.brand?.id)
+const category = ref<number | undefined>(props.preset?.category?.id)
 const colors = computed({
   get() {
     return state.colors?.map(color => color.id) || []
@@ -61,10 +61,6 @@ const applications = computed({
 function validate(state: ProductEntity) {
   const errors = []
 
-  if (!brand.value && !props.preset)
-    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
-  if (!category.value && !props.preset)
-    errors.push({ path: 'category', message: 'Обовʼязкове поле' })
   if (!state.description)
     errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
@@ -89,6 +85,8 @@ async function onCreateOrUpdate() {
 
   const data = {
     ...state,
+    brand: brand.value ? { id: brand.value } : undefined,
+    category: category.value ? { id: category.value } : undefined,
     image: url.value,
   } as ProductEntity
 
@@ -96,7 +94,7 @@ async function onCreateOrUpdate() {
     if (props.preset?.id)
       await edit(props.preset.id, data)
     else
-      await add(category.value!, data)
+      await add(data)
 
     emit('submit')
   }
@@ -126,11 +124,11 @@ async function onCreateOrUpdate() {
         @change="photo = $event"
       />
       <UFormGroup label="Бренди" name="brand">
-        <UseBrandSelector v-model="brand" :disabled="!!preset" />
+        <UseBrandSelector v-model="brand" />
       </UFormGroup>
 
       <UFormGroup label="Категорії" name="category">
-        <UseCategorySelector v-model="category" :brands="brand ? [brand] : []" :disabled="!!preset" />
+        <UseCategorySelector v-model="category" />
       </UFormGroup>
 
       <UFormGroup

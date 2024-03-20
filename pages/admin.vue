@@ -11,16 +11,16 @@ definePageMeta({
     <UHorizontalNavigation
       :links="[
         {
-          label: 'Бренди',
-          to: '/admin/brands',
+          label: 'Продукти',
+          to: '/admin/products',
         },
         {
-          label: 'Категорії',
+          label: 'Категорії продуктів',
           to: '/admin/categories',
         },
         {
-          label: 'Продукти',
-          to: '/admin/products',
+          label: 'Бренди',
+          to: '/admin/brands',
         },
         {
           label: 'Характеристики продуктів',

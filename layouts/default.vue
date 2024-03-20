@@ -44,7 +44,7 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
             :class="{ 'w-full flex-col items-center': !md }"
             @click="menuOpen = !menuOpen"
           >
-            <ULink to="/b/product" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+            <ULink to="/product" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
               Продукція
             </ULink>
             <ULink to="/service" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">

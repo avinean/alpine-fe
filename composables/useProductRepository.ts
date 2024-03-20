@@ -2,12 +2,12 @@ import type { ProductEntity } from '~/types/entities'
 import type { VisibilityStatus } from '~/types/enums'
 
 export const useProductRepository = createGlobalState(() => {
-  function get(query: { categories: number[], statuses?: VisibilityStatus[] }) {
+  function get(query: { categories?: number[], statuses?: VisibilityStatus[] }) {
     return $api<ProductEntity[]>(`/product`, { query })
   }
 
-  function add(categoryId: number, body: Partial<ProductEntity>) {
-    return $api(`/product/${categoryId}`, {
+  function add(body: Partial<ProductEntity>) {
+    return $api(`/product`, {
       method: 'POST',
       body,
     })

@@ -1,15 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{
-  brands: number[]
+defineProps<{
   multiple?: boolean
   disabled?: boolean
 }>()
 const model = defineModel<number[] | number>()
 const { get } = useCategoryRepository()
-const { data } = useAsyncData(
-  () => get({ brands: props.brands }),
-  { watch: [() => props.brands] },
-)
+const { data } = useAsyncData(() => get({}))
 </script>
 
 <template>

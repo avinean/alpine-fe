@@ -8,5 +8,17 @@ export default defineAppConfig({
     input: {
       rounded: 'rounded-none',
     },
+    textarea: {
+      rounded: 'rounded-none',
+    },
+    select: {
+      rounded: 'rounded-none',
+    },
+    selectMenu: {
+      rounded: 'rounded-none',
+    },
+    buttonGroup: {
+      rounded: 'rounded-none',
+    },
   },
 })

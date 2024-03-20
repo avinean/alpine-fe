@@ -11,6 +11,7 @@ export interface BrandEntity {
   updatedAt: Date
   status: VisibilityStatus
   categories: CategoryEntity[]
+  products: ProductEntity[]
 }
 
 export interface CategoryEntity {
@@ -44,6 +45,7 @@ export interface ProductEntity {
   updatedAt: Date
   status: VisibilityStatus
   category: CategoryEntity
+  brand: BrandEntity
 }
 
 export interface ColorEntity {
