@@ -19,6 +19,11 @@ export const useBrandRepository = createGlobalState(() => {
       body,
     })
   }
+  
+  function remove(id: number) {
+    return $api(`/brand/delete/${id}`, { method: 'POST' })
+  }
+
 
   function publish(id: number) {
     return $api(`/brand/${id}/publish`, { method: 'PUT' })
@@ -39,5 +44,6 @@ export const useBrandRepository = createGlobalState(() => {
     publish,
     draft,
     archive,
+    remove
   }
 })

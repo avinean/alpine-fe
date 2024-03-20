@@ -18,7 +18,7 @@ const toast = useToast()
 const { add, edit } = useBrandRepository()
 const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
 
-const isMaterialBrand = ref(false)
+// const isMaterialBrand = ref(false)
 
 const loading = ref(false)
 const state: Partial<BrandEntity> = reactive({
@@ -41,7 +41,7 @@ async function onCreateOrUpdate() {
 
   const data = {
     ...state,
-    type: isMaterialBrand.value ? BrandType.Material : BrandType.Product,
+    // type: isMaterialBrand.value ? BrandType.Material : BrandType.Product,
     image: url.value,
   } as BrandEntity
 
@@ -77,12 +77,12 @@ async function onCreateOrUpdate() {
       :src="state.image"
       @change="photo = $event"
     />
-    <UFormGroup
+    <!-- <UFormGroup
       label="Бренд матеріалу"
       name="isMaterialBrand"
     >
       <UCheckbox v-model="isMaterialBrand" />
-    </UFormGroup>
+    </UFormGroup> -->
     <UFormGroup
       label="Назва"
       name="title"

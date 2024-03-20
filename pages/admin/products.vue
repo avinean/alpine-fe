@@ -38,7 +38,7 @@ const selectedCategories = computed({
   },
 })
 
-const { get, publish, draft, archive } = useProductRepository()
+const { get, publish, draft, archive, remove } = useProductRepository()
 const { data, refresh } = useAsyncData(
   () => get({ categories: selectedCategories.value, statuses: statuses.value }),
   { watch: [selectedCategories, statuses] },
@@ -173,6 +173,14 @@ const columns = [
                 icon: row.status === VisibilityStatus.Archived ? 'i-heroicons-folder-plus-16-solid' : 'i-heroicons-folder-minus-16-solid',
                 click: async () => {
                   await (row.status === VisibilityStatus.Archived ? draft(row.id) : archive(row.id))
+                  refresh()
+                },
+              },
+              {
+                label: 'Видалити',
+                icon: 'i-heroicons-trash',
+                click: async () => {
+                  await remove(row.id)
                   refresh()
                 },
               },

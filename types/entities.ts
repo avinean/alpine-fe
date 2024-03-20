@@ -46,6 +46,7 @@ export interface ProductEntity {
   status: VisibilityStatus
   category: CategoryEntity
   brand: BrandEntity
+  prices: PriceEntity[]
 }
 
 export interface ColorEntity {
@@ -57,6 +58,7 @@ export interface ColorEntity {
   createdAt: Date
   updatedAt: Date
   products: ProductEntity[]
+  prices: PriceEntity[]
 }
 
 export interface ParameterEntity {
@@ -68,6 +70,7 @@ export interface ParameterEntity {
   createdAt: Date
   updatedAt: Date
   products: ProductEntity[]
+  prices: PriceEntity[]
 }
 
 export interface ApplicationEntity {
@@ -108,4 +111,12 @@ export interface ServiceEntity {
   status: VisibilityStatus
   createdAt: Date
   updatedAt: Date
+}
+
+export interface PriceEntity {
+  article: string
+  price: number
+  color: ColorEntity
+  parameters: ParameterEntity[]
+  product: ProductEntity
 }

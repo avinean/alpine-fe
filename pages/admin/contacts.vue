@@ -137,6 +137,21 @@ function validate(state: ContactEntity) {
           Опублікований
         </UBadge>
       </template>
+      <template #address-data="{ row }">
+        <div class="max-w-32 overflow-hidden text-elipsis">
+          {{ row.address }}
+        </div>
+      </template>
+      <template #phones-data="{ row }">
+        <div class="max-w-32 overflow-hidden text-elipsis">
+          {{ row.phones }}
+        </div>
+      </template>
+      <template #emails-data="{ row }">
+        <div class="max-w-32 overflow-hidden text-elipsis">
+          {{ row.emails }}
+        </div>
+      </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">
           <base-datetime :date="row.createdAt" />

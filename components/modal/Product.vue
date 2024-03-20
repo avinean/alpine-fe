@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { ApplicationEntity, ColorEntity, ParameterEntity, ProductEntity } from '~/types/entities'
+import { ModalProductPrice } from '#components'
+import type { ApplicationEntity, ColorEntity, ParameterEntity, PriceEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: ProductEntity | null
@@ -11,8 +12,12 @@ const emit = defineEmits<{
 defineExpose({
   title: props.preset?.id ? 'Змінити продукт' : 'Додати продукт',
   ui: { width: 'sm:max-w-4xl' },
+  props: {
+    fullscreen: true,
+  },
 })
 
+const { open } = useModalStore()
 const toast = useToast()
 const { add, edit } = useProductRepository()
 const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
@@ -30,6 +35,7 @@ const state: Partial<ProductEntity> = reactive({
   colors: props.preset?.colors || [],
   parameters: props.preset?.parameters || [],
   applications: props.preset?.applications || [],
+  prices: props.preset?.prices || [],
 })
 const brand = ref<number | undefined>(props.preset?.brand?.id)
 const category = ref<number | undefined>(props.preset?.category?.id)
@@ -65,8 +71,6 @@ function validate(state: ProductEntity) {
     errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
     errors.push({ path: 'title', message: 'Обовʼязкове поле' })
-  if (!state.price)
-    errors.push({ path: 'price', message: 'Обовʼязкове поле' })
 
   return errors
 }
@@ -107,6 +111,31 @@ async function onCreateOrUpdate() {
   finally {
     loading.value = false
   }
+}
+
+function callPriceModal(preset?: PriceEntity) {
+  open(
+    ModalProductPrice,
+    {
+      preset,
+      onSubmit(price: PriceEntity) {
+        if (!state.prices)
+          state.prices = []
+
+        if (preset)
+          state.prices = state.prices.map(item => item.article === price.article ? price : item)
+
+        else
+          state.prices.push(price)
+      },
+    },
+  )
+}
+
+function removePrice(price: PriceEntity) {
+  const index = state.prices?.findIndex(item => item.article === price.article)
+  if (typeof index === 'number' && index !== -1)
+    state.prices?.splice(index, 1)
 }
 </script>
 
@@ -179,7 +208,6 @@ async function onCreateOrUpdate() {
       <UFormGroup
         label="Ціна"
         name="price"
-        required
       >
         <UInput v-model.number="state.price" type="number" step="any">
           <template #trailing>
@@ -192,6 +220,68 @@ async function onCreateOrUpdate() {
         name="tags"
       >
         <InputTags v-model="state.tags" />
+      </UFormGroup>
+      <UFormGroup
+        label="Ціни"
+        name="prices"
+        class="col-span-2"
+      >
+        <UTable
+          :rows="state.prices"
+          :columns="[
+            { key: 'article', label: 'Артикул' },
+            { key: 'price', label: 'Ціна' },
+            { key: 'color', label: 'Колір' },
+            { key: 'parameters', label: 'Характеристики' },
+            { key: 'actions', label: 'Дії' },
+          ]"
+        >
+          <template #color-data="{ row }">
+            <UBadge
+              :key="row.color?.id"
+              :label="row.color?.title"
+            />
+          </template>
+          <template #parameters-data="{ row }">
+            <div class="flex gap-2 flex-wrap">
+              <UBadge
+                v-for="parameter in row.parameters"
+                :key="parameter.id"
+                :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
+              />
+            </div>
+          </template>
+          <template #actions-data="{ row }">
+            <UDropdown
+              :items="[
+                [
+                  {
+                    label: 'Редагувати',
+                    icon: 'i-heroicons-pencil-square-16-solid',
+                    click: () => callPriceModal(row),
+                  },
+                  {
+                    label: 'Видалити',
+                    icon: 'i-heroicons-x-mark-16-solid',
+                    click: () => removePrice(row),
+                  },
+                ],
+              ]"
+            >
+              <UButton color="gray" variant="ghost" icon="i-heroicons-adjustments-horizontal-solid" />
+            </UDropdown>
+          </template>
+          <template #empty-state>
+            <div class="p-4">
+              <UButton class="mx-auto block" @click="callPriceModal()">
+                Додати ціну
+              </UButton>
+            </div>
+          </template>
+        </UTable>
+        <UButton v-if="state.prices?.length" class="mx-auto block" @click="callPriceModal()">
+          Додати ціну
+        </UButton>
       </UFormGroup>
     </div>
     <div class="flex justify-end">

@@ -8,7 +8,7 @@ const global = useGlobalStore()
       Контакти
     </h1>
     <ul v-if="global.contacts" class="space-y-2">
-      <li v-for="contact in global.contacts" :key="contact.address" class="grid grid-cols-3 items-center bg-gray-100 text-center text-xl p-2">
+      <li v-for="contact in global.contacts" :key="contact.address" class="grid lg:grid-cols-3 items-center bg-gray-100 text-center text-lg p-2">
         <div>{{ contact.address }}</div>
         <div class="grid gap-2">
           <a

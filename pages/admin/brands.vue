@@ -9,7 +9,7 @@ const statuses = ref<VisibilityStatus[]>([
   VisibilityStatus.Published,
   VisibilityStatus.Draft,
 ])
-const { get, publish, draft, archive } = useBrandRepository()
+const { get, publish, draft, archive, remove } = useBrandRepository()
 const { data, refresh } = useAsyncData(
   () => get({ statuses: statuses.value }),
   { watch: [statuses] },
@@ -130,6 +130,14 @@ const columns = [
                 icon: row.status === VisibilityStatus.Archived ? 'i-heroicons-folder-plus-16-solid' : 'i-heroicons-folder-minus-16-solid',
                 click: async () => {
                   await (row.status === VisibilityStatus.Archived ? draft(row.id) : archive(row.id))
+                  refresh()
+                },
+              },
+              {
+                label: 'Видалити',
+                icon: 'i-heroicons-trash',
+                click: async () => {
+                  await remove(row.id)
                   refresh()
                 },
               },

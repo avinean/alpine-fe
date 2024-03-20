@@ -23,6 +23,10 @@ export const useCategoryRepository = createGlobalState(() => {
       body,
     })
   }
+  
+  function remove(id: number) {
+    return $api(`/category/delete/${id}`, { method: 'POST' })
+  }
 
   function publish(id: number) {
     return $api(`/category/${id}/publish`, { method: 'PUT' })
@@ -44,5 +48,6 @@ export const useCategoryRepository = createGlobalState(() => {
     publish,
     draft,
     archive,
+    remove
   }
 })

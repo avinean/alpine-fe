@@ -20,6 +20,10 @@ export const useProductRepository = createGlobalState(() => {
     })
   }
 
+  function remove(id: number) {
+    return $api(`/product/delete/${id}`, { method: 'POST' })
+  }
+
   function publish(id: number) {
     return $api(`/product/${id}/publish`, { method: 'PUT' })
   }
@@ -39,5 +43,6 @@ export const useProductRepository = createGlobalState(() => {
     publish,
     draft,
     archive,
+    remove,
   }
 })

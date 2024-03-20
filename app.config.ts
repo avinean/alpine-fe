@@ -20,5 +20,8 @@ export default defineAppConfig({
     buttonGroup: {
       rounded: 'rounded-none',
     },
+    badge: {
+      rounded: 'rounded-none',
+    },
   },
 })
