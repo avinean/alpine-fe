@@ -8,7 +8,7 @@ const { data } = useAsyncData(
 </script>
 
 <template>
-  <main class="space-y-2">
+  <div class="space-y-2">
     <h1 class="text-3xl">
       Наші послуги
     </h1>
@@ -72,5 +72,5 @@ const { data } = useAsyncData(
         </UButton>
       </UseCall>
     </div>
-  </main>
+  </div>
 </template>

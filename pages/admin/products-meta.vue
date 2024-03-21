@@ -30,7 +30,7 @@ function addApplication() {
 </script>
 
 <template>
-  <main class="space-y-2">
+  <div class="space-y-2">
     <UCard>
       <template #header>
         <div class="flex justify-between">
@@ -148,5 +148,5 @@ function addApplication() {
         ]"
       />
     </UCard>
-  </main>
+  </div>
 </template>

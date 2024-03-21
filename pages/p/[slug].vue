@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main>
+  <div>
     <div class="grid items-start gap-2 md:grid-cols-[60%_40%]">
       <UCard>
         <BaseImage :src="data?.image" />
@@ -159,5 +159,5 @@ onMounted(() => {
         </template>
       </template>
     </UTabs>
-  </main>
+  </div>
 </template>

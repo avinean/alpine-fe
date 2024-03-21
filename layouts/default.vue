@@ -77,7 +77,7 @@ const categories = computed(() => [
       </header>
     </div>
 
-    <main class="container flex-1 mx-auto p-2">
+    <main class="container flex-1 mx-auto">
       <NuxtPage />
       <div class="fixed bottom-12 right-5 animate-bounce rounded bg-white border">
         <UseCall v-slot="{ call }">

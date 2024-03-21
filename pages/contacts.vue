@@ -3,7 +3,7 @@ const global = useGlobalStore()
 </script>
 
 <template>
-  <main class="space-y-2">
+  <div class="space-y-2">
     <h1 class="text-3xl">
       Контакти
     </h1>
@@ -29,5 +29,5 @@ const global = useGlobalStore()
           </a></div>
       </li>
     </ul>
-  </main>
+  </div>
 </template>

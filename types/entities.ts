@@ -116,3 +116,9 @@ export interface PriceEntity {
   parameters: ParameterEntity[]
   product: ProductEntity
 }
+
+export interface BannerEntity {
+  title: string
+  description: string
+  image: string
+}

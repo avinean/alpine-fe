@@ -1,9 +1,23 @@
-import type { ProductEntity } from '~/types/entities'
+import type { PaginationRequest, PaginationResponse } from '~/types/api'
+import type { ColorEntity, ParameterEntity, ProductEntity } from '~/types/entities'
 import type { VisibilityStatus } from '~/types/enums'
 
 export const useProductRepository = createGlobalState(() => {
   function get(query: { categories?: (number | string)[], statuses?: VisibilityStatus[], pure?: boolean }) {
     return $api<ProductEntity[]>(`/product`, { query })
+  }
+
+  function getByPage(query: {
+    categories?: string[]
+    statuses?: VisibilityStatus[]
+    colors?: string[]
+    parameters?: string[]
+  } & PaginationRequest) {
+    return $api<PaginationResponse<ProductEntity>>(`/product/page`, { query })
+  }
+
+  function getFilters(query: { categories?: string[] }) {
+    return $api<{ colors: ColorEntity[], parameters: ParameterEntity[] }>(`/product/filters`, { query })
   }
 
   function getOne(slug: string) {
@@ -49,5 +63,7 @@ export const useProductRepository = createGlobalState(() => {
     draft,
     archive,
     remove,
+    getByPage,
+    getFilters,
   }
 })

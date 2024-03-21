@@ -3,5 +3,7 @@
 </script>
 
 <template>
-  <div>Under construction!</div>
+  <div>
+    <img src="/banner.jpg" class="w-full">
+  </div>
 </template>
