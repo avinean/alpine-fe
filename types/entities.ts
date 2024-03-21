@@ -38,8 +38,6 @@ export interface ProductEntity {
   image: string
   price: number
   tags: string
-  colors: ColorEntity[]
-  parameters: ParameterEntity[]
   applications: ApplicationEntity[]
   createdAt: Date
   updatedAt: Date
@@ -57,7 +55,6 @@ export interface ColorEntity {
   image?: string
   createdAt: Date
   updatedAt: Date
-  products: ProductEntity[]
   prices: PriceEntity[]
 }
 
@@ -69,7 +66,6 @@ export interface ParameterEntity {
   value?: string
   createdAt: Date
   updatedAt: Date
-  products: ProductEntity[]
   prices: PriceEntity[]
 }
 

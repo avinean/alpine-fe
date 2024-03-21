@@ -27,34 +27,15 @@ const state: Partial<ProductEntity> = reactive({
   description: props.preset?.description,
   title: props.preset?.title,
   image: props.preset?.image,
-  price: props.preset?.price,
   application: props.preset?.application,
   size: props.preset?.size,
   standart: props.preset?.standart,
   tags: props.preset?.tags,
-  colors: props.preset?.colors || [],
-  parameters: props.preset?.parameters || [],
   applications: props.preset?.applications || [],
   prices: props.preset?.prices || [],
 })
 const brand = ref<number | undefined>(props.preset?.brand?.id)
 const category = ref<number | undefined>(props.preset?.category?.id)
-const colors = computed({
-  get() {
-    return state.colors?.map(color => color.id) || []
-  },
-  set(value: number[]) {
-    state.colors = value.map(id => ({ id } as ColorEntity))
-  },
-})
-const parameters = computed({
-  get() {
-    return state.parameters?.map(parameter => parameter.id) || []
-  },
-  set(value: number[]) {
-    state.parameters = value.map(id => ({ id } as ParameterEntity))
-  },
-})
 const applications = computed({
   get() {
     return state.applications?.map(applications => applications.id) || []
@@ -171,21 +152,9 @@ function removePrice(price: PriceEntity) {
         label="Опис"
         name="description"
         required
-        class="row-span-3"
+        class="row-span-4"
       >
-        <UTextarea v-model="state.description" :rows="6" />
-      </UFormGroup>
-      <UFormGroup
-        label="Колір"
-        name="colors"
-      >
-        <UseColorSelector v-model="colors" multiple />
-      </UFormGroup>
-      <UFormGroup
-        label="Характеристики"
-        name="parameters"
-      >
-        <UseParameterSelector v-model="parameters" multiple />
+        <UTextarea v-model="state.description" :rows="11" />
       </UFormGroup>
       <UFormGroup
         label="Застосування"
@@ -204,16 +173,6 @@ function removePrice(price: PriceEntity) {
         name="standart"
       >
         <UInput v-model="state.standart" />
-      </UFormGroup>
-      <UFormGroup
-        label="Ціна"
-        name="price"
-      >
-        <UInput v-model.number="state.price" type="number" step="any">
-          <template #trailing>
-            <span class="text-gray-500 dark:text-gray-400 text-xs">ГРН</span>
-          </template>
-        </UInput>
       </UFormGroup>
       <UFormGroup
         label="Теги для пошуку"
@@ -238,17 +197,22 @@ function removePrice(price: PriceEntity) {
         >
           <template #color-data="{ row }">
             <UBadge
+              v-if="row.color"
               :key="row.color?.id"
               :label="row.color?.title"
             />
+            <UBadge v-else label="Не вказано" color="gray" />
           </template>
           <template #parameters-data="{ row }">
             <div class="flex gap-2 flex-wrap">
-              <UBadge
-                v-for="parameter in row.parameters"
-                :key="parameter.id"
-                :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
-              />
+              <template v-if="row.parameters.length">
+                <UBadge
+                  v-for="parameter in row.parameters"
+                  :key="parameter.id"
+                  :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
+                />
+              </template>
+              <UBadge v-else label="Не вказано" color="gray" />
             </div>
           </template>
           <template #actions-data="{ row }">

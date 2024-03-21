@@ -15,13 +15,13 @@ defineProps<{
     >
       <span
         v-if="color.value"
-        class="flex-shrink-0 w-8 h-8 mt-px rounded-full"
+        class="flex-shrink-0 w-8 h-8 mt-px rounded-full border"
         :style="{ background: color.value }"
       />
       <base-image
         v-else
         :src="color.image"
-        class="w-8 h-8 mt-px rounded-full"
+        class="w-8 h-8 mt-px rounded-full border"
       />
     </UTooltip>
   </div>

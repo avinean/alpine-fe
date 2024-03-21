@@ -37,6 +37,18 @@ export default defineAppConfig({
     },
     checkbox: {
       rounded: 'rounded-none',
-    }
+    },
+    tabs: {
+      list: {
+        background: 'bg-transparent',
+        rounded: 'rounded-none',
+        marker: {
+          rounded: 'rounded-none',
+          background: 'bg-transparent',
+          shadow: 'shadow-none',
+          base: 'border-b-2 border-primary',
+        }
+      },  
+  }
   },
 })

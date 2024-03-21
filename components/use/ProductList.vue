@@ -79,7 +79,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
         </UButton>
       </div>
     </UModal>
-    <ul v-if="data" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3">
+    <ul v-if="data" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
       <ULink
         v-for="product in data"
         :key="product.title"
