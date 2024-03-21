@@ -40,6 +40,7 @@ export default defineAppConfig({
     },
     tabs: {
       list: {
+        base: 'border-b-2',
         background: 'bg-transparent',
         rounded: 'rounded-none',
         marker: {

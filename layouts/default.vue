@@ -94,7 +94,7 @@ const categories = computed(() => [
           <img src="/logo.jpg" alt="logo" class="h-24 mx-auto">
         </ULink>
         <nav class="grid text-center">
-          <h2 class="font-bold">
+          <h2 class="font-bold text-xl">
             Меню
           </h2>
           <ULink to="/b/product" class="p-2">
@@ -111,11 +111,11 @@ const categories = computed(() => [
           </ULink>
         </nav>
         <div class="space-y-2 text-center">
-          <h2 class="font-bold">
+          <h2 class="font-bold text-xl">
             Контакти
           </h2>
           <ul v-if="global.contacts" class="space-y-1">
-            <li v-for="contact in global.contacts" :key="contact.address" class="grid items-center md:grid-cols-2">
+            <li v-for="contact in global.contacts" :key="contact.address">
               <div>{{ contact.address }}</div>
               <div class="grid gap-1">
                 <a

@@ -4,6 +4,8 @@ import type { ColorEntity } from '~/types/entities'
 defineProps<{
   colors?: ColorEntity[]
 }>()
+
+const model = defineModel<ColorEntity>()
 </script>
 
 <template>
@@ -15,13 +17,17 @@ defineProps<{
     >
       <span
         v-if="color.value"
-        class="flex-shrink-0 w-8 h-8 mt-px rounded-full border"
+        class="flex-shrink-0 w-8 h-8 mt-px rounded-full border cursor-pointer"
         :style="{ background: color.value }"
+        :class="{ 'border-2 border-primary': model?.id === color.id}"
+        @click="model = color"
       />
       <base-image
         v-else
         :src="color.image"
-        class="w-8 h-8 mt-px rounded-full border"
+        class="w-8 h-8 mt-px rounded-full border cursor-pointer"
+        :class="{ 'border-2 border-primary': model?.id === color.id}"
+        @click="model = color"
       />
     </UTooltip>
   </div>
