@@ -8,6 +8,8 @@ export const useGlobalStore = defineStore('global', () => {
     : [VisibilityStatus.Published],
   )
 
+  const headerRef = ref<Element | ComponentPublicInstance | null>(null)
+
   async function checkLogin() {
     if (isLoggedIn.value)
       return isLoggedIn.value
@@ -21,9 +23,15 @@ export const useGlobalStore = defineStore('global', () => {
     return isLoggedIn.value
   }
 
-  const { get } = useContactRepository()
+  const contactRepository = useContactRepository()
   const { data: contacts } = useAsyncData(
-    () => get({ statuses: statuses.value }),
+    () => contactRepository.get({ statuses: statuses.value }),
+    { watch: [statuses] },
+  )
+
+  const categoryRepository = useCategoryRepository()
+  const { data: categories } = useAsyncData(
+    () => categoryRepository.get({ statuses: statuses.value }),
     { watch: [statuses] },
   )
 
@@ -32,6 +40,8 @@ export const useGlobalStore = defineStore('global', () => {
     isLoggedIn,
     isPreview,
     statuses,
-    contacts
+    contacts,
+    categories,
+    headerRef,
   }
 })

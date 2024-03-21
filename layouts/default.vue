@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import type { DropdownItem } from '#ui/types'
 
 const global = useGlobalStore()
 
@@ -13,11 +14,18 @@ onMounted(() => {
 const startYear = 2024
 const currentYear = new Date().getFullYear()
 const yearString = startYear === currentYear ? currentYear : `${startYear}-${currentYear}`
+
+const categories = computed(() => [
+  global.categories?.map(category => ({
+    label: category.title,
+    to: `/c/${category.slug}`,
+  })) as DropdownItem[],
+])
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <div class="border-b bg-white sticky top-0 z-10">
+    <div :ref="e => global.headerRef = e" class="border-b bg-white sticky top-0 z-10">
       <div v-if="global.isLoggedIn" class="flex items-center md:justify-between p-2 bg-gray-300">
         <ULink to="/admin" class="flex items-center gap-2">
           <i class="i-heroicons-arrow-left-on-rectangle-20-solid text-2xl text-gray" />
@@ -44,9 +52,14 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
             :class="{ 'w-full flex-col items-center': !md }"
             @click="menuOpen = !menuOpen"
           >
-            <ULink to="/product" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-              Продукція
-            </ULink>
+            <UDropdown :items="categories" mode="hover" :popper="{ placement: 'bottom-start' }">
+              <ULink to="/products" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+                Продукція
+              </ULink>
+              <template #item="{ item }">
+                <ULink :to="item.to">{{ item.label }}</ULink>
+              </template>
+            </UDropdown>
             <ULink to="/service" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
               Послуги
             </ULink>

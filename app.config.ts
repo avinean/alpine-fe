@@ -23,5 +23,20 @@ export default defineAppConfig({
     badge: {
       rounded: 'rounded-none',
     },
+    card: {
+      rounded: 'rounded-none',
+      body: {
+        padding: 'p-2 sm:p-2'
+      }
+    },
+    dropdown: {
+      rounded: 'rounded-none',
+      item: {
+        rounded: 'rounded-none',
+      }
+    },
+    checkbox: {
+      rounded: 'rounded-none',
+    }
   },
 })
