@@ -190,18 +190,18 @@ function removePrice(price: PriceEntity) {
           :columns="[
             { key: 'article', label: 'Артикул' },
             { key: 'price', label: 'Ціна' },
-            { key: 'color', label: 'Колір' },
+            { key: 'colors', label: 'Кольори' },
             { key: 'parameters', label: 'Характеристики' },
             { key: 'actions', label: 'Дії' },
           ]"
         >
-          <template #color-data="{ row }">
-            <UBadge
-              v-if="row.color"
-              :key="row.color?.id"
-              :label="row.color?.title"
-            />
-            <UBadge v-else label="Не вказано" color="gray" />
+          <template #colors-data="{ row }">
+            <div class="flex gap-2 flex-wrap">
+              <template v-if="row.colors.length">
+                <UseColorList :colors="row.colors" />
+              </template>
+              <UBadge v-else label="Не вказано" color="gray" />
+            </div>
           </template>
           <template #parameters-data="{ row }">
             <div class="flex gap-2 flex-wrap">

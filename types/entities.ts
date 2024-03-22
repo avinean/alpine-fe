@@ -112,7 +112,7 @@ export interface ServiceEntity {
 export interface PriceEntity {
   article: string
   price: number
-  color: ColorEntity
+  colors: ColorEntity[]
   parameters: ParameterEntity[]
   product: ProductEntity
 }

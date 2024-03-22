@@ -27,15 +27,15 @@ function validate(state: ProductEntity) {
 
 const state = ref<Partial<PriceEntity>>({
   price: props.preset?.price,
-  color: props.preset?.color,
+  colors: props.preset?.colors,
   parameters: props.preset?.parameters,
 })
-const color = computed({
+const colors = computed({
   get() {
-    return state.value?.color?.id
+    return state.value?.colors?.map(color => color.id) || []
   },
-  set(id) {
-    state.value!.color = { id } as ColorEntity
+  set(value: number[]) {
+    state.value!.colors = value.map(id => ({ id } as ColorEntity))
   },
 })
 const parameters = computed({
@@ -51,7 +51,7 @@ function onCreateOrUpdate() {
   emit('submit', {
     ...props.preset,
     ...state.value,
-    color: (colorSelector.value?.selectedColors || [])[0],
+    colors: colorSelector.value?.selectedColors || [],
     parameters: parametersSelector.value?.selectedParameters || [],
   } as PriceEntity)
 }
@@ -71,9 +71,9 @@ function onCreateOrUpdate() {
       </UInput>
     </UFormGroup>
     <UFormGroup name="price">
-      <UseColorSelector v-slot="{ colors }" ref="colorSelector" v-model="color">
+      <UseColorSelector v-slot="{ colors: _ }" ref="colorSelector" v-model="colors" multiple>
         <div class="flex gap-2 pt-2">
-          <UBadge v-for="c in colors" :key="c.id" :label="c.title" />
+          <UBadge v-for="c in _" :key="c.id" :label="c.title" />
         </div>
       </UseColorSelector>
     </UFormGroup>

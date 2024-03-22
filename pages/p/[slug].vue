@@ -6,8 +6,12 @@ const { getOne } = useProductRepository()
 const slug = useRouteParams<string>('slug')
 const { data } = await useAsyncData(() => getOne(slug.value))
 
+const quantity = ref(1)
+const selectedColor = ref<ColorEntity | undefined>(undefined)
+const selectedParameter = ref<ParameterEntity | undefined>(undefined)
+
 const colors = computed(() => {
-  return data.value?.prices?.map(price => price.color).reduce((acc, _) => {
+  return data.value?.prices?.flatMap(price => price.colors).reduce((acc, _) => {
     if (acc.find(color => color?.id === _?.id))
       return acc
     return [...acc, _]
@@ -15,23 +19,25 @@ const colors = computed(() => {
 })
 
 const parameters = computed(() => {
-  return data.value?.prices?.flatMap(price => price.parameters).reduce((acc, _) => {
-    if (acc.find(parameter => parameter?.id === _?.id))
+  return data.value?.prices?.flatMap(price => price.parameters.map(p => ({
+    ...p,
+    available: price.colors.length ? !!(selectedColor.value && price.colors.find(({ id }) => id === selectedColor.value?.id)) : true,
+  }))).reduce((acc, _) => {
+    const existing = acc.find(parameter => parameter?.id === _?.id)
+    if (existing) {
+      existing.available = _.available || existing.available
       return acc
+    }
     return [...acc, _]
-  }, [] as ParameterEntity[]) || []
+  }, [] as (ParameterEntity & { available: boolean })[]) || []
 })
-
-const quantity = ref(1)
-const selectedColor = ref<ColorEntity | undefined>(undefined)
-const selectedParameter = ref<ParameterEntity | undefined>(undefined)
 
 const price = computed(() => {
   return data.value?.prices?.find((_) => {
     if (!(selectedColor.value && selectedParameter.value))
       return false
 
-    return _.color?.id === selectedColor.value.id
+    return _.colors.some(color => color.id === selectedColor.value?.id)
       && _.parameters.some(parameter => parameter.id === selectedParameter.value?.id)
   })
 })
@@ -41,16 +47,20 @@ watch(quantity, (v) => {
     quantity.value = 1
 })
 
+watch(selectedColor, () => {
+  if (parameters.value.length)
+    selectedParameter.value = parameters.value.find(({ available }) => available)
+})
+
 onMounted(() => {
-  watch([colors, parameters], () => {
+  watch(colors, () => {
     selectedColor.value = colors.value?.[0]
-    selectedParameter.value = parameters.value?.[0]
   }, { immediate: true })
 })
 </script>
 
 <template>
-  <div>
+  <div class="py-2">
     <div class="grid items-start gap-2 md:grid-cols-[60%_40%]">
       <UCard>
         <BaseImage :src="data?.image" />
@@ -61,32 +71,56 @@ onMounted(() => {
             {{ data?.title }}
           </h1>
           <p class="text-sm">
-            Категорія: {{ data?.category?.title }}
+            <span class="font-bold">Категорія:</span> {{ data?.category?.title }}
           </p>
           <p class="text-sm">
-            Виробник: {{ data?.brand?.title }}
+            <span class="font-bold">Виробник:</span> {{ data?.brand?.title }}
           </p>
         </div>
+        <p v-if="data?.size" class="py-2">
+          <span class="font-bold">Розмір:</span> {{ data?.size }}
+        </p>
         <p class="py-2">
-          Стандарт: {{ data?.standart }}
+          <span class="font-bold">Стандарт:</span> {{ data?.standart }}
         </p>
         <div v-if="colors" class="py-2">
           <p class="pb-2 font-bold">
             Кольори
           </p>
-          <UseColorList v-model="selectedColor" :colors />
+          <div class="flex gap-2 flex-wrap">
+            <UTooltip
+              v-for="color in (colors || [])"
+              :key="color.title"
+              :text="color.title"
+            >
+              <span
+                v-if="color.value"
+                class="flex-shrink-0 w-8 h-8 mt-px rounded-full border cursor-pointer"
+                :style="{ background: color.value }"
+                :class="{ 'border-2 border-primary': selectedColor?.id === color.id }"
+                @click="selectedColor = color"
+              />
+              <base-image
+                v-else
+                :src="color.image"
+                class="w-8 h-8 mt-px rounded-full border cursor-pointer"
+                :class="{ 'border-2 border-primary': selectedColor?.id === color.id }"
+                @click="selectedColor = color"
+              />
+            </UTooltip>
+          </div>
         </div>
         <div v-if="parameters" class="py-2">
           <p class="pb-2 font-bold">
             Харатеристики
           </p>
           <div class="flex flex-wrap gap-2 py-2">
-            <UBadge
+            <UButton
               v-for="parameter in parameters"
               :key="parameter.id"
               :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
               :color="selectedParameter?.id === parameter.id ? undefined : 'gray'"
-              class="cursor-pointer"
+              :disabled="!parameter.available"
               @click="selectedParameter = parameter"
             />
           </div>
