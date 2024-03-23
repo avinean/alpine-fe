@@ -134,22 +134,11 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
               <div class="font-bold text-lg mb-2">
                 Кольори
               </div>
-              <div class="flex gap-2 flex-wrap">
-                <UTooltip
-                  v-for="color in filters?.colors"
-                  :key="color.title"
-                  :text="color.title"
-                >
-                  <button
-                    class="w-8 h-8 mt-px rounded-full border cursor-pointer overflow-hidden"
-                    :class="{ 'border-primary border-4': colors.includes(color.slug) }"
-                    @click="toggleColor(color.slug)"
-                  >
-                    <span v-if="color.value" class="w-full h-full block" :style="{ background: color.value }" />
-                    <base-image v-else :src="color.image" class="w-full h-full block" />
-                  </button>
-                </UTooltip>
-              </div>
+              <UseColorList
+                v-model="colors"
+                :colors="filters?.colors"
+                multiple
+              />
             </div>
             <div v-if="filters?.parameters" class="py-2">
               <p class="pb-2 font-bold">

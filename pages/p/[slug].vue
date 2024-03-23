@@ -7,7 +7,7 @@ const slug = useRouteParams<string>('slug')
 const { data } = await useAsyncData(() => getOne(slug.value))
 
 const quantity = ref(1)
-const selectedColor = ref<ColorEntity | undefined>(undefined)
+const selectedColor = ref<string | undefined>(undefined)
 const selectedParameter = ref<ParameterEntity | undefined>(undefined)
 
 const colors = computed(() => {
@@ -21,7 +21,7 @@ const colors = computed(() => {
 const parameters = computed(() => {
   return data.value?.prices?.flatMap(price => price.parameters.map(p => ({
     ...p,
-    available: price.colors.length ? !!(selectedColor.value && price.colors.find(({ id }) => id === selectedColor.value?.id)) : true,
+    available: price.colors.length ? !!(selectedColor.value && price.colors.find(({ slug }) => slug === selectedColor.value)) : true,
   }))).reduce((acc, _) => {
     const existing = acc.find(parameter => parameter?.id === _?.id)
     if (existing) {
@@ -37,7 +37,7 @@ const price = computed(() => {
     if (!(selectedColor.value && selectedParameter.value))
       return false
 
-    return _.colors.some(color => color.id === selectedColor.value?.id)
+    return _.colors.some(({ slug }) => slug === selectedColor.value)
       && _.parameters.some(parameter => parameter.id === selectedParameter.value?.id)
   })
 })
@@ -54,7 +54,7 @@ watch(selectedColor, () => {
 
 onMounted(() => {
   watch(colors, () => {
-    selectedColor.value = colors.value?.[0]
+    selectedColor.value = colors.value?.[0].slug
   }, { immediate: true })
 })
 </script>
@@ -87,28 +87,7 @@ onMounted(() => {
           <p class="pb-2 font-bold">
             Кольори
           </p>
-          <div class="flex gap-2 flex-wrap">
-            <UTooltip
-              v-for="color in (colors || [])"
-              :key="color.title"
-              :text="color.title"
-            >
-              <span
-                v-if="color.value"
-                class="flex-shrink-0 w-8 h-8 mt-px rounded-full border cursor-pointer"
-                :style="{ background: color.value }"
-                :class="{ 'border-2 border-primary': selectedColor?.id === color.id }"
-                @click="selectedColor = color"
-              />
-              <base-image
-                v-else
-                :src="color.image"
-                class="w-8 h-8 mt-px rounded-full border cursor-pointer"
-                :class="{ 'border-2 border-primary': selectedColor?.id === color.id }"
-                @click="selectedColor = color"
-              />
-            </UTooltip>
-          </div>
+          <UseColorList v-model="selectedColor" :colors="colors" />
         </div>
         <div v-if="parameters" class="py-2">
           <p class="pb-2 font-bold">

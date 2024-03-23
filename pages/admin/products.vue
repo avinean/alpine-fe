@@ -6,10 +6,6 @@ import { VisibilityStatus } from '~/types/enums'
 const modalStore = useModalStore()
 const router = useRouter()
 const route = useRoute()
-const statuses = ref<VisibilityStatus[]>([
-  VisibilityStatus.Published,
-  VisibilityStatus.Draft,
-])
 const selectedBrands = computed({
   get() {
     return route.query.brands?.toString()?.split(',').map(Number) || []
@@ -39,9 +35,12 @@ const selectedCategories = computed({
 })
 
 const { get, publish, draft, archive, remove } = useProductRepository()
-const { data, refresh } = useAsyncData(
-  () => get({ categories: selectedCategories.value, statuses: statuses.value }),
-  { watch: [selectedCategories, statuses] },
+const { data, refresh, status } = useAsyncData(
+  () => get({
+    categories: selectedCategories.value,
+    statuses: route.query.statuses?.toString()?.split(',').map(String),
+  }),
+  { watch: [selectedCategories, () => route.query.statuses] },
 )
 
 function callModal(preset?: ProductEntity) {
@@ -99,7 +98,7 @@ const columns = [
     </template>
     <div class="border-b pb-2 flex gap-2">
       <UFormGroup label="Статуси" class="w-40">
-        <UseStatusSelector v-model="statuses" />
+        <UseStatusSelector query />
       </UFormGroup>
       <UFormGroup label="Бренди" class="w-40">
         <UseBrandSelector v-model="selectedBrands" multiple />
@@ -108,8 +107,13 @@ const columns = [
         <UseCategorySelector v-model="selectedCategories" :brands="selectedBrands" multiple />
       </UFormGroup>
     </div>
-
-    <UTable v-if="data" :rows="data" :columns="columns">
+    <UTable
+      v-if="data"
+      :rows="data"
+      :columns="columns"
+      :loading="status === 'pending'"
+      :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
+    >
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик

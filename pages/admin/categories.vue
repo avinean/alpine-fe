@@ -6,10 +6,7 @@ import { VisibilityStatus } from '~/types/enums'
 const { open } = useModalStore()
 const router = useRouter()
 const route = useRoute()
-const statuses = ref<VisibilityStatus[]>([
-  VisibilityStatus.Published,
-  VisibilityStatus.Draft,
-])
+
 const { get, publish, draft, archive, remove } = useCategoryRepository()
 
 const selectedBrands = computed({
@@ -21,9 +18,9 @@ const selectedBrands = computed({
   },
 })
 
-const { data: categories, refresh } = useAsyncData(
-  () => get({ statuses: statuses.value }),
-  { watch: [selectedBrands, statuses] },
+const { data: categories, refresh, status } = useAsyncData(
+  () => get({ statuses: route.query.statuses?.toString()?.split(',').map(String) }),
+  { watch: [selectedBrands, () => route.query.statuses] },
 )
 
 function callModal(preset?: CategoryEntity) {
@@ -77,13 +74,19 @@ const columns = [
     </template>
     <div class="border-b pb-2 flex gap-2">
       <UFormGroup label="Статуси" class="w-40">
-        <UseStatusSelector v-model="statuses" />
+        <UseStatusSelector query />
       </UFormGroup>
       <UFormGroup label="Бренди" class="w-40">
         <UseBrandSelector v-model="selectedBrands" multiple />
       </UFormGroup>
     </div>
-    <UTable v-if="categories" :rows="categories" :columns="columns">
+    <UTable
+      v-if="categories"
+      :rows="categories"
+      :columns="columns"
+      :loading="status === 'pending'"
+      :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
+    >
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик

@@ -3,7 +3,7 @@ import type { ColorEntity, ParameterEntity, ProductEntity } from '~/types/entiti
 import type { VisibilityStatus } from '~/types/enums'
 
 export const useProductRepository = createGlobalState(() => {
-  function get(query: { categories?: (number | string)[], statuses?: VisibilityStatus[], pure?: boolean }) {
+  function get(query: { categories?: (number | string)[], statuses?: string[], pure?: boolean }) {
     return $api<ProductEntity[]>(`/product`, { query })
   }
 

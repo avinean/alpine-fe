@@ -3,16 +3,13 @@ import { ModalBrand } from '#components'
 import type { BrandEntity } from '~/types/entities'
 import { VisibilityStatus } from '~/types/enums'
 
+const route = useRoute()
 const modalStore = useModalStore()
 
-const statuses = ref<VisibilityStatus[]>([
-  VisibilityStatus.Published,
-  VisibilityStatus.Draft,
-])
 const { get, publish, draft, archive, remove } = useBrandRepository()
-const { data, refresh } = useAsyncData(
-  () => get({ statuses: statuses.value }),
-  { watch: [statuses] },
+const { data, refresh, status } = await useAsyncData(
+  () => get({ statuses: route.query.statuses?.toString()?.split(',').map(String) }),
+  { watch: [() => route.query.statuses] },
 )
 
 function callModal(preset?: BrandEntity) {
@@ -66,10 +63,15 @@ const columns = [
     </template>
     <div class="border-b pb-2">
       <UFormGroup label="Статуси" class="w-40">
-        <UseStatusSelector v-model="statuses" />
+        <UseStatusSelector query />
       </UFormGroup>
     </div>
-    <UTable v-if="data" :rows="data" :columns="columns">
+    <UTable
+      :rows="data || []"
+      :columns="columns"
+      :loading="status === 'pending'"
+      :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
+    >
       <template #status-data="{ row }">
         <UBadge v-if="row.status === VisibilityStatus.Draft" variant="subtle" color="gray">
           Чорновик

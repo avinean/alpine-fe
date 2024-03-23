@@ -1,11 +1,29 @@
 <script setup lang="ts">
 import type { ColorEntity } from '~/types/entities'
 
-defineProps<{
+const props = defineProps<{
   colors?: ColorEntity[]
+  multiple?: boolean
 }>()
 
-const model = defineModel<ColorEntity>()
+const model = defineModel<string | string[]>()
+
+function isSelected(color: ColorEntity) {
+  if (Array.isArray(model.value))
+    return model.value?.find(slug => slug === color.slug)
+  else if (model.value && !props.multiple)
+    return model.value === color.slug
+}
+
+function toggleColor(color: ColorEntity) {
+  if (Array.isArray(model.value)) {
+    if (model.value.find(_ => _ === color.slug))
+      model.value = model.value.filter(_ => _ !== color.slug)
+    else
+      model.value = [...model.value, color.slug]
+  }
+  else if (model.value && !props.multiple) { model.value = color.slug }
+}
 </script>
 
 <template>
@@ -15,20 +33,14 @@ const model = defineModel<ColorEntity>()
       :key="color.title"
       :text="color.title"
     >
-      <span
-        v-if="color.value"
-        class="flex-shrink-0 w-8 h-8 mt-px rounded-full border cursor-pointer"
-        :style="{ background: color.value }"
-        :class="{ 'border-2 border-primary': model?.id === color.id}"
-        @click="model = color"
-      />
-      <base-image
-        v-else
-        :src="color.image"
-        class="w-8 h-8 mt-px rounded-full border cursor-pointer"
-        :class="{ 'border-2 border-primary': model?.id === color.id}"
-        @click="model = color"
-      />
+      <button
+        class="w-8 h-8 mt-px rounded-full border cursor-pointer overflow-hidden"
+        :class="{ 'border-primary border-4': isSelected(color) }"
+        @click="toggleColor(color)"
+      >
+        <span v-if="color.value" class="w-full h-full block" :style="{ background: color.value }" />
+        <base-image v-else :src="color.image" class="w-full h-full block" />
+      </button>
     </UTooltip>
   </div>
 </template>
