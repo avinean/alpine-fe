@@ -82,9 +82,7 @@ watch([_categories, _colors, _parameters], () => {
 })
 
 const { data: filters } = useAsyncData(
-  () => getFilters({
-    categories: categories.value.length ? categories.value : undefined,
-  }),
+  () => getFilters({ categories: categories.value.length ? categories.value : undefined }),
   {
     watch: [() => global.statuses],
   },
@@ -133,15 +131,19 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
                 multiple
               />
             </div>
-            <div v-if="filters?.parameters" class="py-2">
+            <div
+              v-for="parameterFilters, title in filters?.parameters"
+              :key="title"
+              class="py-2"
+            >
               <p class="pb-2 font-bold">
-                Харатеристики
+                {{ title }}
               </p>
               <div class="flex flex-wrap gap-2 py-2">
                 <UBadge
-                  v-for="parameter in filters?.parameters"
+                  v-for="parameter in parameterFilters"
                   :key="parameter.id"
-                  :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
+                  :label="[parameter.value, parameter.unit].filter(Boolean).join(' ')"
                   :color="parameters.includes(parameter.slug) ? undefined : 'gray'"
                   class="cursor-pointer"
                   @click="toggleParameter(parameter.slug)"

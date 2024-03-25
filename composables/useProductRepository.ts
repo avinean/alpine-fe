@@ -22,7 +22,7 @@ export const useProductRepository = createGlobalState(() => {
   }
 
   function getFilters(query: { categories?: string[] }) {
-    return $api<{ colors: ColorEntity[], parameters: ParameterEntity[] }>(`/product/filters`, { query })
+    return $api<{ colors: ColorEntity[], parameters: Record<string, ParameterEntity[]> }>(`/product/filters`, { query })
   }
 
   function getOne(slug: string) {

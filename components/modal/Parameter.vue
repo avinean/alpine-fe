@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import type { ParameterEntity } from '~/types/entities'
 
+const props = defineProps<{
+  preset?: ParameterEntity
+}>()
+
 const emit = defineEmits<{
   submit: []
 }>()
@@ -10,14 +14,14 @@ defineExpose({
 })
 
 const toast = useToast()
-const { add, suggestions } = useParameterRepository()
+const { add, edit, suggestions } = useParameterRepository()
 const { data } = useAsyncData(suggestions)
 
 const loading = ref(false)
 const state: Partial<ParameterEntity> = reactive({
-  type: undefined,
-  value: undefined,
-  unit: undefined,
+  type: props.preset?.type.trim() || undefined,
+  value: props.preset?.value?.trim() || undefined,
+  unit: props.preset?.unit?.trim() || undefined,
 })
 
 const types = computed(() => data.value?.map(item => item.type) || [])
@@ -47,7 +51,9 @@ async function onCreateOrUpdate() {
   loading.value = true
 
   try {
-    await add(state)
+    await (props.preset
+      ? edit(props.preset.id, state)
+      : add(state))
     emit('submit')
   }
   catch (error: any) {

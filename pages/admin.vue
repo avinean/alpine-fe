@@ -3,7 +3,7 @@ import { VisibilityStatus } from '~/types/enums'
 
 definePageMeta({
   layout: 'admin',
-  redirect: '/admin/brands',
+  redirect: '/admin/products',
   middleware: 'requires-auth',
 })
 
@@ -30,8 +30,16 @@ const query = `?statuses=${[
           to: `/admin/brands${query}`,
         },
         {
-          label: 'Характеристики продуктів',
-          to: '/admin/products-meta',
+          label: 'Кольори',
+          to: '/admin/colors',
+        },
+        {
+          label: 'Характеристики',
+          to: '/admin/parameters',
+        },
+        {
+          label: 'Застосування',
+          to: '/admin/applications',
         },
         {
           label: 'Контакти',

@@ -33,10 +33,15 @@ export const useParameterRepository = createGlobalState(() => {
     })
   }
 
+  function remove(id: number) {
+    return $api(`/parameter/delete/${id}`, { method: 'POST' })
+  }
+
   return {
     get,
     suggestions,
     add,
     edit,
+    remove,
   }
 })

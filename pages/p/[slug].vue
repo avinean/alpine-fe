@@ -116,7 +116,7 @@ onMounted(() => {
             <UButton
               v-for="parameter in group"
               :key="parameter.id"
-              :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
+              :label="[parameter.value,parameter.unit].filter(Boolean).join(' ')"
               :color="availableParameters.includes(parameter.slug) && selectedParameters.find(slug => slug === parameter.slug) ? undefined : 'gray'"
               :disabled="!availableParameters.includes(parameter.slug)"
               @click="selectParameter(parameter, group)"
