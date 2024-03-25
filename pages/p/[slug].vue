@@ -136,7 +136,7 @@ onMounted(() => {
             Ціна: <span class="text-2xl font-bold">{{ price.price * quantity }}</span> грн
           </div>
         </template>
-        <div v-else class="py-2">
+        <div v-else-if="!price && selectedParameters.length" class="py-2">
           Немає в наявності
         </div>
       </div>

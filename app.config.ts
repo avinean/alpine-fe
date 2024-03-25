@@ -26,14 +26,14 @@ export default defineAppConfig({
     card: {
       rounded: 'rounded-none',
       body: {
-        padding: 'p-2 sm:p-2'
-      }
+        padding: 'p-2 sm:p-2',
+      },
     },
     dropdown: {
       rounded: 'rounded-none',
       item: {
         rounded: 'rounded-none',
-      }
+      },
     },
     checkbox: {
       rounded: 'rounded-none',
@@ -48,8 +48,20 @@ export default defineAppConfig({
           background: 'bg-transparent',
           shadow: 'shadow-none',
           base: 'border-b-2 border-primary',
-        }
-      },  
-  }
+        },
+      },
+    },
+    table: {
+      th: {
+        padding: 'py-1 px-2',
+      },
+      td: {
+        padding: 'py-1 px-2',
+      },
+    },
+    pagination: {
+      rounded: 'first:rounded-none last:rounded-none',
+      
+    }
   },
 })
