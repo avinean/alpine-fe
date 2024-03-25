@@ -1,31 +1,28 @@
 <script lang="ts" setup>
+import { useRouteQuery } from '@vueuse/router'
 import { VisibilityStatus } from '~/types/enums'
 
-const props =defineProps<{
+const props = defineProps<{
   query?: boolean
 }>()
 
-const router = useRouter()
-const route = useRoute()
-
+const statuses = useRouteQuery<string>('statuses')
 const _model = defineModel<VisibilityStatus[]>({
   default: () => [],
 })
 
 const selectedStatuses = computed({
   get() {
-    return (route.query.statuses?.toString()?.split(',').map(String) || [
+    return (statuses.value?.toString()?.split(',') as VisibilityStatus[]) || [
       VisibilityStatus.Published,
       VisibilityStatus.Draft,
-    ]) as VisibilityStatus[]
+    ]
   },
-  set(statuses: VisibilityStatus[]) {
-    router.replace({
-      query: {
-        ...route.query,
-        statuses: statuses.length ? statuses.join(',') : undefined,
-      },
-    })
+  set(_statuses: VisibilityStatus[]) {
+    statuses.value = (_statuses || [
+      VisibilityStatus.Published,
+      VisibilityStatus.Draft,
+    ]).join(',')
   },
 })
 
@@ -35,25 +32,24 @@ const model = computed({
   },
   set(statuses: VisibilityStatus[]) {
     (props.query ? selectedStatuses : _model).value = statuses
-  }
+  },
 })
-
 
 const options = [
   {
     id: VisibilityStatus.Published,
     label: 'Опублікований',
-    icon: 'i-heroicons-eye-solid'
+    icon: 'i-heroicons-eye-solid',
   },
   {
     id: VisibilityStatus.Draft,
     label: 'Чорновик',
-    icon: 'i-heroicons-eye-slash-solid'
+    icon: 'i-heroicons-eye-slash-solid',
   },
   {
     id: VisibilityStatus.Archived,
     label: 'Архівований',
-    icon: 'i-heroicons-folder-minus-16-solid'
+    icon: 'i-heroicons-folder-minus-16-solid',
   },
 ]
 </script>
@@ -65,6 +61,6 @@ const options = [
     option-attribute="label"
     value-attribute="id"
     multiple
-    placeholder="Select people"
+    placeholder="Обрати статуси"
   />
 </template>

@@ -1,26 +1,21 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router'
 import { ModalCategory } from '#components'
 import type { CategoryEntity } from '~/types/entities'
 import { VisibilityStatus } from '~/types/enums'
 
 const { open } = useModalStore()
-const router = useRouter()
-const route = useRoute()
 
 const { get, publish, draft, archive, remove } = useCategoryRepository()
 
-const selectedBrands = computed({
-  get() {
-    return route.query.brands?.toString()?.split(',').map(Number) || []
-  },
-  set(ids: number[]) {
-    router.replace({ query: { ...route.query, brands: ids.join(',') } })
-  },
-})
+const sQuery = useRouteQuery('statuses', [
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+].join(','))
 
 const { data: categories, refresh, status } = useAsyncData(
-  () => get({ statuses: route.query.statuses?.toString()?.split(',').map(String) }),
-  { watch: [selectedBrands, () => route.query.statuses] },
+  () => get({ statuses: sQuery.value?.toString()?.split(',').map(String) }),
+  { watch: [sQuery] },
 )
 
 function callModal(preset?: CategoryEntity) {
@@ -75,9 +70,6 @@ const columns = [
     <div class="border-b pb-2 flex gap-2">
       <UFormGroup label="Статуси" class="w-40">
         <UseStatusSelector query />
-      </UFormGroup>
-      <UFormGroup label="Бренди" class="w-40">
-        <UseBrandSelector v-model="selectedBrands" multiple />
       </UFormGroup>
     </div>
     <UTable

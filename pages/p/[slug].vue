@@ -8,39 +8,59 @@ const { data } = await useAsyncData(() => getOne(slug.value))
 
 const quantity = ref(1)
 const selectedColor = ref<string | undefined>(undefined)
-const selectedParameter = ref<ParameterEntity | undefined>(undefined)
+const selectedParameters = ref<string[]>([])
 
 const colors = computed(() => {
-  return data.value?.prices?.flatMap(price => price.colors).reduce((acc, _) => {
-    if (acc.find(color => color?.id === _?.id))
-      return acc
-    return [...acc, _]
-  }, [] as ColorEntity[]) || []
+  return data.value?.prices?.flatMap(price => price.colors).reduce((acc, _) =>
+    acc.find(color => color?.id === _?.id) ? acc : [...acc, _], [] as ColorEntity[]) || []
 })
 
-const parameters = computed(() => {
-  return data.value?.prices?.flatMap(price => price.parameters.map(p => ({
-    ...p,
-    available: price.colors.length ? !!(selectedColor.value && price.colors.find(({ slug }) => slug === selectedColor.value)) : true,
-  }))).reduce((acc, _) => {
-    const existing = acc.find(parameter => parameter?.id === _?.id)
-    if (existing) {
-      existing.available = _.available || existing.available
-      return acc
-    }
-    return [...acc, _]
-  }, [] as (ParameterEntity & { available: boolean })[]) || []
+const availableParameters = computed(() => {
+  return data.value?.prices
+    ?.filter(({ colors }) => colors.find(({ slug }) => slug === selectedColor.value))
+    ?.filter(({ parameters }) =>
+      selectedParameters.value.every(slug => parameters.some(parameter => parameter.slug === slug)),
+    )
+    ?.flatMap(({ parameters }) => parameters.map(({ slug }) => slug)) || []
+})
+
+const parameterGroups = computed(() => {
+  const groups: Record<string, ParameterEntity[]> = {}
+
+  data.value?.prices?.flatMap(price => price.parameters)?.forEach((parameter) => {
+    if (!groups[parameter.type])
+      groups[parameter.type] = []
+
+    const existing = groups[parameter.type].find(({ id }) => id === parameter?.id)
+    if (!existing)
+      groups[parameter.type].push(parameter)
+  })
+
+  return groups
 })
 
 const price = computed(() => {
   return data.value?.prices?.find((_) => {
-    if (!(selectedColor.value && selectedParameter.value))
+    if (!(selectedColor.value && selectedParameters.value.length))
       return false
-
     return _.colors.some(({ slug }) => slug === selectedColor.value)
-      && _.parameters.some(parameter => parameter.id === selectedParameter.value?.id)
+      && selectedParameters.value.every(
+        slug => _.parameters.some(parameter => parameter.slug === slug),
+      )
   })
 })
+
+function selectParameter(parameter: ParameterEntity, group: ParameterEntity[]) {
+  const groupSlugs = group.map(({ slug }) => slug)
+  if (selectedParameters.value.includes(parameter.slug)) { selectedParameters.value = selectedParameters.value.filter(slug => slug !== parameter.slug) }
+  else {
+    selectedParameters.value = [
+      ...selectedParameters.value
+        .filter(slug => availableParameters.value.includes(slug) && !groupSlugs.includes(slug)),
+      parameter.slug,
+    ]
+  }
+}
 
 watch(quantity, (v) => {
   if (v < 1)
@@ -48,8 +68,7 @@ watch(quantity, (v) => {
 })
 
 watch(selectedColor, () => {
-  if (parameters.value.length)
-    selectedParameter.value = parameters.value.find(({ available }) => available)
+  selectedParameters.value = []
 })
 
 onMounted(() => {
@@ -89,31 +108,36 @@ onMounted(() => {
           </p>
           <UseColorList v-model="selectedColor" :colors="colors" />
         </div>
-        <div v-if="parameters" class="py-2">
+        <div v-for="group, name in parameterGroups" :key="name" class="py-2">
           <p class="pb-2 font-bold">
-            Харатеристики
+            {{ name }}
           </p>
           <div class="flex flex-wrap gap-2 py-2">
             <UButton
-              v-for="parameter in parameters"
+              v-for="parameter in group"
               :key="parameter.id"
               :label="`${parameter.type} ${parameter.value} ${parameter.unit}`"
-              :color="selectedParameter?.id === parameter.id ? undefined : 'gray'"
-              :disabled="!parameter.available"
-              @click="selectedParameter = parameter"
+              :color="availableParameters.includes(parameter.slug) && selectedParameters.find(slug => slug === parameter.slug) ? undefined : 'gray'"
+              :disabled="!availableParameters.includes(parameter.slug)"
+              @click="selectParameter(parameter, group)"
             />
           </div>
         </div>
-        <div v-if="price" class="py-2">
-          Кількість:
-          <div class="flex w-32">
-            <UButton icon="i-heroicons-minus-20-solid" class="w-8" @click="quantity--" />
-            <UInput v-model.number="quantity" type="number" step="any" />
-            <UButton icon="i-heroicons-plus-20-solid" class="w-8" @click="quantity++" />
+        <template v-if="price">
+          <div class="py-2">
+            Кількість:
+            <div class="flex w-32">
+              <UButton icon="i-heroicons-minus-20-solid" class="w-8" @click="quantity--" />
+              <UInput v-model.number="quantity" type="number" step="any" />
+              <UButton icon="i-heroicons-plus-20-solid" class="w-8" @click="quantity++" />
+            </div>
           </div>
-        </div>
-        <div v-if="price" class="py-2">
-          Ціна: <span class="text-2xl font-bold">{{ price.price * quantity }}</span> грн
+          <div class="py-2">
+            Ціна: <span class="text-2xl font-bold">{{ price.price * quantity }}</span> грн
+          </div>
+        </template>
+        <div v-else class="py-2">
+          Немає в наявності
         </div>
       </div>
     </div>
@@ -147,20 +171,20 @@ onMounted(() => {
             </template>
             <template #color-data="{ row }">
               <UseColorList
-                v-if="row.color"
-                :colors="[row.color]"
+                v-if="row.colors"
+                :colors="row.colors"
               />
               <UBadge v-else label="Не вказано" color="gray" />
             </template>
             <template #parameters-data="{ row }">
               <div class="flex gap-2 flex-wrap">
                 <template v-if="row.parameters.length">
-                  <span
+                  <UBadge
                     v-for="parameter in row.parameters"
                     :key="parameter.id"
-                  >
-                    {{ parameter.type }} {{ parameter.value }} {{ parameter.unit }}
-                  </span>
+                    color="gray"
+                    :label="[parameter.type, parameter.value, parameter.unit].filter(Boolean).join(' ')"
+                  />
                 </template>
                 <UBadge v-else label="Не вказано" color="gray" />
               </div>

@@ -1,15 +1,20 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router'
 import { ModalBrand } from '#components'
 import type { BrandEntity } from '~/types/entities'
 import { VisibilityStatus } from '~/types/enums'
 
-const route = useRoute()
 const modalStore = useModalStore()
+
+const sQuery = useRouteQuery('statuses', [
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+].join(','))
 
 const { get, publish, draft, archive, remove } = useBrandRepository()
 const { data, refresh, status } = await useAsyncData(
-  () => get({ statuses: route.query.statuses?.toString()?.split(',').map(String) }),
-  { watch: [() => route.query.statuses] },
+  () => get({ statuses: sQuery.value?.toString()?.split(',').map(String) }),
+  { watch: [sQuery] },
 )
 
 function callModal(preset?: BrandEntity) {

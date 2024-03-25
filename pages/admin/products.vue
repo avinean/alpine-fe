@@ -1,36 +1,23 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router'
 import { ModalProduct } from '#components'
-import type { CategoryEntity, ProductEntity } from '~/types/entities'
+import type { ProductEntity } from '~/types/entities'
 import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
-const router = useRouter()
-const route = useRoute()
-const selectedBrands = computed({
-  get() {
-    return route.query.brands?.toString()?.split(',').map(Number) || []
-  },
-  set(ids: number[]) {
-    router.replace({
-      query: {
-        ...route.query,
-        brands: ids.length ? ids.join(',') : undefined,
-        categories: undefined,
-      },
-    })
-  },
-})
+
+const cQuery = useRouteQuery('categories')
+const sQuery = useRouteQuery('statuses', [
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+].join(','))
+
 const selectedCategories = computed({
   get() {
-    return route.query.categories?.toString()?.split(',').map(Number) || []
+    return cQuery.value?.toString()?.split(',').map(Number) || []
   },
   set(ids: number[]) {
-    router.replace({
-      query: {
-        ...route.query,
-        categories: ids.length ? ids.join(',') : undefined,
-      },
-    })
+    cQuery.value = ids.join(',')
   },
 })
 
@@ -38,9 +25,9 @@ const { get, publish, draft, archive, remove } = useProductRepository()
 const { data, refresh, status } = useAsyncData(
   () => get({
     categories: selectedCategories.value,
-    statuses: route.query.statuses?.toString()?.split(',').map(String),
+    statuses: sQuery.value?.toString()?.split(',').map(String),
   }),
-  { watch: [selectedCategories, () => route.query.statuses] },
+  { watch: [selectedCategories, sQuery] },
 )
 
 function callModal(preset?: ProductEntity) {
@@ -100,11 +87,8 @@ const columns = [
       <UFormGroup label="Статуси" class="w-40">
         <UseStatusSelector query />
       </UFormGroup>
-      <UFormGroup label="Бренди" class="w-40">
-        <UseBrandSelector v-model="selectedBrands" multiple />
-      </UFormGroup>
       <UFormGroup label="Категорії" class="w-40">
-        <UseCategorySelector v-model="selectedCategories" :brands="selectedBrands" multiple />
+        <UseCategorySelector v-model="selectedCategories" multiple />
       </UFormGroup>
     </div>
     <UTable
