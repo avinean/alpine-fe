@@ -25,13 +25,13 @@ export const useGlobalStore = defineStore('global', () => {
 
   const contactRepository = useContactRepository()
   const { data: contacts } = useAsyncData(
-    () => contactRepository.get({ statuses: statuses.value }),
+    () => contactRepository.get({ statuses: statuses.value.join(',') }),
     { watch: [statuses] },
   )
 
   const categoryRepository = useCategoryRepository()
   const { data: categories } = useAsyncData(
-    () => categoryRepository.get({ statuses: statuses.value }),
+    () => categoryRepository.get({ statuses: statuses.value.join(',') }),
     { watch: [statuses] },
   )
 

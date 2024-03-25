@@ -9,7 +9,7 @@ const statuses = ref<VisibilityStatus[]>([
 const toast = useToast()
 const { get, add, edit, publish, draft, archive } = useContactRepository()
 const { data, refresh } = useAsyncData(
-  () => get({ statuses: statuses.value }),
+  () => get({ statuses: statuses.value.join(',') }),
   { watch: [statuses] },
 )
 

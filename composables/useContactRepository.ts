@@ -1,8 +1,7 @@
 import type { ContactEntity } from '~/types/entities'
-import type { VisibilityStatus } from '~/types/enums'
 
 export const useContactRepository = createGlobalState(() => {
-  function get(query: { statuses?: VisibilityStatus[] }) {
+  function get(query: { statuses?: string }) {
     return $api<ContactEntity[]>(`/contact`, { query })
   }
 

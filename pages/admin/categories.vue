@@ -8,13 +8,10 @@ const { open } = useModalStore()
 
 const { get, publish, draft, archive, remove } = useCategoryRepository()
 
-const sQuery = useRouteQuery('statuses', [
-  VisibilityStatus.Published,
-  VisibilityStatus.Draft,
-].join(','))
+const sQuery = useRouteQuery('statuses', '')
 
 const { data: categories, refresh, status } = useAsyncData(
-  () => get({ statuses: sQuery.value?.toString()?.split(',').map(String) }),
+  () => get({ statuses: sQuery.value }),
   { watch: [sQuery] },
 )
 

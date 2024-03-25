@@ -6,14 +6,11 @@ import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
 
-const sQuery = useRouteQuery('statuses', [
-  VisibilityStatus.Published,
-  VisibilityStatus.Draft,
-].join(','))
+const sQuery = useRouteQuery('statuses', '')
 
 const { get, publish, draft, archive, remove } = useBrandRepository()
 const { data, refresh, status } = await useAsyncData(
-  () => get({ statuses: sQuery.value?.toString()?.split(',').map(String) }),
+  () => get({ statuses: sQuery.value }),
   { watch: [sQuery] },
 )
 

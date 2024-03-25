@@ -53,13 +53,6 @@ function toggleParameter(slug: string) {
     parameters.value = [...parameters.value, slug]
 }
 
-function toggleColor(slug: string) {
-  if (colors.value.includes(slug))
-    colors.value = colors.value.filter(_ => _ !== slug)
-  else
-    colors.value = [...colors.value, slug]
-}
-
 const page = ref(1)
 const take = ref(10)
 

@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { VisibilityStatus } from '~/types/enums'
+
 definePageMeta({
   layout: 'admin',
   redirect: '/admin/brands',
   middleware: 'requires-auth',
 })
+
+const query = `?statuses=${[
+  VisibilityStatus.Published,
+  VisibilityStatus.Draft,
+].join(',')}`
 </script>
 
 <template>
@@ -12,15 +19,15 @@ definePageMeta({
       :links="[
         {
           label: 'Продукти',
-          to: '/admin/products',
+          to: `/admin/products${query}`,
         },
         {
           label: 'Категорії продуктів',
-          to: '/admin/categories',
+          to: `/admin/categories${query}`,
         },
         {
           label: 'Бренди',
-          to: '/admin/brands',
+          to: `/admin/brands${query}`,
         },
         {
           label: 'Характеристики продуктів',
@@ -28,7 +35,7 @@ definePageMeta({
         },
         {
           label: 'Контакти',
-          to: '/admin/contacts',
+          to: `/admin/contacts${query}`,
         },
         {
           label: 'Послуги',

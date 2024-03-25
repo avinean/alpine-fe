@@ -13,16 +13,10 @@ const _model = defineModel<VisibilityStatus[]>({
 
 const selectedStatuses = computed({
   get() {
-    return (statuses.value?.toString()?.split(',') as VisibilityStatus[]) || [
-      VisibilityStatus.Published,
-      VisibilityStatus.Draft,
-    ]
+    return (statuses.value?.toString()?.split(',') as VisibilityStatus[]) || []
   },
   set(_statuses: VisibilityStatus[]) {
-    statuses.value = (_statuses || [
-      VisibilityStatus.Published,
-      VisibilityStatus.Draft,
-    ]).join(',')
+    statuses.value = _statuses.join(',')
   },
 })
 
