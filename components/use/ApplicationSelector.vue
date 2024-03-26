@@ -3,7 +3,7 @@ defineProps<{
   multiple?: boolean
   disabled?: boolean
 }>()
-const model = defineModel<number[] | number>()
+const model = defineModel<number[]  | number>()
 const { get } = useApplicationRepository()
 const { data } = useAsyncData(get)
 </script>

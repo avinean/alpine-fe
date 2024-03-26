@@ -161,7 +161,7 @@ function validate(state: ServiceEntity) {
         <div class="max-w-32 whitespace-break-spaces">{{ row.description }}</div>
       </template>
       <template #image-data="{ row }">
-        <base-image :src="row.image" width="80" height="80" />
+        <BaseImage :src="row.image" width="80" height="80" />
       </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">

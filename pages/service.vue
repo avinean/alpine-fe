@@ -17,7 +17,7 @@ const { data } = useAsyncData(
     </div>
     <ul class="grid gap-2 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <UCard v-for="service in data" :key="service.title">
-        <base-image :src="service.image" :alt="service.title" class="object-cover aspect-[1/1]" />
+        <BaseImage :src="service.image" :alt="service.title" class="object-cover aspect-[1/1]" />
         <div class="border-b-1 font-bold">
           {{ service.title }}
         </div>

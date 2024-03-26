@@ -98,7 +98,7 @@ const columns = [
         </div>
       </template>
       <template #image-data="{ row }">
-        <base-image :src="row.image" width="80" height="80" />
+        <BaseImage :src="row.image" width="80" height="80" class="aspect-[1/1] object-contain"/>
       </template>
       <template #createdAt-data="{ row }">
         <div class="max-w-32 overflow-hidden text-elipsis">

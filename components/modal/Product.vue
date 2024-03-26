@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ModalProductPrice } from '#components'
-import type { ApplicationEntity, ColorEntity, ParameterEntity, PriceEntity, ProductEntity } from '~/types/entities'
+import { ModalGallery, ModalProductPrice } from '#components'
+import type { ApplicationEntity, GalleryEntity, PriceEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: ProductEntity | null
@@ -20,19 +20,19 @@ defineExpose({
 const { open } = useModalStore()
 const toast = useToast()
 const { add, edit } = useProductRepository()
-const { photo, url, add: addPhoto } = usePhoto(props.preset?.image)
 
 const loading = ref(false)
 const state: Partial<ProductEntity> = reactive({
   description: props.preset?.description,
   title: props.preset?.title,
-  image: props.preset?.image,
   application: props.preset?.application,
   size: props.preset?.size,
   standart: props.preset?.standart,
   tags: props.preset?.tags,
   applications: props.preset?.applications || [],
   prices: props.preset?.prices || [],
+  images: props.preset?.images || [],
+  primaryImage: props.preset?.primaryImage,
 })
 const brand = ref<number | undefined>(props.preset?.brand?.id)
 const category = ref<number | undefined>(props.preset?.category?.id)
@@ -58,21 +58,11 @@ function validate(state: ProductEntity) {
 
 async function onCreateOrUpdate() {
   loading.value = true
-  try {
-    await addPhoto()
-  }
-  catch (error: any) {
-    toast.add({
-      title: 'Помилка завантаження фото',
-      description: error.message,
-    })
-  }
 
   const data = {
     ...state,
     brand: brand.value ? { id: brand.value } : undefined,
     category: category.value ? { id: category.value } : undefined,
-    image: url.value,
   } as ProductEntity
 
   try {
@@ -113,6 +103,18 @@ function callPriceModal(preset?: PriceEntity) {
   )
 }
 
+function callGalleryModal() {
+  open(
+    ModalGallery,
+    {
+      selected: state.images || [],
+      onSubmit(images) {
+        state.images = images
+      },
+    },
+  )
+}
+
 function removePrice(price: PriceEntity) {
   const index = state.prices?.findIndex(item => item.article === price.article)
   if (typeof index === 'number' && index !== -1)
@@ -128,33 +130,18 @@ function removePrice(price: PriceEntity) {
     @submit="onCreateOrUpdate"
   >
     <div class="grid grid-cols-2 gap-2">
-      <input-file
-        class="block w-40 m-auto row-span-3"
-        :src="state.image"
-        @change="photo = $event"
-      />
       <UFormGroup label="Бренди" name="brand">
         <UseBrandSelector v-model="brand" />
       </UFormGroup>
-
       <UFormGroup label="Категорії" name="category">
         <UseCategorySelector v-model="category" />
       </UFormGroup>
-
       <UFormGroup
         label="Назва"
         name="title"
         required
       >
         <UInput v-model="state.title" />
-      </UFormGroup>
-      <UFormGroup
-        label="Опис"
-        name="description"
-        required
-        class="row-span-4"
-      >
-        <UTextarea v-model="state.description" :rows="11" />
       </UFormGroup>
       <UFormGroup
         label="Застосування"
@@ -181,10 +168,22 @@ function removePrice(price: PriceEntity) {
         <InputTags v-model="state.tags" />
       </UFormGroup>
       <UFormGroup
-        label="Ціни"
-        name="prices"
+        label="Опис"
+        name="description"
+        required
         class="col-span-2"
       >
+        <UTextarea v-model="state.description" :rows="11" />
+      </UFormGroup>
+      <UCard class="col-span-2">
+        <template #header>
+          <div class="flex justify-between items-center">
+            <span>Ціни</span>
+            <UButton v-if="state.prices?.length" @click="callPriceModal()">
+              Додати ціну
+            </UButton>
+          </div>
+        </template>
         <UTable
           :rows="state.prices"
           :columns="[
@@ -235,18 +234,37 @@ function removePrice(price: PriceEntity) {
               <UButton color="gray" variant="ghost" icon="i-heroicons-adjustments-horizontal-solid" />
             </UDropdown>
           </template>
-          <template #empty-state>
-            <div class="p-4">
-              <UButton class="mx-auto block" @click="callPriceModal()">
-                Додати ціну
-              </UButton>
-            </div>
+        </UTable>
+      </UCard>
+
+      <UCard class="col-span-2">
+        <template #header>
+          <div class="flex justify-between items-center">
+            <span>Зображення</span>
+            <UButton v-if="state.prices?.length" @click="callGalleryModal()">
+              Додати зображення
+            </UButton>
+          </div>
+        </template>
+        <UTable
+          :rows="state.images"
+          :columns="[
+            { key: 'image', label: 'Зображення' },
+            { key: 'title', label: 'Назва/Альтернативний текст' },
+            { key: 'isPrimary', label: 'Використовувати як основний' },
+          ]"
+        >
+          <template #image-data="{ row }">
+            <BaseImage :src="row.image" width="60" class="aspect-[1/1] object-contain" />
+          </template>
+          <template #title-data="{ row }">
+            <span class="truncate">{{ row.title }}</span>
+          </template>
+          <template #isPrimary-data="{ row }">
+            <UCheckbox :model-value="state.primaryImage?.id === row.id" @update:model-value="state.primaryImage = row" />
           </template>
         </UTable>
-        <UButton v-if="state.prices?.length" class="mx-auto block" @click="callPriceModal()">
-          Додати ціну
-        </UButton>
-      </UFormGroup>
+      </UCard>
     </div>
     <div class="flex justify-end">
       <UButton

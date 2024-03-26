@@ -10,6 +10,10 @@ const quantity = ref(1)
 const selectedColor = ref<string | undefined>(undefined)
 const selectedParameters = ref<string[]>([])
 
+const galleryItems = computed(() => {
+  return data.value?.images?.toSorted(item => -(item.id === data.value?.primaryImage?.id))
+})
+
 const colors = computed(() => {
   return data.value?.prices?.flatMap(price => price.colors).reduce((acc, _) =>
     acc.find(color => color?.id === _?.id) ? acc : [...acc, _], [] as ColorEntity[]) || []
@@ -80,10 +84,18 @@ onMounted(() => {
 
 <template>
   <div class="py-2">
-    <div class="grid items-start gap-2 md:grid-cols-[60%_40%]">
-      <UCard>
-        <BaseImage :src="data?.image" />
-      </UCard>
+    <div class="grid items-start gap-2 md:grid-cols-[50%_50%]">
+      <UCarousel
+        v-if="galleryItems"
+        v-slot="{ item }"
+        :items="galleryItems.map(({ image }) => image)"
+        :ui="{ item: 'basis-full' }"
+        class="rounded-lg overflow-hidden border"
+        :arrows="galleryItems.length > 1"
+      >
+        <BaseImage :src="item" class="w-full aspect-[1/1] object-contain" draggable="false" />
+      </UCarousel>
+      <BaseImage v-else :src="data?.primaryImage?.image" />
       <div class="divide-y">
         <div class="py-2">
           <h1 class="text-3xl">
@@ -116,7 +128,7 @@ onMounted(() => {
             <UButton
               v-for="parameter in group"
               :key="parameter.id"
-              :label="[parameter.value,parameter.unit].filter(Boolean).join(' ')"
+              :label="[parameter.value, parameter.unit].filter(Boolean).join(' ')"
               :color="availableParameters.includes(parameter.slug) && selectedParameters.find(slug => slug === parameter.slug) ? undefined : 'gray'"
               :disabled="!availableParameters.includes(parameter.slug)"
               @click="selectParameter(parameter, group)"

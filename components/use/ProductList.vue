@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { breakpointsTailwind } from '@vueuse/core'
 import { useRouteParams, useRouteQuery } from '@vueuse/router'
 import type { PaginationResponse } from '~/types/api'
 import type { ProductEntity } from '~/types/entities'
@@ -182,7 +181,13 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
           :to="`/p/${product.slug}`"
         >
           <UCard class="h-full">
-            <base-image :src="product.image" :alt="product.title" class="object-cover w-full aspect-[1/1]" width="100" height="100" />
+            <BaseImage
+              :src="product.primaryImage?.image"
+              :alt="product.primaryImage?.title"
+              class="object-cover w-full aspect-[1/1]"
+              width="100"
+              height="100"
+            />
             <div class="border-b-1 font-bold">
               {{ product.title }}
             </div>

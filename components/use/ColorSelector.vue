@@ -34,7 +34,7 @@ defineExpose({
           class="flex-shrink-0 w-8 h-8 mt-px rounded-full"
           :style="{ background: option.value }"
         />
-        <base-image
+        <BaseImage
           v-else
           :src="option.image"
           class="w-8 h-8 mt-px rounded-full"

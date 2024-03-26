@@ -1,15 +1,18 @@
 <script setup lang="ts">
-defineProps < {
+defineProps<{
   src?: string
-} > ()
+  multiple?: boolean
+}>()
 
 const emit = defineEmits<{
-  change: [file: File]
+  change: [file: File],
+  select: [files: File[]]
 }>()
 
 const imageUrl = ref('')
 
 function handleFileChange(event: any) {
+  emit('select', [...event.target.files])
   const file = event.target.files[0]
   if (file) {
     const reader = new FileReader()
@@ -27,14 +30,18 @@ function handleFileChange(event: any) {
     <input
       type="file"
       hidden
+      :multiple="multiple"
+      accept="image/png, image/jpeg, image/jpg, image/svg+xml, image/webp, image/gif"
       @change="handleFileChange"
     >
-    <base-image
-      :src="imageUrl || src"
-      class="object-contain"
-    />
-    <div class="flex items-center justify-center bg-primary absolute bottom-0 left-0 right-0 p-2">
-      <span class="i-heroicons-camera-20-solid text-white text-2xl" />
-    </div>
+    <slot>
+      <BaseImage
+        :src="imageUrl || src"
+        class="object-contain"
+      />
+      <div class="flex items-center justify-center bg-primary absolute bottom-0 left-0 right-0 p-2">
+        <span class="i-heroicons-camera-20-solid text-white text-2xl" />
+      </div>
+    </slot>
   </label>
 </template>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { UseColorSelector, UseParameterSelector } from '#components'
-import type { ApplicationEntity, ColorEntity, ParameterEntity, PriceEntity, ProductEntity } from '~/types/entities'
+import type { ColorEntity, ParameterEntity, PriceEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: PriceEntity | null

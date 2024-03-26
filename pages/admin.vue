@@ -30,6 +30,10 @@ const query = `?statuses=${[
           to: `/admin/brands${query}`,
         },
         {
+          label: 'Галерея',
+          to: `/admin/gallery`,
+        },
+        {
           label: 'Кольори',
           to: '/admin/colors',
         },

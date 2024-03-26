@@ -36,6 +36,8 @@ export interface ProductEntity {
   application: string
   standart: string
   image: string
+  primaryImage: GalleryEntity
+  images: GalleryEntity[]
   price: number
   tags: string
   applications: ApplicationEntity[]
@@ -117,8 +119,14 @@ export interface PriceEntity {
   product: ProductEntity
 }
 
-export interface BannerEntity {
+export interface GalleryEntity {
+  id: number
+  slug: string
   title: string
+  primary: boolean
   description: string
   image: string
+  createdAt: Date
+  updatedAt: Date
+  products: ProductEntity[]
 }

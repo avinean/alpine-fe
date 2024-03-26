@@ -50,7 +50,7 @@ function addColor() {
           <div class="w-10 h-10" :style="{ background: row.value }" />
         </template>
         <template #image-data="{ row }">
-          <base-image :src="row.image" class="w-10 h-10" />
+          <BaseImage :src="row.image" class="w-10 h-10" />
         </template>
         <template #empty-state>
           <div class="flex flex-col items-center justify-center py-6 gap-3">

@@ -39,7 +39,7 @@ function toggleColor(color: ColorEntity) {
         @click="toggleColor(color)"
       >
         <span v-if="color.value" class="w-full h-full block" :style="{ background: color.value }" />
-        <base-image v-else :src="color.image" class="w-full h-full block" />
+        <BaseImage v-else :src="color.image" class="w-full h-full block" />
       </button>
     </UTooltip>
   </div>
