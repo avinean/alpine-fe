@@ -6,6 +6,7 @@ import { VisibilityStatus } from '~/types/enums'
 
 const modalStore = useModalStore()
 
+const bQuery = useRouteQuery('brands', '')
 const cQuery = useRouteQuery('categories', '')
 const sQuery = useRouteQuery('statuses', '')
 const nameQuery = useRouteQuery('title', '')
@@ -22,19 +23,20 @@ watchDebounced(
 const { get, publish, draft, archive, remove } = useProductRepository()
 const { data, refresh, status } = useAsyncData(
   () => get({
+    brands: bQuery.value,
     categoryIds: cQuery.value,
     statuses: sQuery.value,
     title: nameQuery.value,
     page: page.value,
     take: take.value,
   }),
-  { watch: [cQuery, sQuery, nameQuery, page, take] },
+  { watch: [bQuery, cQuery, sQuery, nameQuery, page, take] },
 )
 
 const items = computed(() => data.value?.items || [])
 const pages = computed(() => data.value?.pages || 0)
 
-watch([cQuery, sQuery, nameQuery, take], () => {
+watch([bQuery, cQuery, sQuery, nameQuery, take], () => {
   page.value = 1
 })
 
@@ -97,6 +99,9 @@ const columns = [
       </UFormGroup>
       <UFormGroup label="Категорії" class="w-40">
         <UseCategorySelector query multiple />
+      </UFormGroup>
+      <UFormGroup label="Бренди" class="w-40">
+        <UseBrandSelector query multiple />
       </UFormGroup>
       <UFormGroup label="Назва" class="w-40">
         <UInput v-model="productTitle" />

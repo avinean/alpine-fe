@@ -4,6 +4,7 @@ import type { VisibilityStatus } from '~/types/enums'
 
 export const useProductRepository = createGlobalState(() => {
   function get(query: {
+    brands?: string
     categorySlugs?: string
     categoryIds?: string
     statuses?: string

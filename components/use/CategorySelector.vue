@@ -14,7 +14,7 @@ const categories = useRouteQuery<string>('categories')
 
 const selectedCategories = computed({
   get() {
-    return (categories.value?.toString()?.split(',').map(Number) as number[]) || []
+    return (categories.value?.toString()?.split(',').filter(Boolean).map(Number) as number[]) || []
   },
   set(_categories: number[]) {
     categories.value = _categories.join(',')

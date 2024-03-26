@@ -21,7 +21,7 @@ function callModal(preset?: ParameterEntity) {
       <template #header>
         <div class="flex justify-between">
           <span class="text-2xl">Основні характеристики</span>
-          <UButton icon="i-heroicons-folder-plus-16-solid" @click="callModal">
+          <UButton icon="i-heroicons-folder-plus-16-solid" @click="callModal()">
             Додати характеристику
           </UButton>
         </div>
@@ -85,7 +85,7 @@ function callModal(preset?: ParameterEntity) {
         <template #empty-state>
           <div class="flex flex-col items-center justify-center py-6 gap-3">
             <span class="italic text-sm">В базі відсутні характеристики</span>
-            <UButton icon="i-heroicons-folder-plus-16-solid" @click="callModal">
+            <UButton icon="i-heroicons-folder-plus-16-solid" @click="callModal()">
               Додати характеристику
             </UButton>
           </div>
