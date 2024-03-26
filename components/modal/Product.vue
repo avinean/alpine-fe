@@ -255,7 +255,7 @@ function removePrice(price: PriceEntity) {
           ]"
         >
           <template #image-data="{ row }">
-            <BaseImage :src="row.image" width="60" class="aspect-[1/1] object-contain" />
+            <BaseImage :src="row.image" class="aspect-[1/1] object-contain w-20" />
           </template>
           <template #title-data="{ row }">
             <span class="truncate">{{ row.title }}</span>

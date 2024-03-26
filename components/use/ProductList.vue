@@ -186,8 +186,6 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
                 :src="product.primaryImage?.image"
                 :alt="product.primaryImage?.title"
                 class="object-cover w-full aspect-[1/1]"
-                width="100"
-                height="100"
               />
               <div class="border-b-1 font-bold">
                 {{ product.title }}

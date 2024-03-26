@@ -35,7 +35,6 @@ export interface ProductEntity {
   size: string
   application: string
   standart: string
-  image: string
   primaryImage: GalleryEntity
   images: GalleryEntity[]
   price: number
