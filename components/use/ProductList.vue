@@ -174,34 +174,36 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
           </UButton>
         </div>
       </UModal>
-      <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
-        <ULink
-          v-for="product in data.items"
-          :key="product.title"
-          :to="`/p/${product.slug}`"
-        >
-          <UCard class="h-full">
-            <BaseImage
-              :src="product.primaryImage?.image"
-              :alt="product.primaryImage?.title"
-              class="object-cover w-full aspect-[1/1]"
-              width="100"
-              height="100"
-            />
-            <div class="border-b-1 font-bold">
-              {{ product.title }}
-            </div>
-            <span class="sr-only">
-              Детальніше про {{ product.title }}
-            </span>
-          </UCard>
-        </ULink>
-      </ul>
-    </div>
-    <div v-if="hasMore" class="p-2 flex justify-center col-span-100">
-      <UButton @click="page++">
-        Більше
-      </UButton>
+      <div class="flex-1">
+        <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
+          <ULink
+            v-for="product in data.items"
+            :key="product.title"
+            :to="`/p/${product.slug}`"
+          >
+            <UCard class="h-full">
+              <BaseImage
+                :src="product.primaryImage?.image"
+                :alt="product.primaryImage?.title"
+                class="object-cover w-full aspect-[1/1]"
+                width="100"
+                height="100"
+              />
+              <div class="border-b-1 font-bold">
+                {{ product.title }}
+              </div>
+              <span class="sr-only">
+                Детальніше про {{ product.title }}
+              </span>
+            </UCard>
+          </ULink>
+        </ul>
+        <div v-if="hasMore" class="p-2 flex justify-center col-span-100">
+          <UButton @click="page++">
+            Більше
+          </UButton>
+        </div>
+      </div>
     </div>
   </div>
 </template>

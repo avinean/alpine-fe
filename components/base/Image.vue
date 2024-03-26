@@ -5,5 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <img :src="src || '/placeholder.jpg'">
+  <picture class="block">
+    <img :src="src || '/placeholder.jpg'" loading="lazy" class="w-full h-full object-contain">
+  </picture>
 </template>
