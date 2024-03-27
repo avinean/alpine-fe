@@ -179,7 +179,7 @@ function removePrice(price: PriceEntity) {
         <template #header>
           <div class="flex justify-between items-center">
             <span>Ціни</span>
-            <UButton v-if="state.prices?.length" @click="callPriceModal()">
+            <UButton @click="callPriceModal()">
               Додати ціну
             </UButton>
           </div>
@@ -241,7 +241,7 @@ function removePrice(price: PriceEntity) {
         <template #header>
           <div class="flex justify-between items-center">
             <span>Зображення</span>
-            <UButton v-if="state.prices?.length" @click="callGalleryModal()">
+            <UButton @click="callGalleryModal()">
               Додати зображення
             </UButton>
           </div>
