@@ -128,6 +128,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
                 v-model="colors"
                 :colors="filters?.colors"
                 multiple
+                exclude-mix
               />
             </div>
             <div

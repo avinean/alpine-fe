@@ -72,14 +72,14 @@ function onCreateOrUpdate() {
     </UFormGroup>
     <UFormGroup name="price">
       <UseColorSelector v-slot="{ colors: _ }" ref="colorSelector" v-model="colors" multiple>
-        <div class="flex gap-2 pt-2">
+        <div class="flex flex-wrap gap-2 pt-2">
           <UBadge v-for="c in _" :key="c.id" :label="c.title" />
         </div>
       </UseColorSelector>
     </UFormGroup>
     <UFormGroup name="price">
       <UseParameterSelector v-slot="{ parameters: _ }" ref="parametersSelector" v-model="parameters" multiple>
-        <div class="flex gap-2 pt-2 ">
+        <div class="flex flex-wrap gap-2 pt-2 ">
           <UBadge
             v-for="parameter in _"
             :key="parameter.id"

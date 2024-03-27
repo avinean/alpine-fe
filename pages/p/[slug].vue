@@ -73,6 +73,11 @@ watch(quantity, (v) => {
 
 watch(selectedColor, () => {
   selectedParameters.value = []
+  Object.entries(parameterGroups.value).forEach(([group, list]) => {
+    const available = list.find(({ slug }) => availableParameters.value.includes(slug))
+    if (available)
+      selectedParameters.value.push(available.slug)
+  })
 })
 
 onMounted(() => {
