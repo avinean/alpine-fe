@@ -93,12 +93,15 @@ onMounted(() => {
       <UCarousel
         v-if="galleryItems"
         v-slot="{ item }"
-        :items="galleryItems.map(({ image }) => image)"
+        :items="galleryItems"
         :ui="{ item: 'basis-full' }"
         class="rounded-lg overflow-hidden border"
         :arrows="galleryItems.length > 1"
       >
-        <BaseImage :src="item" class="w-full aspect-[1/1] object-contain" draggable="false" />
+        <div class="w-full aspect-[1/1]">
+          <div class="absolute w-full bg-gray-500/60 p-2 text-white text-right truncate">{{ item.title }}</div>
+          <BaseImage :src="item.image" class="w-full h-full" draggable="false" />
+        </div>
       </UCarousel>
       <BaseImage v-else :src="data?.primaryImage?.image" />
       <div class="divide-y">
