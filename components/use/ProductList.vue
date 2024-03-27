@@ -11,9 +11,19 @@ const header = computed(() => global.headerRef)
 // @ts-expect-error it's a ref
 const { height } = useElementSize(header)
 const _category = useRouteParams<string>('slug')
+const _brands = useRouteQuery<string>('b')
 const _categories = useRouteQuery<string>('c')
 const _colors = useRouteQuery<string>('colors')
 const _parameters = useRouteQuery<string>('parameters')
+
+const brands = computed({
+  get() {
+    return _brands.value?.split(',').filter(Boolean) || []
+  },
+  set(value: string[]) {
+    _brands.value = value.join(',')
+  },
+})
 
 const categories = computed({
   get() {
@@ -58,6 +68,7 @@ const take = ref(10)
 const { data, refresh } = useAsyncData(
   () => getByPage({
     statuses: global.statuses,
+    brands: brands.value.length ? brands.value : undefined,
     categories: categories.value.length ? categories.value : undefined,
     colors: colors.value.length ? colors.value : undefined,
     parameters: parameters.value.length ? parameters.value : undefined,
@@ -66,16 +77,16 @@ const { data, refresh } = useAsyncData(
   }),
   {
     watch: [() => global.statuses, page],
-    transform(rest: PaginationResponse<ProductEntity>): PaginationResponse<ProductEntity> {
+    transform({ items, pages }: PaginationResponse<ProductEntity>): PaginationResponse<ProductEntity> {
       return {
-        items: page.value === 1 ? rest.items : [...(data.value?.items || []), ...rest.items],
-        pages: rest.pages,
+        items: page.value === 1 ? items : [...(data.value?.items || []), ...items],
+        pages,
       } satisfies PaginationResponse<ProductEntity>
     },
   },
 )
 
-watch([_categories, _colors, _parameters], () => {
+watch([_brands, _categories, _colors, _parameters], () => {
   page.value = 1
   refresh()
 })
@@ -98,12 +109,27 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
 <template>
   <div>
-    <div class="flex flex-col md:flex-row items-start gap-2 py-2">
+    <div class="flex flex-col md:flex-row gap-2 py-2">
       <DefineTemplate>
         <UCard>
           <div class="divide-y">
             <div class="text-xl font-bold mb-2">
               Фільтри
+            </div>
+            <div v-if="global.brands?.length" class="py-2">
+              <div class="font-bold text-lg mb-2">
+                Виробники
+              </div>
+              <div class="space-y-2">
+                <UCheckbox
+                  v-for="brand in global.brands"
+                  :key="brand.slug"
+                  v-model="brands"
+                  :label="brand.title"
+                  :value="brand.slug"
+                  name="brands"
+                />
+              </div>
             </div>
             <div v-if="!_category" class="py-2">
               <div class="font-bold text-lg mb-2">
@@ -176,10 +202,15 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
         </div>
       </UModal>
       <div class="flex-1">
+        <div v-if="data?.items && !data.items.length" class="h-full border-b">
+          <div class="text-center text-xl font-bold">
+            Немає результатів
+          </div>
+        </div>
         <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
           <ULink
             v-for="product in data.items"
-            :key="product.title"
+            :key="product.id"
             :to="`/p/${product.slug}`"
           >
             <UCard class="h-full">

@@ -14,6 +14,7 @@ export const useProductRepository = createGlobalState(() => {
   }
 
   function getByPage(query: {
+    brands?: string[]
     categories?: string[]
     statuses?: VisibilityStatus[]
     colors?: string[]
