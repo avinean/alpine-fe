@@ -3,7 +3,6 @@ import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import type { DropdownItem } from '#ui/types'
 
 const global = useGlobalStore()
-
 const { md } = useBreakpoints(breakpointsTailwind)
 const menuOpen = ref(!!md.value)
 
@@ -57,7 +56,9 @@ const categories = computed(() => [
                 Продукція
               </ULink>
               <template #item="{ item }">
-                <ULink :to="item.to">{{ item.label }}</ULink>
+                <ULink :to="item.to">
+                  {{ item.label }}
+                </ULink>
               </template>
             </UDropdown>
             <ULink to="/service" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
@@ -77,9 +78,16 @@ const categories = computed(() => [
       </header>
     </div>
 
+    <div class="container py-2 mx-auto">
+      <UBreadcrumb
+        v-if="global.breadcrumbs?.length"
+        divider="/"
+        :links="[{ label: 'Головна', to: '/' }, ...global.breadcrumbs]"
+      />
+    </div>
     <main class="container flex-1 mx-auto">
       <NuxtPage />
-      <div class="fixed bottom-12 right-5 animate-bounce rounded bg-white border">
+      <div class="fixed bottom-12 right-5 animate-bounce bg-white border">
         <UseCall v-slot="{ call }">
           <button @click="call">
             <i class="i-heroicons-phone text-6xl text-gray" />
@@ -97,7 +105,7 @@ const categories = computed(() => [
           <h2 class="font-bold text-xl">
             Меню
           </h2>
-          <ULink to="/b/product" class="p-2">
+          <ULink to="/products" class="p-2">
             Продукція
           </ULink>
           <ULink to="/service" class="p-2">

@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const global = useGlobalStore()
+
+useBreadcrumbs([
+  {
+    label: 'Контакти',
+  },
+])
 </script>
 
 <template>
-  <div class="space-y-2">
+  <div class="space-y-2 py-2">
     <h1 class="text-3xl">
       Контакти
     </h1>
@@ -26,8 +32,23 @@ const global = useGlobalStore()
             :href="`mailto:${email}`"
           >
             {{ email }}
-          </a></div>
+          </a>
+        </div>
       </li>
     </ul>
+
+    <div class="grid grid-cols-2 pt-10">
+      <div>
+        <h2 class="text-2xl">
+          Потрібна допомога?
+        </h2>
+        <div class="text-sm">
+          Залиште нам свої контактні дані, і менеджер Avenue зв’яжеться з Вами для уточнення деталей.
+        </div>
+      </div>
+      <div>
+        <FormCall />
+      </div>
+    </div>
   </div>
 </template>

@@ -61,7 +61,10 @@ export default defineAppConfig({
     },
     pagination: {
       rounded: 'first:rounded-none last:rounded-none',
-      
-    }
+
+    },
+    carousel: {
+      rounded: 'rounded-none',
+    },
   },
 })

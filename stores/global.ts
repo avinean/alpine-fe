@@ -7,6 +7,7 @@ export const useGlobalStore = defineStore('global', () => {
     ? [VisibilityStatus.Published, VisibilityStatus.Draft]
     : [VisibilityStatus.Published],
   )
+  const breadcrumbs = ref<({ label: string, to: string } | { label: string })[]>([])
 
   const headerRef = ref<Element | ComponentPublicInstance | null>(null)
 
@@ -50,5 +51,6 @@ export const useGlobalStore = defineStore('global', () => {
     categories,
     brands,
     headerRef,
+    breadcrumbs,
   }
 })

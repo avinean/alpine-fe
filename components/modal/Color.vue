@@ -89,7 +89,7 @@ async function onCreateOrUpdate() {
     >
       <div class="grid grid-cols-2 gap-2">
         <UInput v-model="state.value" />
-        <div class="border rounded-md" :style="{ background: state.value }" />
+        <div class="border" :style="{ background: state.value }" />
       </div>
     </UFormGroup>
 

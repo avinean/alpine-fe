@@ -5,10 +5,16 @@ const { data } = useAsyncData(
   () => get({ statuses: global.statuses }),
   { watch: [() => global.statuses] },
 )
+
+useBreadcrumbs([
+  {
+    label: 'Послуги',
+  },
+])
 </script>
 
 <template>
-  <div class="space-y-2">
+  <div class="space-y-2 py-2">
     <h1 class="text-3xl">
       Наші послуги
     </h1>
@@ -67,8 +73,8 @@ const { data } = useAsyncData(
     </ul>
     <div class="pt-12 flex justify-center">
       <UseCall v-slot="{ call }">
-        <UButton @click="call">
-          Передзвонити мені
+        <UButton @click="call" color="white">
+          Замовити консультацію
         </UButton>
       </UseCall>
     </div>

@@ -40,5 +40,10 @@ const model = computed({
     value-attribute="id"
     option-attribute="title"
     placeholder="Обрати категорію"
-  />
+  >
+    <template v-if="multiple" #label>
+      <span v-if="model?.length" class="truncate">Обрано {{ model.length }}</span>
+      <span v-else>Обрати категорію</span>
+    </template>
+  </USelectMenu>
 </template>

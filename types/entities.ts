@@ -129,3 +129,12 @@ export interface GalleryEntity {
   updatedAt: Date
   products: ProductEntity[]
 }
+
+export interface TelegramEntity {
+  id: number
+  region: string
+  botApiKey: string
+  userIds: string
+  link: string
+  categories: CategoryEntity[]
+}

@@ -229,8 +229,8 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
           </ULink>
         </ul>
         <div v-if="hasMore" class="p-2 flex justify-center col-span-100">
-          <UButton @click="page++">
-            Більше
+          <UButton color="white" @click="page++">
+            Завантажити ще
           </UButton>
         </div>
       </div>

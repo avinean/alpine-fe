@@ -1,37 +1,15 @@
 <script setup lang="ts">
 const open = ref(false)
 const sent = ref(false)
-const pending = ref(false)
 
-const form = ref({
-  name: '',
-  phone: '',
-})
-
-async function send() {
-  if (!form.value.name || !form.value.phone)
-    return
-
-  pending.value = true
-
-  await $fetch('/api/message', {
-    method: 'POST',
-    body: form.value,
-  })
-
-  sent.value = true
-  pending.value = false
-
-  setTimeout(() => {
-    open.value = false
-
-    nextTick(() => {
+whenever(sent, () => {
+  if (sent.value) {
+    setTimeout(() => {
+      open.value = false
       sent.value = false
-      form.value.name = ''
-      form.value.phone = ''
-    })
-  }, 1000)
-}
+    }, 3000)
+  }
+})
 </script>
 
 <template>
@@ -55,22 +33,7 @@ async function send() {
           </span>
           <button class="i-heroicons-x-mark-16-solid text-gray text-2xl" @click="open = false" />
         </h2>
-        <UForm :state="form" class="space-y-2" @submit="send">
-          <UFormGroup name="name" label="Ваше ім'я">
-            <UInput v-model="form.name" />
-          </UFormGroup>
-          <UFormGroup
-            name="phone"
-            label="Ваш номер телефону"
-          >
-            <UInput v-model="form.phone" />
-          </UFormGroup>
-          <div class="flex justify-right">
-          <UButton :loading="pending" type="submit">
-            Відправити
-          </UButton>
-          </div>
-        </UForm>
+        <FormCall @submit="sent = true" />
       </template>
     </div>
   </UModal>

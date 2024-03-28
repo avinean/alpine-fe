@@ -73,7 +73,7 @@ async function onCreateOrUpdate() {
     @submit="onCreateOrUpdate"
   >
     <input-file
-      class="block w-40 m-auto"
+      class="block w-44 m-auto"
       :src="state.image"
       @change="photo = $event"
     />

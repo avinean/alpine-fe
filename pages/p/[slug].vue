@@ -6,6 +6,22 @@ const { getOne } = useProductRepository()
 const slug = useRouteParams<string>('slug')
 const { data } = await useAsyncData(() => getOne(slug.value))
 
+useBreadcrumbs(() => data.value
+  ? [
+      {
+        label: 'Продукція',
+        to: '/products',
+      },
+      {
+        label: data.value.category.title,
+        to: `/c/${data.value.category.slug}`,
+      },
+      {
+        label: data.value.title,
+      },
+    ]
+  : [])
+
 const quantity = ref(1)
 const selectedColor = ref<string | undefined>(undefined)
 const selectedParameters = ref<string[]>([])
@@ -95,11 +111,13 @@ onMounted(() => {
         v-slot="{ item }"
         :items="galleryItems"
         :ui="{ item: 'basis-full' }"
-        class="rounded-lg overflow-hidden border"
+        class="overflow-hidden border"
         :arrows="galleryItems.length > 1"
       >
         <div class="w-full aspect-[1/1]">
-          <div class="absolute w-full bg-gray-500/60 p-2 text-white text-right truncate">{{ item.title }}</div>
+          <div class="absolute w-full bg-gray-500/60 p-2 text-white text-right truncate">
+            {{ item.title }}
+          </div>
           <BaseImage :src="item.image" class="w-full h-full" draggable="false" />
         </div>
       </UCarousel>

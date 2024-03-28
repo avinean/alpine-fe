@@ -1,5 +1,9 @@
 <script setup lang="ts">
-
+useBreadcrumbs([
+  {
+    label: 'Доставка',
+  },
+])
 </script>
 
 <template>

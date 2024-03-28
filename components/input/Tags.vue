@@ -27,6 +27,7 @@ function remove(item: string) {
         v-model="value"
         class="w-full"
         @keypress.space="add"
+        @change="add"
       />
     </UButtonGroup>
     <template v-if="model">

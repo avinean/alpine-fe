@@ -97,7 +97,7 @@ const columns = [
       <UFormGroup label="Статуси" class="w-40">
         <UseStatusSelector query />
       </UFormGroup>
-      <UFormGroup label="Категорії" class="w-40">
+      <UFormGroup label="Категорії" class="w-50">
         <UseCategorySelector query multiple />
       </UFormGroup>
       <UFormGroup label="Бренди" class="w-40">
