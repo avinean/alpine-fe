@@ -42,7 +42,7 @@ const model = computed({
     placeholder="Обрати категорію"
   >
     <template v-if="multiple" #label>
-      <span v-if="model?.length" class="truncate">Обрано {{ model.length }}</span>
+      <span v-if="Array.isArray(model) && model?.length" class="truncate">Обрано {{ model.length }}</span>
       <span v-else>Обрати категорію</span>
     </template>
   </USelectMenu>
