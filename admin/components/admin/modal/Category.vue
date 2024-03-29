@@ -22,7 +22,6 @@ const state: Partial<CategoryEntity> = reactive({
   title: props.preset?.title,
   image: props.preset?.image,
 })
-const brand = ref<number>()
 
 function validate(state: CategoryEntity) {
   const errors = []
@@ -30,8 +29,6 @@ function validate(state: CategoryEntity) {
     errors.push({ path: 'description', message: 'Обовʼязкове поле' })
   if (!state.title)
     errors.push({ path: 'title', message: 'Обовʼязкове поле' })
-  if (!props.preset?.id && !brand.value)
-    errors.push({ path: 'brand', message: 'Обовʼязкове поле' })
 
   return errors
 }
@@ -57,7 +54,7 @@ async function onCreateOrUpdate() {
     if (props.preset?.id)
       await edit(props.preset.id, data)
     else
-      await add(brand.value!, data)
+      await add(data)
     emit('submit')
   }
   catch (error: any) {
@@ -84,9 +81,6 @@ async function onCreateOrUpdate() {
       :src="state.image"
       @change="photo = $event"
     />
-    <UFormGroup v-if="!preset" label="Бренди" name="brand">
-      <AdminBrandSelector v-model="brand" class="w-full" />
-    </UFormGroup>
     <UFormGroup
       label="Назва"
       name="title"

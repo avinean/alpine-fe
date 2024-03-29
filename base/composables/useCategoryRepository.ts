@@ -1,5 +1,4 @@
 import type { CategoryEntity } from '~/types/entities'
-import type { VisibilityStatus } from '~/types/enums'
 
 export const useCategoryRepository = createGlobalState(() => {
   function get(query: { statuses?: string }) {
@@ -10,8 +9,8 @@ export const useCategoryRepository = createGlobalState(() => {
     return $api<CategoryEntity>(`/category/${categoryIdOrSlug}`)
   }
 
-  function add(brandId: number, body: Partial<CategoryEntity>) {
-    return $api(`/category/${brandId}`, {
+  function add(body: Partial<CategoryEntity>) {
+    return $api(`/category`, {
       method: 'POST',
       body,
     })
