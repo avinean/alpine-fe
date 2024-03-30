@@ -41,7 +41,7 @@ function addSection(type: CmsSection['type']) {
   if (type === 'text')
     emit('update', [...props.sections, { type: 'text', content: '', align: 'left', tag: 'p' }])
   if (type === 'image')
-    emit('update', [...props.sections, { type: 'image', image: null }])
+    emit('update', [...props.sections, { type: 'image', image: null, aspectRatio: 'auto' }])
   if (type === 'grid') {
     emit('update', [...props.sections, {
       type: 'grid',
@@ -152,12 +152,27 @@ const menu = [
         <UTextarea v-model="section.content" />
       </div>
 
-      <BaseImage
-        v-else-if="section.type === 'image'"
-        :src="section.image?.image"
-        class="cursor-pointer max-w-64"
-        @click="setImage(section)"
-      />
+      <div v-else-if="section.type === 'image'">
+        <div class="flex gap-2 flex-wrap mb-4">
+          <UFormGroup label="Пропорція:" class="flex-1">
+            <USelect
+              v-model="section.aspectRatio"
+              option-attribute="label"
+              value-attribute="value"
+              :options="[
+                { label: 'Автоматична', value: 'auto' },
+                { label: '1:1', value: 1 },
+              ]"
+            />
+          </UFormGroup>
+        </div>
+
+        <BaseImage
+          :src="section.image?.image"
+          class="cursor-pointer max-w-64"
+          @click="setImage(section)"
+        />
+      </div>
       <div v-else-if="section.type === 'grid'">
         <div class="grid grid-cols-4 gap-4 mb-4">
           <UFormGroup label="Кількість колонок (sm):">
