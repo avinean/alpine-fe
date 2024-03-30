@@ -4,7 +4,7 @@ const global = useGlobalStore()
 
 <template>
   <div class="space-y-2 py-2">
-    <h1 class="text-3xl">
+    <h1>
       Контакти
     </h1>
     <ul v-if="global.contacts" class="space-y-2">
@@ -33,10 +33,10 @@ const global = useGlobalStore()
 
     <div class="grid grid-cols-2 gap-2 pt-10">
       <div>
-        <h2 class="text-2xl">
+        <h2>
           Потрібна допомога?
         </h2>
-        <div class="text-sm">
+        <div>
           Залиште нам свої контактні дані, і менеджер зв’яжеться з Вами для уточнення деталей.
         </div>
       </div>

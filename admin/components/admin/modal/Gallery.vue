@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import type { GalleryEntity } from '~/types/entities';
+import type { GalleryEntity } from '~/types/entities'
 
 const props = defineProps<{
-  selected: GalleryEntity[]
+  multiple?: boolean
+  selected?: GalleryEntity[]
 }>()
-
-const selected = ref<GalleryEntity[]>(props.selected)
 
 const emit = defineEmits<{
   submit: [selected: GalleryEntity[]]
 }>()
 
+const selected = ref<GalleryEntity[]>(props.selected || [])
 
 defineExpose({
   title: 'Додати зображення до галереї',
@@ -22,9 +22,11 @@ defineExpose({
 
 <template>
   <div>
-    <AdminGallery v-model="selected"/>
+    <AdminGallery v-model="selected" :multiple="multiple" />
     <div class="sticky bottom-0 flex justify-end p-2 bg-white border">
-      <UButton @click="emit('submit', selected)">Зберегти</UButton>
+      <UButton @click="emit('submit', selected)">
+        Зберегти
+      </UButton>
     </div>
   </div>
 </template>

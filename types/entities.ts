@@ -1,3 +1,4 @@
+import type { Sizes } from './ds'
 import type { BrandType, VisibilityStatus } from './enums'
 
 export interface BrandEntity {

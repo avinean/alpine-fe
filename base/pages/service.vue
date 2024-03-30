@@ -15,10 +15,11 @@ useBreadcrumbs([
 
 <template>
   <div class="space-y-2 py-2">
-    <h1 class="text-3xl">
+    <CmsSection slug="poslugi" />
+    <h1>
       Наші послуги
     </h1>
-    <div class="text-xl">
+    <div>
       Пропонуємо для наших покупців можливість замовити різні види будівельних послуг, щоб зберегти свій дорогоцінний час та нерви на пошук бригади.
     </div>
     <ul class="grid gap-2 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -30,7 +31,7 @@ useBreadcrumbs([
       </UCard>
     </ul>
     <div class="space-y-2">
-      <h2 class="text-2xl">
+      <h2>
         Наші переваги:
       </h2>
       <ul class="list-disc">
@@ -41,7 +42,7 @@ useBreadcrumbs([
         <li>Доставка матеріалів власними маніпуляторами</li>
         <li>Працюємо оперативно та в узгоджені терміни</li>
       </ul>
-      <p text-xl>
+      <p>
         МИ ЗНАЄМО ЯК ЗРОБИТИ ЯКІСНО ТА ЗА ДОСТУПНОЮ ЦІНОЮ
       </p>
     </div>

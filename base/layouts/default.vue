@@ -128,8 +128,8 @@ const categories = computed(() => [
           <h2 class="font-bold text-xl">
             Контакти
           </h2>
-          <ul v-if="global.contacts" class="space-y-1">
-            <li v-for="contact in global.contacts" :key="contact.address">
+          <div v-if="global.contacts" class="space-y-1">
+            <address v-for="contact in global.contacts" :key="contact.address" class="not-italic">
               <div>{{ contact.address }}</div>
               <div class="grid gap-1">
                 <a
@@ -147,8 +147,8 @@ const categories = computed(() => [
                   {{ email }}
                 </a>
               </div>
-            </li>
-          </ul>
+            </address>
+          </div>
         </div>
       </div>
     </div>

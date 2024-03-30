@@ -107,6 +107,7 @@ function callGalleryModal() {
   open(
     AdminModalGallery,
     {
+      multiple: true,
       selected: state.images || [],
       onSubmit(images) {
         state.images = images

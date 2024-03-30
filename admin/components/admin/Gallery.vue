@@ -2,9 +2,13 @@
 import { AdminModalGalleryItems } from '#components'
 import type { GalleryEntity } from '~/types/entities'
 
+const props = defineProps<{
+  multiple?: boolean
+}>()
+const model = defineModel<GalleryEntity[]>()
+
 const { open } = useModalStore()
 const { get } = useGalleryRepository()
-const model = defineModel<GalleryEntity[]>()
 const { data, refresh } = useAsyncData(() => get())
 const dropZone = ref()
 const { isOverDropZone } = useDropZone(dropZone, {
@@ -30,6 +34,10 @@ function addFiles(files: File[] | null) {
 }
 
 function toggleSelect(item: GalleryEntity) {
+  if (!props.multiple) {
+    model.value = [item]
+    return
+  }
   if (!model.value)
     return
   const index = model.value.findIndex(i => i.id === item.id)
@@ -63,7 +71,7 @@ function toggleSelect(item: GalleryEntity) {
       <template #header>
         <div class="flex justify-between">
           <span class="text-2xl">Галерея</span>
-          <InputFile @select="addFiles($event)" multiple>
+          <InputFile multiple @select="addFiles($event)">
             <UBadge icon="i-heroicons-folder-plus-16-solid cursor-pointer" size="md">
               Додати зображення
             </UBadge>

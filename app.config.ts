@@ -66,5 +66,9 @@ export default defineAppConfig({
     carousel: {
       rounded: 'rounded-none',
     },
+    horizontalNavigation: {
+      container: 'list-none',
+    },
+
   },
 })

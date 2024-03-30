@@ -53,6 +53,10 @@ const query = `?statuses=${[
           label: 'Послуги',
           to: '/admin/services',
         },
+        {
+          label: 'CMS',
+          to: '/admin/cms',
+        },
       ]"
       class="border-b border-gray-200 dark:border-gray-800"
     />
