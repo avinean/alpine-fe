@@ -13,7 +13,7 @@ const alignment = {
 </script>
 
 <template>
-  <component :is="tag" :class="alignment[align]">
+  <component :is="tag" :class="[alignment[align], { list: tag === 'ul' }]">
     <template v-if="tag === 'ul'">
       <li v-for="item in content.split('\n')" :key="item">
         {{ item }}

@@ -29,7 +29,7 @@ h6 {
 p {
     @apply text-base mb-4;
 }
-ul {
+ul.list {
     @apply list-disc pl-5 mb-4 space-y-2;
 }
 </style>
