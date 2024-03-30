@@ -62,6 +62,42 @@ function removeSection(section: CmsSection) {
   emit('update', props.sections.filter(s => s !== section))
 }
 
+function moveUp(section: any) {
+  const index = props.sections.indexOf(section)
+  if (index === 0)
+    return
+  const newSections = [...props.sections]
+  newSections[index] = newSections[index - 1]
+  newSections[index - 1] = section
+  emit('update', newSections)
+}
+
+function moveDown(section: any) {
+  const index = props.sections.indexOf(section)
+  if (index === props.sections.length - 1)
+    return
+  const newSections = [...props.sections]
+  newSections[index] = newSections[index + 1]
+  newSections[index + 1] = section
+  emit('update', newSections)
+}
+
+function moveLeft(section: any, array: any[]) {
+  const index = array.indexOf(section)
+  if (index === 0)
+    return
+  array[index] = array[index - 1]
+  array[index - 1] = section
+}
+
+function moveRight(section: any, array: any[]) {
+  const index = array.indexOf(section)
+  if (index === array.length - 1)
+    return
+  array[index] = array[index + 1]
+  array[index + 1] = section
+}
+
 const menu = [
   [{
     label: 'Додати секцію',
@@ -114,7 +150,11 @@ const menu = [
           <UBadge v-else-if="section.type === 'grid'" label="Сітка" />
           <UBadge v-else-if="section.type === 'card'" label="Картка" />
 
-          <UButton icon="i-heroicons-trash-16-solid" @click="removeSection(section)" />
+          <UButtonGroup>
+            <UButton icon="i-heroicons-trash-16-solid" @click="removeSection(section)" />
+            <UButton v-if="index" icon="i-heroicons-arrow-up-16-solid" @click="moveUp(section)" />
+            <UButton v-if="index !== sections.length - 1" icon="i-heroicons-arrow-down-16-solid" @click="moveDown(section)" />
+          </UButtonGroup>
         </div>
       </UDivider>
       <div v-if="section.type === 'text'">
@@ -195,7 +235,13 @@ const menu = [
           </UFormGroup>
         </div>
         <CmsGrid :columns="section.columns">
-          <div v-for="group, key in section.groups" :key class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
+          <div v-for="group, key in section.groups" :key="JSON.stringify(group)" class="shadow-md hover:shadow-xl  p-2">
+            <UDivider>
+              <UButtonGroup>
+                <UButton icon="i-heroicons-arrow-left-16-solid" @click="moveLeft(group, section.groups)" />
+                <UButton icon="i-heroicons-arrow-right-16-solid" @click="moveRight(group, section.groups)" />
+              </UButtonGroup>
+            </UDivider>
             <CmsSectionComposer :sections="group" :allowed-types="['card', 'image', 'text']" @update="section.groups[key] = $event" />
           </div>
           <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
