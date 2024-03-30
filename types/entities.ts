@@ -101,16 +101,6 @@ export interface ContactEntity {
   updatedAt: Date
 }
 
-export interface ServiceEntity {
-  id: number
-  title: string
-  description: string
-  image: string
-  status: VisibilityStatus
-  createdAt: Date
-  updatedAt: Date
-}
-
 export interface PriceEntity {
   article: string
   price: number
