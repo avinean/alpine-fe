@@ -62,6 +62,12 @@ function toggleParameter(slug: string) {
     parameters.value = [...parameters.value, slug]
 }
 
+const brandRepository = useBrandRepository()
+const { data: awailableBrands } = useAsyncData(
+  () => brandRepository.get({ statuses: global.statuses.join(','), categories: categories.value.join(',') }),
+  { watch: [() => global.statuses, _category, _categories] },
+)
+
 const page = ref(1)
 const take = ref(10)
 
@@ -116,13 +122,13 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
             <div class="text-xl font-bold mb-2">
               Фільтри
             </div>
-            <div v-if="global.brands?.length" class="py-2">
+            <div v-if="awailableBrands?.length" class="py-2">
               <div class="font-bold text-lg mb-2">
                 Виробники
               </div>
               <div class="space-y-2">
                 <UCheckbox
-                  v-for="brand in global.brands"
+                  v-for="brand in awailableBrands"
                   :key="brand.slug"
                   v-model="brands"
                   :label="brand.title"

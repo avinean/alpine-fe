@@ -36,12 +36,6 @@ export const useGlobalStore = defineStore('global', () => {
     { watch: [statuses] },
   )
 
-  const brandRepository = useBrandRepository()
-  const { data: brands } = useAsyncData(
-    () => brandRepository.get({ statuses: statuses.value.join(',') }),
-    { watch: [statuses] },
-  )
-
   return {
     checkLogin,
     isLoggedIn,
@@ -49,7 +43,6 @@ export const useGlobalStore = defineStore('global', () => {
     statuses,
     contacts,
     categories,
-    brands,
     headerRef,
     breadcrumbs,
   }

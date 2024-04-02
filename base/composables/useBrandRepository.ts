@@ -2,7 +2,7 @@ import type { BrandEntity } from '~/types/entities'
 import type { BrandType } from '~/types/enums'
 
 export const useBrandRepository = createGlobalState(() => {
-  function get(query?: { statuses?: string, type?: BrandType }) {
+  function get(query?: { statuses?: string, type?: BrandType, categories?: string }) {
     return $api<BrandEntity[]>('/brand', { query })
   }
 

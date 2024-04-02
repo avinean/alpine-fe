@@ -36,8 +36,11 @@ const colors = computed(() => {
 })
 
 const availableParameters = computed(() => {
-  return data.value?.prices
-    ?.filter(({ colors }) => colors.find(({ slug }) => slug === selectedColor.value))
+  let p = data.value?.prices || []
+  if (colors.value.length)
+    p = p.filter(({ colors }) => colors.find(({ slug }) => slug === selectedColor.value))
+
+  return p
     ?.filter(({ parameters }) =>
       selectedParameters.value.every(slug => parameters.some(parameter => parameter.slug === slug)),
     )
@@ -60,14 +63,25 @@ const parameterGroups = computed(() => {
 })
 
 const price = computed(() => {
-  return data.value?.prices?.find((_) => {
-    if (!(selectedColor.value && selectedParameters.value.length))
-      return false
-    return _.colors.some(({ slug }) => slug === selectedColor.value)
-      && selectedParameters.value.every(
-        slug => _.parameters.some(parameter => parameter.slug === slug),
-      )
-  })
+  if (colors.value.length) {
+    return data.value?.prices?.find((_) => {
+      if (!(selectedColor.value && selectedParameters.value.length))
+        return false
+      return _.colors.some(({ slug }) => slug === selectedColor.value)
+        && selectedParameters.value.every(
+          slug => _.parameters.some(parameter => parameter.slug === slug),
+        )
+    })
+  }
+  else {
+    return data.value?.prices?.find((_) => {
+      if (!selectedParameters.value.length)
+        return false
+      return selectedParameters.value.every(
+          slug => _.parameters.some(parameter => parameter.slug === slug),
+        )
+    })
+  }
 })
 
 function selectParameter(parameter: ParameterEntity, group: ParameterEntity[]) {
@@ -98,7 +112,7 @@ watch(selectedColor, () => {
 
 onMounted(() => {
   watch(colors, () => {
-    selectedColor.value = colors.value?.[0].slug
+    selectedColor.value = colors.value?.[0]?.slug
   }, { immediate: true })
 })
 </script>
@@ -124,33 +138,33 @@ onMounted(() => {
       <BaseImage v-else :src="data?.primaryImage?.image" />
       <div class="divide-y">
         <div class="py-2">
-          <h1 class="text-3xl">
+          <h1 v-if="data?.title" class="text-3xl">
             {{ data?.title }}
           </h1>
-          <p class="text-sm">
+          <p v-if="data?.category?.title" class="text-sm">
             <span class="font-bold">Категорія:</span> {{ data?.category?.title }}
           </p>
-          <p class="text-sm">
+          <p v-if="data?.brand?.title" class="text-sm">
             <span class="font-bold">Виробник:</span> {{ data?.brand?.title }}
           </p>
         </div>
         <p v-if="data?.size" class="py-2">
           <span class="font-bold">Розмір:</span> {{ data?.size }}
         </p>
-        <p class="py-2">
+        <p v-if="data?.standart" class="py-2">
           <span class="font-bold">Стандарт:</span> {{ data?.standart }}
         </p>
-        <div v-if="colors" class="py-2">
+        <div v-if="colors.length" class="py-2">
           <p class="pb-2 font-bold">
             Кольори
           </p>
           <UseColorList v-model="selectedColor" :colors="colors" />
         </div>
         <div v-for="group, name in parameterGroups" :key="name" class="py-2">
-          <p class="pb-2 font-bold">
+          <p class="font-bold">
             {{ name }}
           </p>
-          <div class="flex flex-wrap gap-2 py-2">
+          <div class="flex flex-wrap gap-2">
             <UButton
               v-for="parameter in group"
               :key="parameter.id"
