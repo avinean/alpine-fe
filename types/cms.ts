@@ -10,7 +10,7 @@ export interface TextSection {
 
 export interface ImageSection {
   type: 'image'
-  aspectRatio: 'auto' | 1 | '2/1' | '3/2' | '4/3' | '3/4' | '2/3' | '1/2'
+  aspectRatio?: 'auto' | 1 | '2/1' | '3/2' | '4/3' | '3/4' | '2/3' | '1/2'
   image: GalleryEntity | null
 }
 

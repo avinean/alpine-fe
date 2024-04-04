@@ -97,8 +97,7 @@ const categories = computed(() => [
     </main>
 
     <div class="border-t bg-white">
-      <div class="container grid md:grid-cols-[2fr_1fr_2fr] gap-4 p-2 items-start justify-center mx-auto">
-        <div class="flex flex-col items-center">
+      <div class="container flex flex-col items-center py-4 mx-auto">
           <ULink to="/">
             <img src="/logo.jpg" alt="logo" class="h-24 mx-auto">
           </ULink>
@@ -106,50 +105,6 @@ const categories = computed(() => [
             wooden-dreamhouse.com.ua
           </a>
           <span>{{ yearString }}</span>
-        </div>
-        <nav class="grid text-center">
-          <h2 class="font-bold text-xl">
-            Меню
-          </h2>
-          <ULink to="/products" class="p-2">
-            Продукція
-          </ULink>
-          <ULink to="/service" class="p-2">
-            Послуги
-          </ULink>
-          <ULink to="/delivery" class="p-2">
-            Доставка
-          </ULink>
-          <ULink to="/contacts" class="p-2">
-            Контакти
-          </ULink>
-        </nav>
-        <div class="space-y-2 text-center">
-          <h2 class="font-bold text-xl">
-            Контакти
-          </h2>
-          <div v-if="global.contacts" class="space-y-1">
-            <address v-for="contact in global.contacts" :key="contact.address" class="not-italic">
-              <div>{{ contact.address }}</div>
-              <div class="grid gap-1">
-                <a
-                  v-for="phone in contact.phones.split(',')"
-                  :key="phone"
-                  :href="`tel:${phone}`"
-                >
-                  {{ phone }}
-                </a>
-                <a
-                  v-for="email in contact.emails.split(',')"
-                  :key="email"
-                  :href="`mailto:${email}`"
-                >
-                  {{ email }}
-                </a>
-              </div>
-            </address>
-          </div>
-        </div>
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ useBreadcrumbs([])
 
 <template>
   <div>
-    <img src="/banner.jpg" class="w-full">
+    <CmsSection slug="golovna-pered-spiskom" key="golovna-pered-spiskom" />
+    <UseProductList />
   </div>
 </template>
