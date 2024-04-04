@@ -69,7 +69,7 @@ const { data: awailableBrands } = useAsyncData(
 )
 
 const page = ref(1)
-const take = ref(10)
+const take = ref(24)
 
 const { data, refresh } = useAsyncData(
   () => getByPage({
@@ -110,6 +110,18 @@ const hasMore = computed(() => {
   return current < max
 })
 
+onMounted(() => {
+  useInfiniteScroll(
+    window,
+    () => {
+      if (!hasMore.value)
+        return
+      page.value++
+    },
+    { distance: 100 },
+  )
+})
+
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 </script>
 
@@ -121,66 +133,77 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
           <div class="text-xl font-bold mb-2">
             Фільтри
           </div>
-          <div v-if="awailableBrands?.length" class="py-2">
-            <div class="font-bold text-lg mb-2">
-              Виробники
-            </div>
-            <div class="space-y-2">
-              <UCheckbox
-                v-for="brand in awailableBrands"
-                :key="brand.slug"
-                v-model="brands"
-                :label="brand.title"
-                :value="brand.slug"
-                name="brands"
-              />
-            </div>
-          </div>
-          <div v-if="!_category" class="py-2">
-            <div class="font-bold text-lg mb-2">
-              Категорії
-            </div>
-            <div class="space-y-2">
-              <UCheckbox
-                v-for="category in global.categories"
-                :key="category.slug"
-                v-model="categories"
-                :label="category.title"
-                :value="category.slug"
-                name="categories"
-              />
-            </div>
-          </div>
-          <div v-if="filters?.colors" class="py-2">
-            <div class="font-bold text-lg mb-2">
-              Кольори
-            </div>
-            <UseColorList
-              v-model="colors"
-              :colors="filters?.colors"
-              multiple
-              exclude-mix
-            />
-          </div>
-          <div
-            v-for="parameterFilters, title in filters?.parameters"
-            :key="title"
-            class="py-2"
+          <UAccordion
+            v-if="filters?.parameters"
+            multiple
+            :items="[
+              awailableBrands?.length && {
+                label: 'Виробники',
+                slot: 'slot-brands',
+                defaultOpen: true,
+              },
+              !_category && {
+                label: 'Категорії',
+                slot: 'slot-categories',
+                defaultOpen: true,
+              },
+              filters?.colors && {
+                label: 'Кольори',
+                slot: 'slot-colors',
+                defaultOpen: true,
+              },
+              ...filters?.parameters?.map(({ label }, i) => ({ label, slot: `slot-${i}` })),
+            ].filter(Boolean) as any[]"
           >
-            <p class="pb-2 font-bold">
-              {{ title }}
-            </p>
-            <div class="flex flex-wrap gap-2 py-2">
-              <UBadge
-                v-for="parameter in parameterFilters"
-                :key="parameter.id"
-                :label="[parameter.value, parameter.unit].filter(Boolean).join(' ')"
-                :color="parameters.includes(parameter.slug) ? undefined : 'gray'"
-                class="cursor-pointer"
-                @click="toggleParameter(parameter.slug)"
+            <template #slot-brands>
+              <div class="space-y-2">
+                <UCheckbox
+                  v-for="brand in awailableBrands"
+                  :key="brand.slug"
+                  v-model="brands"
+                  :label="brand.title"
+                  :value="brand.slug"
+                  name="brands"
+                />
+              </div>
+            </template>
+            <template #slot-categories>
+              <div class="space-y-2">
+                <UCheckbox
+                  v-for="category in global.categories"
+                  :key="category.slug"
+                  v-model="categories"
+                  :label="category.title"
+                  :value="category.slug"
+                  name="categories"
+                />
+              </div>
+            </template>
+            <template #slot-colors>
+              <UseColorList
+                v-model="colors"
+                :colors="filters?.colors"
+                multiple
+                exclude-mix
               />
-            </div>
-          </div>
+            </template>
+            <template
+              v-for="i in filters?.parameters.length"
+              :key="i"
+              #[`slot-${i-1}`]
+            >
+              <div class="flex flex-wrap gap-2 py-2">
+                <UBadge
+                  v-for="parameter in filters?.parameters[i - 1].items"
+                  :key="parameter.id"
+                  :label="[parameter.value, parameter.unit].filter(Boolean).join(' ')"
+                  :color="parameters.includes(parameter.slug) ? undefined : 'gray'"
+                  class="cursor-pointer"
+                  @click="toggleParameter(parameter.slug)"
+                />
+              </div>
+            </template>
+          </UAccordion>
         </div>
       </UCard>
     </DefineTemplate>
@@ -233,11 +256,6 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
           </UCard>
         </ULink>
       </ul>
-      <div v-if="hasMore" class="p-2 flex justify-center col-span-100">
-        <UButton color="white" @click="page++">
-          Завантажити ще
-        </UButton>
-      </div>
     </div>
   </div>
 </template>
