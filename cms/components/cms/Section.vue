@@ -29,5 +29,6 @@ const { data } = props.slug
     <CmsGrid v-else-if="section.type === 'grid'" v-bind="section">
       <CmsSection v-for="group, i in section.groups" :key="i" :content="group" />
     </CmsGrid>
+    <CmsContacts v-else-if="section.type === 'contacts'" v-bind="section" />
   </template>
 </template>

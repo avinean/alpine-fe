@@ -7,5 +7,7 @@ useBreadcrumbs([
 </script>
 
 <template>
-  <UseProductList />
+  <div class="space-y-2 py-2">
+    <UseProductList />
+  </div>
 </template>

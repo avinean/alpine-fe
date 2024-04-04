@@ -9,6 +9,5 @@ useBreadcrumbs([
 <template>
   <div class="space-y-2 py-2">
     <CmsSection slug="poslugi" />
-    <UseContacts />
   </div>
 </template>

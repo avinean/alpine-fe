@@ -7,5 +7,7 @@ useBreadcrumbs([
 </script>
 
 <template>
-  <UseContacts />
+  <div class="space-y-2 py-2">
+    <CmsSection slug="kontakti" />
+  </div>
 </template>

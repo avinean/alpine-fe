@@ -6,6 +6,7 @@ import type { CmsSection } from '~/types/cms'
 const props = defineProps<{
   sections: CmsSection[]
   allowedTypes?: CmsSection['type'][]
+  single?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -56,6 +57,12 @@ function addSection(type: CmsSection['type']) {
   }
   if (type === 'card')
     emit('update', [...props.sections, { type: 'card', image: null, sections: [] }])
+  if (type === 'contacts')
+    emit('update', [...props.sections, { type: 'contacts' }])
+}
+
+function duplicateSection(section: CmsSection) {
+  emit('update', [...props.sections, JSON.parse(JSON.stringify(section))])
 }
 
 function removeSection(section: CmsSection) {
@@ -80,6 +87,15 @@ function moveDown(section: any) {
   newSections[index] = newSections[index + 1]
   newSections[index + 1] = section
   emit('update', newSections)
+}
+
+function duplicateGroup(section: any, array: any[]) {
+  array.push(JSON.parse(JSON.stringify(section)))
+}
+
+function removeGroup(section: any, array: any[]) {
+  const index = array.indexOf(section)
+  array.splice(index, 1)
 }
 
 function moveLeft(section: any, array: any[]) {
@@ -127,6 +143,12 @@ const menu = [
       icon: 'i-heroicons-presentation-chart-bar-20-solid',
       click: () => addSection('card'),
     },
+    {
+      type: 'contacts',
+      label: 'Контакти',
+      icon: 'i-heroicons-phone-arrow-down-left-16-solid',
+      click: () => addSection('contacts'),
+    },
   ] as {
     type: CmsSection['type']
     label: string
@@ -144,16 +166,26 @@ const menu = [
       class="shadow-md hover:shadow-xl p-4"
     >
       <UDivider>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center">
           <UBadge v-if="section.type === 'text'" label="Текст" />
           <UBadge v-else-if="section.type === 'image'" label="Зображення" />
           <UBadge v-else-if="section.type === 'grid'" label="Сітка" />
           <UBadge v-else-if="section.type === 'card'" label="Картка" />
+          <UBadge v-else-if="section.type === 'contacts'" label="Контакти" />
 
           <UButtonGroup>
-            <UButton icon="i-heroicons-trash-16-solid" @click="removeSection(section)" />
-            <UButton v-if="index" icon="i-heroicons-arrow-up-16-solid" @click="moveUp(section)" />
-            <UButton v-if="index !== sections.length - 1" icon="i-heroicons-arrow-down-16-solid" @click="moveDown(section)" />
+            <UTooltip text="Створити дублікат">
+              <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateSection(section)" />
+            </UTooltip>
+            <UTooltip text="Видалити секцію">
+              <UButton icon="i-heroicons-trash-16-solid" size="2xs" @click="removeSection(section)" />
+            </UTooltip>
+            <UTooltip v-if="index" text="Перемістити вище">
+              <UButton icon="i-heroicons-arrow-up-16-solid" size="2xs" @click="moveUp(section)" />
+            </UTooltip>
+            <UTooltip v-if="index !== sections.length - 1" text="Перемістити нижче">
+              <UButton icon="i-heroicons-arrow-down-16-solid" size="2xs" @click="moveDown(section)" />
+            </UTooltip>
           </UButtonGroup>
         </div>
       </UDivider>
@@ -237,12 +269,23 @@ const menu = [
         <CmsGrid :columns="section.columns">
           <div v-for="group, key in section.groups" :key="JSON.stringify(group)" class="shadow-md hover:shadow-xl  p-2">
             <UDivider>
+              <UBadge label="Комірка сітки" />
               <UButtonGroup>
-                <UButton icon="i-heroicons-arrow-left-16-solid" @click="moveLeft(group, section.groups)" />
-                <UButton icon="i-heroicons-arrow-right-16-solid" @click="moveRight(group, section.groups)" />
+                <UTooltip text="Створити дублікат комірки">
+                  <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateGroup(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Видалити комірку">
+                  <UButton icon="i-heroicons-trash-16-solid" size="2xs" @click="removeGroup(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Перемістити назад">
+                  <UButton icon="i-heroicons-arrow-left-16-solid" size="2xs" @click="moveLeft(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Перемістити вперед">
+                  <UButton icon="i-heroicons-arrow-right-16-solid" size="2xs" @click="moveRight(group, section.groups)" />
+                </UTooltip>
               </UButtonGroup>
             </UDivider>
-            <CmsSectionComposer :sections="group" :allowed-types="['card', 'image', 'text']" @update="section.groups[key] = $event" />
+            <CmsSectionComposer :sections="group" :allowed-types="['card', 'image', 'text']" single @update="section.groups[key] = $event" />
           </div>
           <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
@@ -254,8 +297,11 @@ const menu = [
       <div v-else-if="section.type === 'card'">
         <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text']" @update="section.sections = $event" />
       </div>
+      <div v-else-if="section.type === 'contacts'">
+        <CmsContacts />
+      </div>
     </div>
-    <UDivider>
+    <UDivider v-if="single ? sections.length !== 1 : true">
       <UDropdown
         :items="menu"
         :popper="{ placement: 'bottom-start' }"

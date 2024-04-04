@@ -28,7 +28,11 @@ export interface CardSection {
   sections: CmsSection[]
 }
 
-export type CmsSection = TextSection | ImageSection | GridSection | CardSection
+export interface ContactsSection {
+  type: 'contacts'
+}
+
+export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection
 
 export interface CmsEntity {
   id: number
