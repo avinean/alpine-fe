@@ -32,7 +32,16 @@ export interface ContactsSection {
   type: 'contacts'
 }
 
-export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection
+export interface CallSection {
+  type: 'call'
+}
+
+export interface GroupSection {
+  type: 'group'
+  sections: CmsSection[]
+}
+
+export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection
 
 export interface CmsEntity {
   id: number

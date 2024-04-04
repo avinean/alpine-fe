@@ -4,9 +4,6 @@ const global = useGlobalStore()
 
 <template>
   <div class="space-y-2 py-2">
-    <h1>
-      Контакти
-    </h1>
     <ul v-if="global.contacts" class="space-y-2">
       <li v-for="contact in global.contacts" :key="contact.address" class="grid lg:grid-cols-3 items-center bg-gray-100 text-center text-lg p-2">
         <div>{{ contact.address }}</div>
@@ -30,19 +27,5 @@ const global = useGlobalStore()
         </div>
       </li>
     </ul>
-
-    <div class="grid grid-cols-2 gap-2 pt-10">
-      <div>
-        <h2>
-          Потрібна допомога?
-        </h2>
-        <div>
-          Залиште нам свої контактні дані, і менеджер зв’яжеться з Вами для уточнення деталей.
-        </div>
-      </div>
-      <div>
-        <FormCall />
-      </div>
-    </div>
   </div>
 </template>

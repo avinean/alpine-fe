@@ -14,6 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const { open } = useModalStore()
+const gridKey = ref(Math.random())
 
 function setImage(section: CmsSection) {
   if (section.type !== 'image')
@@ -57,8 +58,12 @@ function addSection(type: CmsSection['type']) {
   }
   if (type === 'card')
     emit('update', [...props.sections, { type: 'card', image: null, sections: [] }])
+  if (type === 'group')
+    emit('update', [...props.sections, { type: 'group', sections: [] }])
   if (type === 'contacts')
     emit('update', [...props.sections, { type: 'contacts' }])
+  if (type === 'call')
+    emit('update', [...props.sections, { type: 'call' }])
 }
 
 function duplicateSection(section: CmsSection) {
@@ -91,11 +96,13 @@ function moveDown(section: any) {
 
 function duplicateGroup(section: any, array: any[]) {
   array.push(JSON.parse(JSON.stringify(section)))
+  gridKey.value = Math.random()
 }
 
 function removeGroup(section: any, array: any[]) {
   const index = array.indexOf(section)
   array.splice(index, 1)
+  gridKey.value = Math.random()
 }
 
 function moveLeft(section: any, array: any[]) {
@@ -104,6 +111,7 @@ function moveLeft(section: any, array: any[]) {
     return
   array[index] = array[index - 1]
   array[index - 1] = section
+  gridKey.value = Math.random()
 }
 
 function moveRight(section: any, array: any[]) {
@@ -112,6 +120,7 @@ function moveRight(section: any, array: any[]) {
     return
   array[index] = array[index + 1]
   array[index + 1] = section
+  gridKey.value = Math.random()
 }
 
 const menu = [
@@ -138,6 +147,12 @@ const menu = [
       click: () => addSection('grid'),
     },
     {
+      type: 'group',
+      label: 'Групу елементів',
+      icon: 'i-heroicons-queue-list-16-solid',
+      click: () => addSection('group'),
+    },
+    {
       type: 'card',
       label: 'Картку',
       icon: 'i-heroicons-presentation-chart-bar-20-solid',
@@ -148,6 +163,12 @@ const menu = [
       label: 'Контакти',
       icon: 'i-heroicons-phone-arrow-down-left-16-solid',
       click: () => addSection('contacts'),
+    },
+    {
+      type: 'call',
+      label: 'Форма зворотнього звʼязку',
+      icon: 'i-heroicons-phone-arrow-down-left-16-solid',
+      click: () => addSection('call'),
     },
   ] as {
     type: CmsSection['type']
@@ -171,7 +192,9 @@ const menu = [
           <UBadge v-else-if="section.type === 'image'" label="Зображення" />
           <UBadge v-else-if="section.type === 'grid'" label="Сітка" />
           <UBadge v-else-if="section.type === 'card'" label="Картка" />
+          <UBadge v-else-if="section.type === 'group'" label="Група" />
           <UBadge v-else-if="section.type === 'contacts'" label="Контакти" />
+          <UBadge v-else-if="section.type === 'call'" label="Форма зворотнього звʼязку" />
 
           <UButtonGroup>
             <UTooltip text="Створити дублікат">
@@ -267,7 +290,7 @@ const menu = [
           </UFormGroup>
         </div>
         <CmsGrid :columns="section.columns">
-          <div v-for="group, key in section.groups" :key="JSON.stringify(group)" class="shadow-md hover:shadow-xl  p-2">
+          <div v-for="group, key in section.groups" :key="key + gridKey" class="shadow-md hover:shadow-xl p-2">
             <UDivider>
               <UBadge label="Комірка сітки" />
               <UButtonGroup>
@@ -285,7 +308,7 @@ const menu = [
                 </UTooltip>
               </UButtonGroup>
             </UDivider>
-            <CmsSectionComposer :sections="group" :allowed-types="['card', 'image', 'text']" single @update="section.groups[key] = $event" />
+            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
           </div>
           <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
@@ -297,8 +320,14 @@ const menu = [
       <div v-else-if="section.type === 'card'">
         <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text']" @update="section.sections = $event" />
       </div>
+      <div v-else-if="section.type === 'group'">
+        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts']" @update="section.sections = $event" />
+      </div>
       <div v-else-if="section.type === 'contacts'">
         <CmsContacts />
+      </div>
+      <div v-else-if="section.type === 'call'">
+        <CmsCall />
       </div>
     </div>
     <UDivider v-if="single ? sections.length !== 1 : true">
