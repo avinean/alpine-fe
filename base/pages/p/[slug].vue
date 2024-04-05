@@ -63,25 +63,21 @@ const parameterGroups = computed(() => {
 })
 
 const price = computed(() => {
-  if (colors.value.length) {
-    return data.value?.prices?.find((_) => {
-      if (!(selectedColor.value && selectedParameters.value.length))
-        return false
-      return _.colors.some(({ slug }) => slug === selectedColor.value)
-        && selectedParameters.value.every(
-          slug => _.parameters.some(parameter => parameter.slug === slug),
-        )
-    })
+  let prices = data.value?.prices || []
+
+  if (!prices?.length)
+    return
+
+  if (colors.value.length)
+    prices = prices.filter(_ => _.colors.some(({ slug }) => slug === selectedColor.value))
+
+  if (selectedParameters.value.length) {
+    prices = prices.filter(_ => selectedParameters.value.every(
+      slug => _.parameters.some(parameter => parameter.slug === slug),
+    ))
   }
-  else {
-    return data.value?.prices?.find((_) => {
-      if (!selectedParameters.value.length)
-        return false
-      return selectedParameters.value.every(
-          slug => _.parameters.some(parameter => parameter.slug === slug),
-        )
-    })
-  }
+
+  return prices[0]
 })
 
 function selectParameter(parameter: ParameterEntity, group: ParameterEntity[]) {

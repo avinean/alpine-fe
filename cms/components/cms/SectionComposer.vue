@@ -216,6 +216,7 @@ const menu = [
           <UBadge v-else-if="section.type === 'group'" label="Група" />
           <UBadge v-else-if="section.type === 'contacts'" label="Контакти" />
           <UBadge v-else-if="section.type === 'call'" label="Форма зворотнього звʼязку" />
+          <UBadge v-else-if="section.type === 'carousel'" label="Карусель" />
 
           <UButtonGroup>
             <UTooltip text="Створити дублікат">
