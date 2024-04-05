@@ -32,5 +32,6 @@ const { data } = props.slug
     <CmsContacts v-else-if="section.type === 'contacts'" v-bind="section" />
     <CmsCall v-else-if="section.type === 'call'" v-bind="section" />
     <CmsGroup v-else-if="section.type === 'group'" v-bind="section" />
+    <CmsCarousel v-else-if="section.type === 'carousel'" v-bind="section" />
   </template>
 </template>

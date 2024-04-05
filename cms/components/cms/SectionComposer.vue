@@ -56,6 +56,21 @@ function addSection(type: CmsSection['type']) {
       groups: [[]],
     }])
   }
+  if (type === 'carousel') {
+    emit('update', [...props.sections, {
+      type: 'carousel',
+      columns: {
+        sm: 2,
+        md: 4,
+        lg: 4,
+        xl: 6,
+      },
+      arrows: false,
+      autoplay: false,
+      duration: 5000,
+      groups: [[]],
+    }])
+  }
   if (type === 'card')
     emit('update', [...props.sections, { type: 'card', image: null, sections: [] }])
   if (type === 'group')
@@ -169,6 +184,12 @@ const menu = [
       label: 'Форма зворотнього звʼязку',
       icon: 'i-heroicons-phone-arrow-down-left-16-solid',
       click: () => addSection('call'),
+    },
+    {
+      type: 'carousel',
+      label: 'Карусель',
+      icon: 'i-heroicons-presentation-chart-bar-16-solid',
+      click: () => addSection('carousel'),
     },
   ] as {
     type: CmsSection['type']
@@ -297,6 +318,58 @@ const menu = [
           </UFormGroup>
           <UFormGroup label="Кількість колонок (xl):">
             <USelect v-model="section.columns.xl" :options="[1, 2, 3, 4, 5, 6]" />
+          </UFormGroup>
+        </div>
+        <CmsGrid :columns="section.columns">
+          <div v-for="group, key in section.groups" :key="key + gridKey" class="shadow-md hover:shadow-xl p-2">
+            <UDivider>
+              <UBadge label="Комірка сітки" />
+              <UButtonGroup>
+                <UTooltip text="Створити дублікат комірки">
+                  <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateGroup(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Видалити комірку">
+                  <UButton icon="i-heroicons-trash-16-solid" size="2xs" @click="removeGroup(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Перемістити назад">
+                  <UButton icon="i-heroicons-arrow-left-16-solid" size="2xs" @click="moveLeft(group, section.groups)" />
+                </UTooltip>
+                <UTooltip text="Перемістити вперед">
+                  <UButton icon="i-heroicons-arrow-right-16-solid" size="2xs" @click="moveRight(group, section.groups)" />
+                </UTooltip>
+              </UButtonGroup>
+            </UDivider>
+            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
+          </div>
+          <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
+            <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
+              Додати комірку
+            </UButton>
+          </div>
+        </CmsGrid>
+      </div>
+      <div v-else-if="section.type === 'carousel'">
+        <div class="grid grid-cols-4 gap-4 mb-4">
+          <UFormGroup label="Кількість колонок (sm):">
+            <USelect v-model="section.columns.sm" :options="[1, 2, 3, 4, 5, 6]" />
+          </UFormGroup>
+          <UFormGroup label="Кількість колонок (md):">
+            <USelect v-model="section.columns.md" :options="[1, 2, 3, 4, 5, 6]" />
+          </UFormGroup>
+          <UFormGroup label="Кількість колонок (lg):">
+            <USelect v-model="section.columns.lg" :options="[1, 2, 3, 4, 5, 6]" />
+          </UFormGroup>
+          <UFormGroup label="Кількість колонок (xl):">
+            <USelect v-model="section.columns.xl" :options="[1, 2, 3, 4, 5, 6]" />
+          </UFormGroup>
+          <UFormGroup label="Показувати стрілки:">
+            <UCheckbox v-model="section.arrows" />
+          </UFormGroup>
+          <UFormGroup label="Автопрогравання:">
+            <UCheckbox v-model="section.autoplay" />
+          </UFormGroup>
+          <UFormGroup label="Тривалість (секунд):">
+            <UInput :model-value="section.duration / 1000" @update:model-value="section.duration = $event * 1000" />
           </UFormGroup>
         </div>
         <CmsGrid :columns="section.columns">

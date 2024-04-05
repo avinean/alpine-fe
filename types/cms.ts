@@ -42,7 +42,18 @@ export interface GroupSection {
   sections: CmsSection[]
 }
 
-export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection
+export interface CarouselSection {
+  type: 'carousel'
+  columns: {
+    [S in Sizes]: 1 | 2 | 3 | 4 | 5 | 6
+  },
+  arrows: boolean,
+  autoplay: boolean,
+  duration: number,
+  groups: CmsSection[][]
+}
+
+export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection | CarouselSection
 
 export interface CmsEntity {
   id: number
