@@ -8,6 +8,11 @@ const global = useGlobalStore()
 const { getByPage, getFilters } = useProductRepository()
 
 const filtersOpen = ref(false)
+const headerRef = computed(() => global.headerRef)
+const loadMoreRef = ref()
+// @ts-expect-error it's a ref
+const { height } = useElementSize(headerRef)
+const loadMoreVisible = useElementVisibility(loadMoreRef)
 const _category = useRouteParams<string>('slug')
 const _brands = useRouteQuery<string>('b')
 const _categories = useRouteQuery<string>('c')
@@ -69,7 +74,7 @@ const { data: awailableBrands } = useAsyncData(
 const page = ref(1)
 const take = ref(24)
 
-const { data, refresh } = useAsyncData(
+const { data, refresh, pending } = useAsyncData(
   () => getByPage({
     statuses: global.statuses,
     brands: brands.value.length ? brands.value : undefined,
@@ -108,16 +113,10 @@ const hasMore = computed(() => {
   return current < max
 })
 
-onMounted(() => {
-  useInfiniteScroll(
-    window,
-    () => {
-      if (!hasMore.value)
-        return
-      page.value++
-    },
-    { distance: 100 },
-  )
+whenever(loadMoreVisible, () => {
+  if (!hasMore.value)
+    return
+  page.value++
 })
 
 const filterSections = computed(() => [
@@ -206,18 +205,16 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
         </div>
       </UCard>
     </DefineTemplate>
-    <div
-      class="w-full md:w-60 md:min-w-60"
-    >
-      <div class="hidden md:block">
+    <div class="w-60 min-w-60 hidden md:block">
+      <div class="sticky top-0 z-1" :style="{ top: `calc(${height}px + 0.5rem)` }">
         <ReuseTemplate />
       </div>
-      <div class="flex justify-between p-2 md:hidden bg-white">
-        <span>Фільтри</span>
-        <button class="flex md:hidden" @click="filtersOpen = true">
-          <i class="i-heroicons-adjustments-horizontal text-4xl text-gray" />
-        </button>
-      </div>
+    </div>
+    <div class="sticky top-0 z-1 w-full flex items-center justify-between p-2 md:hidden bg-white border" :style="{ top: `calc(${height}px + 0.5rem)` }">
+      <span>Фільтри</span>
+      <button class="flex md:hidden" @click="filtersOpen = true">
+        <i class="i-heroicons-adjustments-horizontal text-4xl text-gray" />
+      </button>
     </div>
     <UModal v-model="filtersOpen" fullscreen>
       <ReuseTemplate />
@@ -253,7 +250,11 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
             </span>
           </UCard>
         </ULink>
+        <template v-if="page > 1 && pending">
+          <USkeleton v-for="key in take" :key />
+        </template>
       </ul>
+      <div ref="loadMoreRef" class="relative -top-20" />
     </div>
   </div>
 </template>
