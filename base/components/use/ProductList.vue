@@ -206,11 +206,20 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
       </UCard>
     </DefineTemplate>
     <div class="w-60 min-w-60 hidden md:block">
-      <div class="sticky top-0 z-1" :style="{ top: `calc(${height}px + 0.5rem)` }">
+      <div
+        class="sticky top-0 z-1 overflow-auto"
+        :style="{
+          top: `calc(${height}px + 0.5rem)`,
+          maxHeight: `calc(100vh - ${height}px - 1rem)`,
+        }"
+      >
         <ReuseTemplate />
       </div>
     </div>
-    <div class="sticky top-0 z-1 w-full flex items-center justify-between p-2 md:hidden bg-white border" :style="{ top: `calc(${height}px + 0.5rem)` }">
+    <div
+      class="sticky top-0 z-1 w-full flex items-center justify-between p-2 md:hidden bg-white border"
+      :style="{ top: `calc(${height}px + 0.5rem)` }"
+    >
       <span>Фільтри</span>
       <button class="flex md:hidden" @click="filtersOpen = true">
         <i class="i-heroicons-adjustments-horizontal text-4xl text-gray" />
