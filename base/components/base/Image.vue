@@ -1,9 +1,11 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   src?: string
   alt?: string
-  cover?: boolean
-}>()
+  fit?: 'cover' | 'contain'
+}>(), {
+  fit: 'cover',
+})
 </script>
 
 <template>
@@ -13,7 +15,10 @@ defineProps<{
       loading="lazy"
       :alt
       class="w-full h-full"
-      :class="cover ? 'object-cover' : 'object-contain'"
+      :class="{
+        'object-cover': fit === 'cover',
+        'object-contain': fit === 'contain',
+      }"
     >
   </picture>
 </template>

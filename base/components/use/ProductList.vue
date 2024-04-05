@@ -2,14 +2,12 @@
 import { useRouteParams, useRouteQuery } from '@vueuse/router'
 import type { PaginationResponse } from '~/types/api'
 import type { ProductEntity } from '~/types/entities'
+import type { AccordionItem } from '#ui/types'
 
 const global = useGlobalStore()
 const { getByPage, getFilters } = useProductRepository()
 
 const filtersOpen = ref(false)
-const header = computed(() => global.headerRef)
-// @ts-expect-error it's a ref
-const { height } = useElementSize(header)
 const _category = useRouteParams<string>('slug')
 const _brands = useRouteQuery<string>('b')
 const _categories = useRouteQuery<string>('c')
@@ -122,6 +120,25 @@ onMounted(() => {
   )
 })
 
+const filterSections = computed(() => [
+  awailableBrands.value?.length && {
+    label: 'Виробники',
+    slot: 'slot-brands',
+    defaultOpen: true,
+  },
+  !_category.value && {
+    label: 'Категорії',
+    slot: 'slot-categories',
+    defaultOpen: true,
+  },
+  filters.value?.colors && {
+    label: 'Кольори',
+    slot: 'slot-colors',
+    defaultOpen: true,
+  },
+  ...(filters.value?.parameters || [])?.map(({ label }, i) => ({ label, slot: `slot-${i}` })),
+].filter(Boolean) as AccordionItem[])
+
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 </script>
 
@@ -134,26 +151,8 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
             Фільтри
           </div>
           <UAccordion
-            v-if="filters?.parameters"
             multiple
-            :items="[
-              awailableBrands?.length && {
-                label: 'Виробники',
-                slot: 'slot-brands',
-                defaultOpen: true,
-              },
-              !_category && {
-                label: 'Категорії',
-                slot: 'slot-categories',
-                defaultOpen: true,
-              },
-              filters?.colors && {
-                label: 'Кольори',
-                slot: 'slot-colors',
-                defaultOpen: true,
-              },
-              ...filters?.parameters?.map(({ label }, i) => ({ label, slot: `slot-${i}` })),
-            ].filter(Boolean) as any[]"
+            :items="filterSections"
           >
             <template #slot-brands>
               <div class="space-y-2">
@@ -208,8 +207,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
       </UCard>
     </DefineTemplate>
     <div
-      :style="{ top: `calc(${height}px + 0.5rem)` }"
-      class="sticky top-0 w-full md:w-60 md:min-w-60"
+      class="w-full md:w-60 md:min-w-60"
     >
       <div class="hidden md:block">
         <ReuseTemplate />

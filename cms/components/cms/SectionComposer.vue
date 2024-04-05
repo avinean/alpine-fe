@@ -43,7 +43,7 @@ function addSection(type: CmsSection['type']) {
   if (type === 'text')
     emit('update', [...props.sections, { type: 'text', content: '', align: 'left', tag: 'p' }])
   if (type === 'image')
-    emit('update', [...props.sections, { type: 'image', image: null, aspectRatio: 'auto' }])
+    emit('update', [...props.sections, { type: 'image', image: null, aspectRatio: 'auto', fit: 'cover' }])
   if (type === 'grid') {
     emit('update', [...props.sections, {
       type: 'grid',
@@ -248,7 +248,7 @@ const menu = [
       </div>
 
       <div v-else-if="section.type === 'image'">
-        <div class="flex gap-2 flex-wrap mb-4">
+        <div class="space-y-2 mb-2">
           <UFormGroup label="Пропорція:" class="flex-1">
             <USelect
               v-model="section.aspectRatio"
@@ -266,10 +266,20 @@ const menu = [
               ]"
             />
           </UFormGroup>
+          <UFormGroup label="Вміщення картинки:" class="flex-1">
+            <USelect
+              v-model="section.fit"
+              option-attribute="label"
+              value-attribute="value"
+              :options="[
+                { label: 'Заповнити', value: 'cover' },
+                { label: 'Вмістити', value: 'contain' },
+              ]"
+            />
+          </UFormGroup>
         </div>
-
-        <BaseImage
-          :src="section.image?.image"
+        <CmsImage
+          v-bind="section"
           class="cursor-pointer max-w-64"
           @click="setImage(section)"
         />

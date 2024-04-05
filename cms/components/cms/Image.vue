@@ -5,5 +5,5 @@ defineProps<ImageSection>()
 </script>
 
 <template>
-  <BaseImage :src="image?.image" :alt="image?.title" :style="{ aspectRatio }" cover />
+  <BaseImage :src="image?.image" :alt="image?.title" :style="{ aspectRatio }" :fit />
 </template>
