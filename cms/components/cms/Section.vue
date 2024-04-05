@@ -10,6 +10,7 @@ const global = useGlobalStore()
 const { getOne } = useCmsRepository()
 const { data } = props.slug
   ? await useAsyncData(
+    props.slug,
     () => getOne(props.slug!, { statuses: global.statuses }),
     {
       watch: [() => global.statuses],

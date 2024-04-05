@@ -4,7 +4,8 @@ useBreadcrumbs([])
 
 <template>
   <div>
-    <CmsSection slug="golovna-pered-spiskom" key="golovna-pered-spiskom" />
+    <CmsSection key="golovna-pered-spiskom" slug="golovna-pered-spiskom" />
     <UseProductList />
+    <CmsSection key="golovna-pislya-spisku" slug="golovna-pislya-spisku" />
   </div>
 </template>
