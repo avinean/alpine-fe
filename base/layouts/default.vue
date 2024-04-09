@@ -35,8 +35,8 @@ const categories = computed(() => [
         </div>
       </div>
       <header class="container flex flex-wrap gap-4 items-center justify-between mx-auto p-2">
-        <ULink to="/">
-          <img src="/logo.jpg" alt="logo" class="h-24">
+        <ULink to="/" class="h-24 w-24">
+          <CmsSection slug="logo" />
         </ULink>
 
         <button class="flex md:hidden" @click="menuOpen = !menuOpen">
@@ -98,13 +98,13 @@ const categories = computed(() => [
 
     <div class="border-t bg-white">
       <div class="container flex flex-col items-center py-4 mx-auto">
-          <ULink to="/">
-            <img src="/logo.jpg" alt="logo" class="h-24 mx-auto">
-          </ULink>
-          <a href="https://wooden-dreamhouse.com.ua">
-            wooden-dreamhouse.com.ua
-          </a>
-          <span>{{ yearString }}</span>
+        <ULink to="/" class="h-24 w-24 mx-auto">
+          <CmsSection slug="logo" />
+        </ULink>
+        <a href="https://wooden-dreamhouse.com.ua">
+          wooden-dreamhouse.com.ua
+        </a>
+        <span>{{ yearString }}</span>
       </div>
     </div>
   </div>
