@@ -35,18 +35,6 @@ const colors = computed(() => {
     acc.find(color => color?.id === _?.id) ? acc : [...acc, _], [] as ColorEntity[]) || []
 })
 
-const availableParameters = computed(() => {
-  let p = data.value?.prices || []
-  if (colors.value.length)
-    p = p.filter(({ colors }) => colors.find(({ slug }) => slug === selectedColor.value))
-
-  return p
-    ?.filter(({ parameters }) =>
-      selectedParameters.value.every(slug => parameters.some(parameter => parameter.slug === slug)),
-    )
-    ?.flatMap(({ parameters }) => parameters.map(({ slug }) => slug)) || []
-})
-
 const parameterGroups = computed(() => {
   const groups: Record<string, ParameterEntity[]> = {}
 
@@ -82,14 +70,8 @@ const price = computed(() => {
 
 function selectParameter(parameter: ParameterEntity, group: ParameterEntity[]) {
   const groupSlugs = group.map(({ slug }) => slug)
-  if (selectedParameters.value.includes(parameter.slug)) { selectedParameters.value = selectedParameters.value.filter(slug => slug !== parameter.slug) }
-  else {
-    selectedParameters.value = [
-      ...selectedParameters.value
-        .filter(slug => availableParameters.value.includes(slug) && !groupSlugs.includes(slug)),
-      parameter.slug,
-    ]
-  }
+  selectedParameters.value = selectedParameters.value.filter(slug => !groupSlugs.includes(slug))
+  selectedParameters.value.push(parameter.slug)
 }
 
 watch(quantity, (v) => {
@@ -99,11 +81,6 @@ watch(quantity, (v) => {
 
 watch(selectedColor, () => {
   selectedParameters.value = []
-  Object.entries(parameterGroups.value).forEach(([group, list]) => {
-    const available = list.find(({ slug }) => availableParameters.value.includes(slug))
-    if (available)
-      selectedParameters.value.push(available.slug)
-  })
 })
 
 onMounted(() => {
@@ -165,8 +142,7 @@ onMounted(() => {
               v-for="parameter in group"
               :key="parameter.id"
               :label="[parameter.value, parameter.unit].filter(Boolean).join(' ')"
-              :color="availableParameters.includes(parameter.slug) && selectedParameters.find(slug => slug === parameter.slug) ? undefined : 'gray'"
-              :disabled="!availableParameters.includes(parameter.slug)"
+              :color="selectedParameters.find(slug => slug === parameter.slug) ? undefined : 'gray'"
               @click="selectParameter(parameter, group)"
             />
           </div>

@@ -198,7 +198,7 @@ function removePrice(price: PriceEntity) {
           <template #colors-data="{ row }">
             <div class="flex gap-2 flex-wrap">
               <template v-if="row.colors.length">
-                <AdminColorList :colors="row.colors" />
+                <UseColorList :colors="row.colors" />
               </template>
               <UBadge v-else label="Не вказано" color="gray" />
             </div>
