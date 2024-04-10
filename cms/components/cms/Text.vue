@@ -10,17 +10,18 @@ const alignment = {
   center: 'text-center',
   right: 'text-right',
 }
+
+function replaceLinksWithHTML(text: string) {
+    const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    return text.replace(regex, '<a href="$2" target="_blank" rel="noopener noreferer" class="link">$1</a>');
+}
 </script>
 
 <template>
   <component :is="tag" :class="[alignment[align], { list: tag === 'ul' }]">
     <template v-if="tag === 'ul'">
-      <li v-for="item in content.split('\n')" :key="item">
-        {{ item }}
-      </li>
+      <li v-for="item in replaceLinksWithHTML(content).split('\n')" :key="item" v-html="item" />
     </template>
-    <template v-else>
-      {{ content }}
-    </template>
+    <span v-else v-html="replaceLinksWithHTML(content)" />
   </component>
 </template>

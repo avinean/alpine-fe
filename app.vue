@@ -32,4 +32,7 @@ p {
 ul.list {
     @apply list-disc pl-5 mb-4 space-y-2;
 }
+a.link {
+    @apply text-gray-500 hover:text-gray-600 underline;
+}
 </style>
