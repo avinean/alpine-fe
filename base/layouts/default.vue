@@ -101,9 +101,6 @@ const categories = computed(() => [
         <ULink to="/" class="h-24 w-24 mx-auto">
           <CmsSection slug="logo" />
         </ULink>
-        <a href="https://wooden-dreamhouse.com.ua">
-          wooden-dreamhouse.com.ua
-        </a>
         <span>{{ yearString }}</span>
       </div>
     </div>
