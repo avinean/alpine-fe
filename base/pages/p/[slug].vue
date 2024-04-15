@@ -157,7 +157,7 @@ onMounted(() => {
             </div>
           </div>
           <div class="py-2">
-            Ціна: <span class="text-2xl font-bold">{{ price.price * quantity }}</span> грн
+            Ціна: <span class="text-2xl font-bold">{{ parseFloat((price.price * quantity).toFixed(2)) }}</span> грн
           </div>
         </template>
         <div v-else-if="!price && selectedParameters.length" class="py-2">
