@@ -3,7 +3,6 @@ import { useRouteParams, useRouteQuery } from '@vueuse/router'
 import type { PaginationResponse } from '~/types/api'
 import type { ProductEntity } from '~/types/entities'
 import type { AccordionItem } from '#ui/types'
-import { VisibilityStatus } from '~/types/enums';
 
 const global = useGlobalStore()
 const { getByPage, getFilters } = useProductRepository()
@@ -68,8 +67,8 @@ function toggleParameter(slug: string) {
 
 const brandRepository = useBrandRepository()
 const { data: awailableBrands } = useAsyncData(
-  () => brandRepository.get({ statuses: VisibilityStatus.Published, categories: categories.value.join(',') }),
-  { watch: [() => _category, _categories] },
+  () => brandRepository.get({ statuses: global.statuses.join(','), categories: categories.value.join(',') }),
+  { watch: [() => global.statuses, _category, _categories] },
 )
 
 const page = ref(1)
@@ -121,14 +120,14 @@ whenever(loadMoreVisible, () => {
 })
 
 const filterSections = computed(() => [
-  awailableBrands.value?.length && {
-    label: 'Виробники',
-    slot: 'slot-brands',
-    defaultOpen: true,
-  },
   !_category.value && {
     label: 'Категорії',
     slot: 'slot-categories',
+    defaultOpen: true,
+  },
+  awailableBrands.value?.length && {
+    label: 'Виробники',
+    slot: 'slot-brands',
     defaultOpen: true,
   },
   filters.value?.colors && {
@@ -252,12 +251,14 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
               :alt="product.primaryImage?.title"
               class="object-cover w-full aspect-[1/1]"
             />
-            <div class="border-b-1 font-bold">
-              {{ product.title }}
+            <div class="border-b-1 text-sm font-bold mt-2">
+              <span class="sr-only">
+                Детальніше про
+              </span> {{ product.title }}
             </div>
-            <span class="sr-only">
-              Детальніше про {{ product.title }}
-            </span>
+            <div v-if="product.prices?.[0]?.price" class="border-b-1 font-black mt-2">
+              {{ product.prices[0].price }} грн
+            </div>
           </UCard>
         </ULink>
         <template v-if="page > 1 && pending">
