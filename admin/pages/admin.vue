@@ -49,6 +49,10 @@ const query = `?statuses=${[
           label: 'Контакти',
           to: `/admin/contacts${query}`,
         },
+        // {
+        //   label: 'Сторінки',
+        //   to: '/admin/pages',
+        // },
         {
           label: 'CMS',
           to: '/admin/cms',

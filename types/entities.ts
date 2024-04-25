@@ -81,16 +81,6 @@ export interface ApplicationEntity {
   products: ProductEntity[]
 }
 
-export interface PageEntity {
-  id: number
-  slug: string
-  title: string
-  content?: string
-  status: VisibilityStatus
-  createdAt: Date
-  updatedAt: Date
-}
-
 export interface ContactEntity {
   id: number
   address: string

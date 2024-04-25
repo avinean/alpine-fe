@@ -51,7 +51,7 @@ const categories = computed(() => [
             :class="{ 'w-full flex-col items-center': !md }"
             @click="menuOpen = !menuOpen"
           >
-            <UDropdown :items="categories" mode="hover" :popper="{ placement: 'bottom-start' }">
+            <UDropdown :items="categories" mode="hover" :ui="{ width: 'w-64' }" :popper="{ placement: 'bottom-start' }">
               <ULink to="/products" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
                 Продукція
               </ULink>
@@ -61,18 +61,7 @@ const categories = computed(() => [
                 </ULink>
               </template>
             </UDropdown>
-            <ULink to="/service" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-              Послуги
-            </ULink>
-            <ULink to="/delivery" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-              Доставка
-            </ULink>
-            <!-- <ULink to="/b/material" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-              Матеріали
-            </ULink> -->
-            <ULink to="/contacts" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-              Контакти
-            </ULink>
+            <LNavigation />
           </nav>
         </transition>
       </header>

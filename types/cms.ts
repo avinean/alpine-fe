@@ -1,5 +1,6 @@
 import type { Sizes } from './ds'
 import type { GalleryEntity } from './entities'
+import type { VisibilityStatus } from './enums'
 
 export interface TextSection {
   type: 'text'
@@ -46,10 +47,10 @@ export interface CarouselSection {
   type: 'carousel'
   columns: {
     [S in Sizes]: 1 | 2 | 3 | 4 | 5 | 6
-  },
-  arrows: boolean,
-  autoplay: boolean,
-  duration: number,
+  }
+  arrows: boolean
+  autoplay: boolean
+  duration: number
   groups: CmsSection[][]
 }
 
@@ -60,6 +61,34 @@ export interface CmsEntity {
   slug: string
   title: string
   content: CmsSection[]
+  status: VisibilityStatus
   createdAt: Date
   updatedAt: Date
+}
+
+export interface PageEntity {
+  id: number
+  slug: string
+  title: string
+  meta: { name: string, content: string }[]
+  breadcrumbs: { label: string, to?: string }[]
+  status: VisibilityStatus
+  createdAt: Date
+  updatedAt: Date
+  section: CmsEntity
+}
+
+export interface NavigationEntity {
+  id: number
+  order: number
+  navigation: {
+    title: string
+    to: string
+    order: number
+    children?: {
+      title: string
+      to: string
+      order: number
+    }[]
+  }[]
 }
