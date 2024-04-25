@@ -4,6 +4,10 @@ useBreadcrumbs([
     label: 'Продукція',
   },
 ])
+
+definePageMeta({
+  keepalive: true,
+})
 </script>
 
 <template>

@@ -1,5 +1,9 @@
 <script setup lang="ts">
 useBreadcrumbs([])
+
+definePageMeta({
+  keepalive: true,
+})
 </script>
 
 <template>

@@ -3,6 +3,7 @@ import { useRouteParams, useRouteQuery } from '@vueuse/router'
 import type { PaginationResponse } from '~/types/api'
 import type { ProductEntity } from '~/types/entities'
 import type { AccordionItem } from '#ui/types'
+import { VisibilityStatus } from '~/types/enums';
 
 const global = useGlobalStore()
 const { getByPage, getFilters } = useProductRepository()
@@ -67,8 +68,8 @@ function toggleParameter(slug: string) {
 
 const brandRepository = useBrandRepository()
 const { data: awailableBrands } = useAsyncData(
-  () => brandRepository.get({ statuses: global.statuses.join(','), categories: categories.value.join(',') }),
-  { watch: [() => global.statuses, _category, _categories] },
+  () => brandRepository.get({ statuses: VisibilityStatus.Published, categories: categories.value.join(',') }),
+  { watch: [() => _category, _categories] },
 )
 
 const page = ref(1)

@@ -1,5 +1,5 @@
 import type { NuxtConfig } from 'nuxt/schema'
 
 export default {
-  storesDirs: ['./base/stores/**'],
+  storesDirs: ['./apps/core/stores/**'],
 } satisfies NuxtConfig['pinia']
