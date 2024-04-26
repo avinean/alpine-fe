@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-import type { DropdownItem } from '#ui/types'
-
 const global = useGlobalStore()
-const { md } = useBreakpoints(breakpointsTailwind)
-const menuOpen = ref(!!md.value)
 
 onMounted(() => {
   global.checkLogin()
@@ -13,13 +8,6 @@ onMounted(() => {
 const startYear = 2024
 const currentYear = new Date().getFullYear()
 const yearString = startYear === currentYear ? currentYear : `${startYear}-${currentYear}`
-
-const categories = computed(() => [
-  global.categories?.map(category => ({
-    label: category.title,
-    to: `/c/${category.slug}`,
-  })) as DropdownItem[],
-])
 </script>
 
 <template>
@@ -34,37 +22,7 @@ const categories = computed(() => [
           Режим попереднього перегляду <UToggle v-model="global.isPreview" color="primary" />
         </div>
       </div>
-      <header class="container flex flex-wrap gap-4 items-center justify-between mx-auto p-2">
-        <ULink to="/" class="h-24 w-24">
-          <CmsSection slug="logo" />
-        </ULink>
-
-        <button class="flex md:hidden" @click="menuOpen = !menuOpen">
-          <i v-if="menuOpen" class="i-heroicons-x-mark-16-solid text-4xl text-gray" />
-          <i v-else class="i-heroicons-bars-3-16-solid text-4xl text-gray" />
-        </button>
-
-        <transition name="fade">
-          <nav
-            v-if="md || menuOpen"
-            class="flex"
-            :class="{ 'w-full flex-col items-center': !md }"
-            @click="menuOpen = !menuOpen"
-          >
-            <UDropdown :items="categories" mode="hover" :ui="{ width: 'w-64' }" :popper="{ placement: 'bottom-start' }">
-              <ULink to="/products" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-                Продукція
-              </ULink>
-              <template #item="{ item }">
-                <ULink :to="item.to">
-                  {{ item.label }}
-                </ULink>
-              </template>
-            </UDropdown>
-            <LNavigation />
-          </nav>
-        </transition>
-      </header>
+      <LHeader />
     </div>
 
     <div class="container py-2 mx-auto">
