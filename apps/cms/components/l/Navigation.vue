@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { get} = useNavigationRepository()
+const { get } = useNavigationRepository()
 const { data } = await useAsyncData(
   () => get(),
 )

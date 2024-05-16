@@ -123,17 +123,14 @@ const filterSections = computed(() => [
   !_category.value && {
     label: 'Категорії',
     slot: 'slot-categories',
-    defaultOpen: true,
   },
   awailableBrands.value?.length && {
     label: 'Виробники',
     slot: 'slot-brands',
-    defaultOpen: true,
   },
   filters.value?.colors && {
     label: 'Кольори',
     slot: 'slot-colors',
-    defaultOpen: true,
   },
   ...(filters.value?.parameters || [])?.map(({ label }, i) => ({ label, slot: `slot-${i}` })),
 ].filter(Boolean) as AccordionItem[])

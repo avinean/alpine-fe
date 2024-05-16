@@ -12,6 +12,9 @@ export const useGlobalStore = defineStore('global', () => {
   const headerRef = ref<Element | ComponentPublicInstance | null>(null)
 
   async function checkLogin() {
+    const token = useCookie('sraka')
+    if (!token.value)
+      return
     if (isLoggedIn.value)
       return isLoggedIn.value
     try {
