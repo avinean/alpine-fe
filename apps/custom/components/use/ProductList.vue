@@ -246,7 +246,8 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
             <BaseImage
               :src="product.primaryImage?.image"
               :alt="product.primaryImage?.title"
-              class="object-cover w-full aspect-[1/1]"
+              class="w-full aspect-[1/1]"
+              fit="contain"
             />
             <div class="border-b-1 text-sm font-bold mt-2">
               <span class="sr-only">

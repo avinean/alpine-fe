@@ -23,6 +23,13 @@ export const useProductRepository = createGlobalState(() => {
     return $api<PaginationResponse<ProductEntity>>(`/product/page`, { query })
   }
 
+  function search(query: {
+    search?: string
+    statuses?: VisibilityStatus[]
+  } & PaginationRequest) {
+    return $api<PaginationResponse<ProductEntity>>(`/product/search`, { query })
+  }
+
   function getFilters(query: { categories?: string[] }) {
     return $api<{ colors: ColorEntity[], parameters: { label: string, items: ParameterEntity[] }[] }>(`/product/filters`, { query })
   }
@@ -72,5 +79,6 @@ export const useProductRepository = createGlobalState(() => {
     remove,
     getByPage,
     getFilters,
+    search
   }
 })

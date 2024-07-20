@@ -23,6 +23,7 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
         </div>
       </div>
       <LHeader />
+      <LSearch />
     </div>
 
     <div class="container py-2 mx-auto">
@@ -34,7 +35,7 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
     </div>
     <main class="container flex-1 mx-auto">
       <NuxtPage />
-      <div class="fixed bottom-12 right-5 animate-bounce bg-white border">
+      <div class="fixed bottom-12 right-5 animate- bg-white border">
         <UseCall v-slot="{ call }">
           <button @click="call">
             <i class="i-heroicons-phone text-6xl text-gray" />

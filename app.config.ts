@@ -69,6 +69,10 @@ export default defineAppConfig({
     horizontalNavigation: {
       container: 'list-none',
     },
-
+    popover: {
+      wrapper: 'h-0',
+      rounded: 'rounded-none',
+      trigger: 'w-0 h-0 overflow-hidden',
+    }
   },
 })
