@@ -50,46 +50,40 @@ whenever(loadMoreVisible, () => {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-2 py-2">
-    <div class="flex-1">
-      <div v-if="data?.items && !data.items.length" class="h-full border-b">
-        <div class="text-center text-xl font-bold mb-16">
-          За вашим запитом немає результатів
-        </div>
-
-        <div class="text-lg font-bold">
-          Наші менеджери вам допоможуть
-        </div>
-        <CmsContacts />
-      </div>
-      <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
-        <ULink
-          v-for="product in data.items"
-          :key="product.id"
-          :to="`/p/${product.slug}`"
-        >
-          <UCard class="h-full">
-            <BaseImage
-              :src="product.primaryImage?.image"
-              :alt="product.primaryImage?.title"
-              class="w-full aspect-[1/1]"
-              fit="contain"
-            />
-            <div class="border-b-1 text-sm font-bold mt-2">
-              <span class="sr-only">
-                Детальніше про
-              </span> {{ product.title }}
-            </div>
-            <div v-if="product.prices?.[0]?.price" class="border-b-1 font-black mt-2">
-              {{ product.prices[0].price }} грн
-            </div>
-          </UCard>
-        </ULink>
-        <template v-if="page > 1 && pending">
-          <USkeleton v-for="key in take" :key />
-        </template>
-      </ul>
-      <div ref="loadMoreRef" class="relative -top-20" />
+  <main class="container flex-1 mx-auto space-y-2 py-2">
+    <h1 class="text-3xl">
+      Результати за запитом "{{ _search }}"
+    </h1>
+    <div v-if="data?.items && !data.items.length" class="text-center text-xl font-boldpy-10">
+      За вашим запитом немає результатів
     </div>
-  </div>
+    <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
+      <ULink
+        v-for="product in data.items"
+        :key="product.id"
+        :to="`/p/${product.slug}`"
+      >
+        <UCard class="h-full">
+          <BaseImage
+            :src="product.primaryImage?.image"
+            :alt="product.primaryImage?.title"
+            class="w-full aspect-[1/1]"
+            fit="contain"
+          />
+          <div class="border-b-1 text-sm font-bold mt-2">
+            <span class="sr-only">
+              Детальніше про
+            </span> {{ product.title }}
+          </div>
+          <div v-if="product.prices?.[0]?.price" class="border-b-1 font-black mt-2">
+            {{ product.prices[0].price }} грн
+          </div>
+        </UCard>
+      </ULink>
+      <template v-if="page > 1 && pending">
+        <USkeleton v-for="key in take" :key />
+      </template>
+    </ul>
+    <div ref="loadMoreRef" class="relative -top-20" />
+  </main>
 </template>

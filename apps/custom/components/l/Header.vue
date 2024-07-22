@@ -13,6 +13,7 @@ const categories = computed(() => [
   global.categories?.map(category => ({
     label: category.title,
     to: `/c/${category.slug}`,
+    image: category.image,
   })) as DropdownItem[],
 ])
 
@@ -36,13 +37,17 @@ const phones = computed(() => global.contacts?.flatMap(({ phones }) => phones.sp
       @click="menuOpen = !menuOpen"
     >
       <UDropdown :items="categories" mode="hover" :ui="{ width: 'w-82' }" :popper="{ placement: 'bottom-start' }">
-        <ULink to="/products" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
-          Продукція
+        <ULink to="/catalog" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+          Каталог
         </ULink>
         <template #item="{ item }">
-          <ULink :to="item.to">
-            {{ item.label }}
-          </ULink>
+          <BaseImage
+            :src="item.image"
+            :alt="item.label"
+            class="w-16 h-16 aspect-[1/1]"
+            fit="contain"
+          />
+          {{ item.label }}
         </template>
       </UDropdown>
       <LNavigation />

@@ -9,8 +9,8 @@ const { data } = await useAsyncData(() => getOne(slug.value))
 useBreadcrumbs(() => data.value
   ? [
       {
-        label: 'Продукція',
-        to: '/products',
+        label: 'Каталог',
+        to: '/catalog',
       },
       {
         label: data.value.category.title,
@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="py-2">
+  <main class="container flex-1 mx-auto">
     <div class="grid items-start gap-2 md:grid-cols-[50%_50%]">
       <UCarousel
         v-if="galleryItems"
@@ -220,5 +220,5 @@ onMounted(() => {
         </template>
       </template>
     </UTabs>
-  </div>
+  </main>
 </template>

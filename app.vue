@@ -1,6 +1,16 @@
 <script setup lang="ts">
 if (process.client)
   localStorage.removeItem('nuxt-color-mode')
+
+useHead({
+  script: [
+    { innerHTML: ` (function(d, w, s) {
+ var widgetHash = '8zgqf5nguovb668oiroa', gcw = d.createElement(s); gcw.type = 'text/javascript'; gcw.async = true;
+ gcw.src = '//widgets.binotel.com/getcall/widgets/'+ widgetHash +'.js';
+ var sn = d.getElementsByTagName(s)[0]; sn.parentNode.insertBefore(gcw, sn);
+  })(document, window, 'script');` },
+  ],
+})
 </script>
 
 <template>

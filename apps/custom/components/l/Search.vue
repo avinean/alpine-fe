@@ -43,7 +43,7 @@ function goToSearch() {
 <template>
   <div class="container border-t mx-auto px-2">
     <UForm :state="state" class="flex flex-wrap" @submit="goToSearch">
-      <input v-model="state.q" type="text" placeholder="Пошук" class="flex-1 h-10 outline-none border-none">
+      <input v-model="state.q" type="text" placeholder="Пошук" class="flex-1 h-10 outline-none border-none bg-transparent">
       <UButton icon="i-heroicons-magnifying-glass" type="submit" trailing>
         Знайти
       </UButton>
