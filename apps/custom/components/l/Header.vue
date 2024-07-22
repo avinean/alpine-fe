@@ -36,7 +36,12 @@ const phones = computed(() => global.contacts?.flatMap(({ phones }) => phones.sp
       :class="{ '!flex w-full flex-col items-center': menuOpen }"
       @click="menuOpen = !menuOpen"
     >
-      <UDropdown :items="categories" mode="hover" :ui="{ width: 'w-82' }" :popper="{ placement: 'bottom-start' }">
+      <UDropdown
+        :items="categories"
+        mode="hover"
+        :ui="{ width: 'w-82', height: 'max-h-96', padding: 'grid grid-cols-2' }"
+        :popper="{ placement: 'bottom-start' }"
+      >
         <ULink to="/catalog" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
           Каталог
         </ULink>
