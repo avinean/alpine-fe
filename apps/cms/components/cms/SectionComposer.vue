@@ -79,6 +79,16 @@ function addSection(type: CmsSection['type']) {
     emit('update', [...props.sections, { type: 'contacts' }])
   if (type === 'call')
     emit('update', [...props.sections, { type: 'call' }])
+  if (type === 'button') {
+    emit('update', [...props.sections, {
+      type: 'button',
+      label: 'Текст кнопки',
+      to: '/',
+      variant: 'solid',
+      size: 'md',
+      block: false,
+    }])
+  }
 }
 
 function duplicateSection(section: CmsSection) {
@@ -191,6 +201,12 @@ const menu = [
       icon: 'i-heroicons-presentation-chart-bar-16-solid',
       click: () => addSection('carousel'),
     },
+    {
+      type: 'button',
+      label: 'Кнопка',
+      icon: 'i-heroicons-link',
+      click: () => addSection('button'),
+    },
   ] as {
     type: CmsSection['type']
     label: string
@@ -207,34 +223,33 @@ const menu = [
       :key="index"
       class="border-2 hover:border-black p-4"
     >
-      <UDivider class="sticky top-0 z-10">
-        <div class="flex items-center">
-          <UBadge v-if="section.type === 'text'" label="Текст" />
-          <UBadge v-else-if="section.type === 'image'" label="Зображення" />
-          <UBadge v-else-if="section.type === 'grid'" label="Сітка" />
-          <UBadge v-else-if="section.type === 'card'" label="Картка" />
-          <UBadge v-else-if="section.type === 'group'" label="Група" />
-          <UBadge v-else-if="section.type === 'contacts'" label="Контакти" />
-          <UBadge v-else-if="section.type === 'call'" label="Форма зворотнього звʼязку" />
-          <UBadge v-else-if="section.type === 'carousel'" label="Карусель" />
+      <div class="flex items-center">
+        <UBadge v-if="section.type === 'text'" label="Текст" />
+        <UBadge v-else-if="section.type === 'image'" label="Зображення" />
+        <UBadge v-else-if="section.type === 'grid'" label="Сітка елементів" />
+        <UBadge v-else-if="section.type === 'card'" label="Картка" />
+        <UBadge v-else-if="section.type === 'group'" label="Група елементів" />
+        <UBadge v-else-if="section.type === 'contacts'" label="Контакти" />
+        <UBadge v-else-if="section.type === 'call'" label="Форма зворотнього звʼязку" />
+        <UBadge v-else-if="section.type === 'carousel'" label="Карусель" />
+        <UBadge v-else-if="section.type === 'button'" label="Кнопка" />
 
-          <UButtonGroup>
-            <UTooltip text="Створити дублікат">
-              <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateSection(section)" />
-            </UTooltip>
-            <UTooltip text="Видалити секцію">
-              <UButton icon="i-heroicons-trash-16-solid" size="2xs" @click="removeSection(section)" />
-            </UTooltip>
-            <UTooltip v-if="index" text="Перемістити вище">
-              <UButton icon="i-heroicons-arrow-up-16-solid" size="2xs" @click="moveUp(section)" />
-            </UTooltip>
-            <UTooltip v-if="index !== sections.length - 1" text="Перемістити нижче">
-              <UButton icon="i-heroicons-arrow-down-16-solid" size="2xs" @click="moveDown(section)" />
-            </UTooltip>
-          </UButtonGroup>
-        </div>
-      </UDivider>
-      <div v-if="section.type === 'text'">
+        <UButtonGroup>
+          <UTooltip text="Створити дублікат">
+            <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateSection(section)" />
+          </UTooltip>
+          <UTooltip text="Видалити секцію">
+            <UButton icon="i-heroicons-trash-16-solid" size="2xs" @click="removeSection(section)" />
+          </UTooltip>
+          <UTooltip v-if="index" text="Перемістити вище">
+            <UButton icon="i-heroicons-arrow-up-16-solid" size="2xs" @click="moveUp(section)" />
+          </UTooltip>
+          <UTooltip v-if="index !== sections.length - 1" text="Перемістити нижче">
+            <UButton icon="i-heroicons-arrow-down-16-solid" size="2xs" @click="moveDown(section)" />
+          </UTooltip>
+        </UButtonGroup>
+      </div>
+      <div v-if="section.type === 'text'" class="bg-gray-200/50">
         <div class="flex gap-2 flex-wrap mb-4">
           <UFormGroup label="Тип:" class="flex-1">
             <USelect
@@ -279,8 +294,7 @@ const menu = [
         </div>
         <UTextarea v-model="section.content" />
       </div>
-
-      <div v-else-if="section.type === 'image'">
+      <div v-else-if="section.type === 'image'" class="bg-gray-200/50">
         <div class="space-y-2 mb-2">
           <UFormGroup label="Пропорція:" class="flex-1">
             <USelect
@@ -317,7 +331,7 @@ const menu = [
           @click="setImage(section)"
         />
       </div>
-      <div v-else-if="section.type === 'grid'">
+      <div v-else-if="section.type === 'grid'" class="bg-gray-200/50">
         <div class="grid grid-cols-4 gap-4 mb-4">
           <UFormGroup label="Кількість колонок (sm):">
             <USelect v-model="section.columns.sm" :options="[1, 2, 3, 4, 5, 6]" />
@@ -334,7 +348,7 @@ const menu = [
         </div>
         <CmsGrid :columns="section.columns">
           <div v-for="group, key in section.groups" :key="key + gridKey" class="border-2 hover:border-black p-2">
-            <UDivider>
+            <div class="flex items-center">
               <UBadge label="Комірка сітки" />
               <UButtonGroup>
                 <UTooltip text="Створити дублікат комірки">
@@ -350,8 +364,8 @@ const menu = [
                   <UButton icon="i-heroicons-arrow-right-16-solid" size="2xs" @click="moveRight(group, section.groups)" />
                 </UTooltip>
               </UButtonGroup>
-            </UDivider>
-            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
+            </div>
+            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call', 'button']" single @update="section.groups[key] = $event" />
           </div>
           <div class="flex items-center justify-center border-2 hover:border-black  p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
@@ -360,7 +374,7 @@ const menu = [
           </div>
         </CmsGrid>
       </div>
-      <div v-else-if="section.type === 'carousel'">
+      <div v-else-if="section.type === 'carousel'" class="bg-gray-200/50">
         <div class="grid grid-cols-4 gap-4 mb-4">
           <UFormGroup label="Кількість колонок (sm):">
             <USelect v-model="section.columns.sm" :options="[1, 2, 3, 4, 5, 6]" />
@@ -386,8 +400,8 @@ const menu = [
         </div>
         <CmsGrid :columns="section.columns">
           <div v-for="group, key in section.groups" :key="key + gridKey" class="border-2 hover:border-black p-2">
-            <UDivider>
-              <UBadge label="Комірка сітки" />
+            <div class="flex items-center">
+              <UBadge label="Слайд каруселі" />
               <UButtonGroup>
                 <UTooltip text="Створити дублікат комірки">
                   <UButton icon="i-heroicons-document-duplicate-solid" size="2xs" @click="duplicateGroup(group, section.groups)" />
@@ -402,8 +416,8 @@ const menu = [
                   <UButton icon="i-heroicons-arrow-right-16-solid" size="2xs" @click="moveRight(group, section.groups)" />
                 </UTooltip>
               </UButtonGroup>
-            </UDivider>
-            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
+            </div>
+            <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call', 'button']" single @update="section.groups[key] = $event" />
           </div>
           <div class="flex items-center justify-center border-2 hover:border-black p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
@@ -412,17 +426,57 @@ const menu = [
           </div>
         </CmsGrid>
       </div>
-      <div v-else-if="section.type === 'card'">
-        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text']" @update="section.sections = $event" />
+      <div v-else-if="section.type === 'card'" class="bg-gray-200/50">
+        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'button']" @update="section.sections = $event" />
       </div>
-      <div v-else-if="section.type === 'group'">
-        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts', 'group']" @update="section.sections = $event" />
+      <div v-else-if="section.type === 'group'" class="bg-gray-200/50">
+        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts', 'group', 'button']" @update="section.sections = $event" />
       </div>
-      <div v-else-if="section.type === 'contacts'">
+      <div v-else-if="section.type === 'contacts'" class="bg-gray-200/50">
         <CmsContacts />
       </div>
-      <div v-else-if="section.type === 'call'">
+      <div v-else-if="section.type === 'call'" class="bg-gray-200/50">
         <CmsCall />
+      </div>
+      <div v-else-if="section.type === 'button'" class="flex gap-2 flex-wrap mb-4 bg-gray-200/50">
+        <UFormGroup label="Вигляд:" class="flex-1">
+          <USelect
+            v-model="section.variant"
+            option-attribute="label"
+            value-attribute="value"
+            :options="[
+              { label: 'Посилання', value: 'link' },
+              { label: 'Суцільний', value: 'solid' },
+              { label: 'Контурний', value: 'outline' },
+              { label: 'Мʼякий', value: 'soft' },
+              { label: 'Прозорий', value: 'ghost' },
+            ]"
+          />
+        </UFormGroup>
+        <UFormGroup label="Розмфр:" class="flex-1">
+          <USelect
+            v-model="section.size"
+            option-attribute="label"
+            value-attribute="value"
+            :options="[
+              { label: 'Дуже маленький', value: '2xs' },
+              { label: 'Маленький', value: 'xs' },
+              { label: 'Звичайний', value: 'sm' },
+              { label: 'Великий', value: 'md' },
+              { label: 'Дуже великий', value: 'lg' },
+              { label: 'Величезний', value: 'xl' },
+            ]"
+          />
+        </UFormGroup>
+        <UFormGroup label="Блочна:" class="flex-1">
+          <UCheckbox v-model="section.block" />
+        </UFormGroup>
+        <UFormGroup label="Посилання:" class="flex-1">
+          <UInput v-model="section.to" />
+        </UFormGroup>
+        <UFormGroup label="Текст:" class="flex-1">
+          <UInput v-model="section.label" />
+        </UFormGroup>
       </div>
     </div>
     <UDivider v-if="single ? sections.length !== 1 : true">

@@ -34,5 +34,6 @@ const { data } = props.slug
     <CmsCall v-else-if="section.type === 'call'" v-bind="section" />
     <CmsGroup v-else-if="section.type === 'group'" v-bind="section" />
     <CmsCarousel v-else-if="section.type === 'carousel'" v-bind="section" />
+    <CmsButton v-else-if="section.type === 'button'" v-bind="section" />
   </template>
 </template>

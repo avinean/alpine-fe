@@ -44,6 +44,15 @@ export interface GroupSection {
   sections: CmsSection[]
 }
 
+export interface ButtonSection {
+  type: 'button'
+  label: string
+  to: string
+  variant: 'link' | 'solid' | 'outline' | 'soft' | 'ghost'
+  size: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  block: boolean
+}
+
 export interface CarouselSection {
   type: 'carousel'
   columns: {
@@ -55,7 +64,8 @@ export interface CarouselSection {
   groups: CmsSection[][]
 }
 
-export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection | CarouselSection
+export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection | CarouselSection |
+  ButtonSection
 
 export interface CmsEntity<T = CmsSection> {
   id: number
