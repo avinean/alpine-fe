@@ -56,6 +56,13 @@ const { data } = await useAsyncData(
                   v-bind="section"
                   class="absolute inset-0 flex flex-col align-center justify-center"
                 />
+                <CmsGrid
+                  v-else-if="section.type === 'grid'"
+                  v-bind="section"
+                  class="absolute inset-0 align-center justify-center"
+                >
+                  <CmsSection v-for="group, k in section.groups" :key="k" :content="group" />
+                </CmsGrid>
               </template>
             </template>
           </template>
