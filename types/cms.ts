@@ -6,6 +6,7 @@ export interface TextSection {
   type: 'text'
   tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'ul'
   align: 'left' | 'center' | 'right'
+  color: 'black' | 'white'
   content: string
 }
 
@@ -56,11 +57,11 @@ export interface CarouselSection {
 
 export type CmsSection = TextSection | ImageSection | GridSection | CardSection | ContactsSection | CallSection | GroupSection | CarouselSection
 
-export interface CmsEntity {
+export interface CmsEntity<T = CmsSection> {
   id: number
   slug: string
   title: string
-  content: CmsSection[]
+  content: T[]
   status: VisibilityStatus
   createdAt: Date
   updatedAt: Date

@@ -41,7 +41,7 @@ function setImage(section: CmsSection) {
 
 function addSection(type: CmsSection['type']) {
   if (type === 'text')
-    emit('update', [...props.sections, { type: 'text', content: '', align: 'left', tag: 'p' }])
+    emit('update', [...props.sections, { type: 'text', content: '', align: 'left', tag: 'p', color: 'black' }])
   if (type === 'image')
     emit('update', [...props.sections, { type: 'image', image: null, aspectRatio: 'auto', fit: 'cover' }])
   if (type === 'grid') {
@@ -205,9 +205,9 @@ const menu = [
     <div
       v-for="(section, index) in sections"
       :key="index"
-      class="shadow-md hover:shadow-xl p-4"
+      class="border-2 hover:border-black p-4"
     >
-      <UDivider>
+      <UDivider class="sticky top-0 z-10">
         <div class="flex items-center">
           <UBadge v-if="section.type === 'text'" label="Текст" />
           <UBadge v-else-if="section.type === 'image'" label="Зображення" />
@@ -262,6 +262,17 @@ const menu = [
                 { label: 'Зліва', value: 'left' },
                 { label: 'По центру', value: 'center' },
                 { label: 'Справа', value: 'right' },
+              ]"
+            />
+          </UFormGroup>
+          <UFormGroup label="Колір:" class="flex-1">
+            <USelect
+              v-model="section.color"
+              option-attribute="label"
+              value-attribute="value"
+              :options="[
+                { label: 'Білий', value: 'white' },
+                { label: 'Чорний', value: 'black' },
               ]"
             />
           </UFormGroup>
@@ -322,7 +333,7 @@ const menu = [
           </UFormGroup>
         </div>
         <CmsGrid :columns="section.columns">
-          <div v-for="group, key in section.groups" :key="key + gridKey" class="shadow-md hover:shadow-xl p-2">
+          <div v-for="group, key in section.groups" :key="key + gridKey" class="border-2 hover:border-black p-2">
             <UDivider>
               <UBadge label="Комірка сітки" />
               <UButtonGroup>
@@ -342,7 +353,7 @@ const menu = [
             </UDivider>
             <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
           </div>
-          <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
+          <div class="flex items-center justify-center border-2 hover:border-black  p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
               Додати комірку
             </UButton>
@@ -374,7 +385,7 @@ const menu = [
           </UFormGroup>
         </div>
         <CmsGrid :columns="section.columns">
-          <div v-for="group, key in section.groups" :key="key + gridKey" class="shadow-md hover:shadow-xl p-2">
+          <div v-for="group, key in section.groups" :key="key + gridKey" class="border-2 hover:border-black p-2">
             <UDivider>
               <UBadge label="Комірка сітки" />
               <UButtonGroup>
@@ -394,7 +405,7 @@ const menu = [
             </UDivider>
             <CmsSectionComposer :sections="group" :allowed-types="['group', 'card', 'image', 'text', 'call']" single @update="section.groups[key] = $event" />
           </div>
-          <div class="flex items-center justify-center shadow-md hover:shadow-xl  p-2">
+          <div class="flex items-center justify-center border-2 hover:border-black p-2">
             <UButton icon="i-heroicons-rectangle-group-20-solid" @click="section.groups.push([])">
               Додати комірку
             </UButton>
@@ -405,7 +416,7 @@ const menu = [
         <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text']" @update="section.sections = $event" />
       </div>
       <div v-else-if="section.type === 'group'">
-        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts']" @update="section.sections = $event" />
+        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts', 'group']" @update="section.sections = $event" />
       </div>
       <div v-else-if="section.type === 'contacts'">
         <CmsContacts />

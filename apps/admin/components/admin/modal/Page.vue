@@ -171,7 +171,7 @@ async function onCreateOrUpdate() {
       <USelectMenu v-if="data" v-model="state.section" :options="data" option-attribute="title" />
     </UFormGroup>
 
-    <div class="flex justify-end">
+    <div class="sticky bottom-0 bg-white p-2 shadow-2xl flex justify-end">
       <UButton
         :loading="loading"
         type="submit"

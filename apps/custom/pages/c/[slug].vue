@@ -17,7 +17,7 @@ useBreadcrumbs(() => [
 </script>
 
 <template>
-  <main class="container flex-1 mx-auto">
+  <main class="container flex-1 mx-auto py-8 px-2 md:px-0">
     <h1 v-if="categoryTitle" class="text-3xl">
       Товари категорії "{{ categoryTitle }}"
     </h1>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { AdminModalGallery, AdminModalProductPrice } from '#components'
-import type { ApplicationEntity, GalleryEntity, PriceEntity, ProductEntity } from '~/types/entities'
+import type { ApplicationEntity, PriceEntity, ProductEntity } from '~/types/entities'
 
 const props = defineProps<{
   preset?: ProductEntity | null
@@ -166,7 +166,7 @@ function removePrice(price: PriceEntity) {
         label="Теги для пошуку"
         name="tags"
       >
-        <InputTags v-model="state.tags" />
+        <UTextarea v-model="state.tags" />
       </UFormGroup>
       <UFormGroup
         label="Опис"
@@ -256,7 +256,7 @@ function removePrice(price: PriceEntity) {
           ]"
         >
           <template #image-data="{ row }">
-            <BaseImage :src="row.image" class="aspect-[1/1] object-contain w-20" />
+            <BaseImage :src="row.image" class="aspect-[1/1] object-contain w-20 h-20" />
           </template>
           <template #title-data="{ row }">
             <span class="truncate">{{ row.title }}</span>
@@ -267,7 +267,7 @@ function removePrice(price: PriceEntity) {
         </UTable>
       </UCard>
     </div>
-    <div class="flex justify-end">
+    <div class="sticky bottom-0 bg-white p-2 shadow-2xl flex justify-end">
       <UButton
         :loading="loading"
         type="submit"

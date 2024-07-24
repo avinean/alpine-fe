@@ -89,7 +89,7 @@ function onCreateOrUpdate() {
         </div>
       </AdminParameterSelector>
     </UFormGroup>
-    <div class="flex justify-end">
+    <div class="sticky bottom-0 bg-white p-2 shadow-2xl flex justify-end">
       <UButton
         type="submit"
         class="flex justify-center"

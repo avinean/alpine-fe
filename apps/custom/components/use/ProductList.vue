@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useRouteParams, useRouteQuery } from '@vueuse/router'
-import type { PaginationResponse } from '~/types/api'
-import type { ProductEntity } from '~/types/entities'
 import type { AccordionItem } from '#ui/types'
 
 const global = useGlobalStore()
@@ -9,10 +7,8 @@ const { getByPage, getFilters } = useProductRepository()
 
 const filtersOpen = ref(false)
 const headerRef = computed(() => global.headerRef)
-const loadMoreRef = ref()
 // @ts-expect-error it's a ref
 const { height } = useElementSize(headerRef)
-const loadMoreVisible = useElementVisibility(loadMoreRef)
 const _category = useRouteParams<string>('slug')
 const _brands = useRouteQuery<string>('b')
 const _categories = useRouteQuery<string>('c')
@@ -72,7 +68,7 @@ const { data: awailableBrands } = useAsyncData(
 )
 
 const page = ref(1)
-const take = ref(24)
+const take = ref(12)
 
 const { data, refresh, pending } = useAsyncData(
   () => getByPage({
@@ -84,40 +80,20 @@ const { data, refresh, pending } = useAsyncData(
     page: page.value,
     take: take.value,
   }),
-  {
-    watch: [() => global.statuses, page],
-    transform({ items, pages }: PaginationResponse<ProductEntity>): PaginationResponse<ProductEntity> {
-      return {
-        items: page.value === 1 ? items : [...(data.value?.items || []), ...items],
-        pages,
-      } satisfies PaginationResponse<ProductEntity>
-    },
-  },
+  { watch: [() => global.statuses, page] },
 )
 
-watch([_brands, _categories, _colors, _parameters], () => {
-  page.value = 1
-  refresh()
+watch([_brands, _categories, _colors, _parameters, take], () => {
+  if (page.value === 1)
+    refresh()
+  else
+    page.value = 1
 })
 
 const { data: filters } = useAsyncData(
   () => getFilters({ categories: categories.value.length ? categories.value : undefined }),
-  {
-    watch: [() => global.statuses],
-  },
+  { watch: [() => global.statuses] },
 )
-
-const hasMore = computed(() => {
-  const max = (data.value?.pages || 1) * take.value
-  const current = page.value * take.value
-  return current < max
-})
-
-whenever(loadMoreVisible, () => {
-  if (!hasMore.value)
-    return
-  page.value++
-})
 
 const filterSections = computed(() => [
   !_category.value && {
@@ -230,40 +206,45 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
         </UButton>
       </div>
     </UModal>
-    <div class="flex-1">
+    <div class="flex-1 flex flex-col ">
       <div v-if="data?.items && !data.items.length" class="h-full border-b">
         <div class="text-center text-xl font-bold">
           Немає результатів
         </div>
       </div>
-      <ul v-if="data?.items" class="grid gap-2 sm:grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
-        <ULink
-          v-for="product in data.items"
-          :key="product.id"
-          :to="`/p/${product.slug}`"
-        >
-          <UCard class="h-full">
-            <BaseImage
-              :src="product.primaryImage?.image"
-              :alt="product.primaryImage?.title"
-              class="w-full aspect-[1/1]"
-              fit="contain"
-            />
-            <div class="border-b-1 text-sm font-bold mt-2">
-              <span class="sr-only">
-                Детальніше про
-              </span> {{ product.title }}
-            </div>
-            <div v-if="product.prices?.[0]?.price" class="border-b-1 font-black mt-2">
-              {{ product.prices[0].price }} грн
-            </div>
-          </UCard>
-        </ULink>
-        <template v-if="page > 1 && pending">
-          <USkeleton v-for="key in take" :key />
-        </template>
-      </ul>
-      <div ref="loadMoreRef" class="relative -top-20" />
+      <div class="flex-1">
+        <ul v-if="data?.items" class="grid gap-2 grid-cols-2 md:col-span-2 lg:grid-cols-3 lg:col-span-3 xl:grid-cols-4">
+          <ULink
+            v-for="product in data.items"
+            :key="product.id"
+            :to="`/p/${product.slug}`"
+          >
+            <UCard class="h-full">
+              <BaseImage
+                :src="product.primaryImage?.image"
+                :alt="product.primaryImage?.title"
+                class="w-full aspect-[1/1]"
+                fit="contain"
+              />
+              <div class="border-b-1 text-sm font-bold mt-2">
+                <span class="sr-only">
+                  Детальніше про
+                </span> {{ product.title }}
+              </div>
+              <div v-if="product.prices?.[0]?.price" class="border-b-1 font-black mt-2">
+                {{ product.prices[0].price }} грн
+              </div>
+            </UCard>
+          </ULink>
+          <template v-if="page > 1 && pending">
+            <USkeleton v-for="key in take" :key />
+          </template>
+        </ul>
+      </div>
+      <div class="flex gap-2 justify-end mt-10">
+        <USelect v-model="take" :options="[12, 24, 48, 100]" />
+        <UPagination v-model="page" size="sm" :total="data?.pages!" :page-count="1" :max="5" />
+      </div>
     </div>
   </div>
 </template>

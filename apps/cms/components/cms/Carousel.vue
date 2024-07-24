@@ -39,6 +39,8 @@ onMounted(() => {
     :ui="{ item: classes }"
     :arrows
   >
-    <CmsSection :content="item" />
+    <slot :item>
+      <CmsSection :content="item" />
+    </slot>
   </UCarousel>
 </template>

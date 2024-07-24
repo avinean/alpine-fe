@@ -6,8 +6,8 @@ export const useCmsRepository = createGlobalState(() => {
     return $api<CmsEntity[]>(`/cms`)
   }
 
-  function getOne(slug: string, query: { statuses?: VisibilityStatus[] }) {
-    return $api<CmsEntity>(`/cms/${slug}`, { query })
+  function getOne<T = CmsEntity>(slug: string, query: { statuses?: VisibilityStatus[] }) {
+    return $api<T>(`/cms/${slug}`, { query })
   }
 
   function add(body: Partial<CmsEntity>) {

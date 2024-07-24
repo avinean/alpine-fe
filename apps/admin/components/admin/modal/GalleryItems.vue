@@ -78,7 +78,7 @@ async function addGalleryItem(row: Partial<GalleryEntity> & { file: File, src: R
     ]"
   >
     <template #photo-data="{ row }">
-      <BaseImage :src="row.src" class="aspect-[1/1] object-contain w-24" />
+      <BaseImage :src="row.src" class="aspect-[1/1] object-contain w-24 h-24" />
     </template>
     <template #title-data="{ row }">
       <template v-if="row.added">
