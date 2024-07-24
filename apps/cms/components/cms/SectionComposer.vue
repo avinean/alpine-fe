@@ -430,7 +430,7 @@ const menu = [
         <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'button']" @update="section.sections = $event" />
       </div>
       <div v-else-if="section.type === 'group'" class="bg-gray-200/50">
-        <CmsSectionComposer :sections="section.sections" :allowed-types="['image', 'text', 'call', 'contacts', 'group', 'button']" @update="section.sections = $event" />
+        <CmsSectionComposer :sections="section.sections" :allowed-types="['grid', 'image', 'text', 'call', 'contacts', 'group', 'button']" @update="section.sections = $event" />
       </div>
       <div v-else-if="section.type === 'contacts'" class="bg-gray-200/50">
         <CmsContacts />
