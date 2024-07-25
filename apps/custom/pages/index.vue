@@ -54,12 +54,14 @@ const { data } = await useAsyncData(
                 <CmsGroup
                   v-else-if="section.type === 'group'"
                   v-bind="section"
-                  class="absolute inset-0 flex flex-col items-center justify-center p-4"
+                  class="absolute inset-0 container mx-auto flex flex-col items-center justify-center p-4"
+                  :style="{ top: `${height}px` }"
                 />
                 <CmsGrid
                   v-else-if="section.type === 'grid'"
                   v-bind="section"
-                  class="absolute inset-0 items-center justify-center p-4"
+                  class="absolute inset-0 container mx-auto items-center justify-center p-4"
+                  :style="{ top: `${height}px` }"
                 >
                   <CmsSection v-for="group, k in section.groups" :key="k" :content="group" />
                 </CmsGrid>
