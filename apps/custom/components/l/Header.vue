@@ -27,8 +27,8 @@ const phones = computed(() => global.contacts?.flatMap(({ phones }) => phones.sp
     </ULink>
 
     <button class="flex md:hidden" @click="menuOpen = !menuOpen">
-      <i v-if="menuOpen" class="i-heroicons-x-mark-16-solid text-4xl text-gray" />
-      <i v-else class="i-heroicons-bars-3-16-solid text-4xl text-gray" />
+      <i v-if="menuOpen" class="i-heroicons-x-mark-16-solid text-4xl text-white" />
+      <i v-else class="i-heroicons-bars-3-16-solid text-4xl text-white" />
     </button>
 
     <nav
@@ -39,10 +39,20 @@ const phones = computed(() => global.contacts?.flatMap(({ phones }) => phones.sp
       <UDropdown
         :items="categories"
         mode="hover"
-        :ui="{ width: 'w-82', height: 'max-h-96', padding: 'grid grid-cols-2' }"
+        :ui="{
+          width: 'w-82',
+          height: 'max-h-96',
+          padding: 'grid grid-cols-2',
+          background: 'bg-black/80',
+          shadow: 'shadow-none',
+          ring: 'ring-0',
+          item: {
+            inactive: 'text-white',
+          },
+        }"
         :popper="{ placement: 'bottom-start' }"
       >
-        <ULink to="/catalog" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+        <ULink to="/catalog" class="p-2 text-white" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
           Каталог
         </ULink>
         <template #item="{ item }">
@@ -57,12 +67,12 @@ const phones = computed(() => global.contacts?.flatMap(({ phones }) => phones.sp
       </UDropdown>
       <LNavigation />
 
-      <address class="grid md:hidden gap-2 not-italic mt-4">
+      <address class="grid md:hidden text-white gap-2 not-italic mt-4">
         <a v-for="phone in phones" :key="phone" :href="`tel:${phone}`">{{ phone }}</a>
       </address>
     </nav>
 
-    <address class="hidden md:grid gap-2 not-italic">
+    <address class="hidden md:grid text-white gap-2 not-italic">
       <a v-for="phone in phones" :key="phone" :href="`tel:${phone}`">{{ phone }}</a>
     </address>
   </header>

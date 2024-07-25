@@ -8,7 +8,7 @@ const { data } = await useAsyncData(
 <template>
   <template v-for="link, key in data?.navigation" :key>
     <UDropdown v-if="link.children?.length" :items="[link.children] as any" mode="hover" :popper="{ placement: 'bottom-start' }">
-      <ULink :to="link.to" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+      <ULink :to="link.to" class="p-2 text-white" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
         {{ link.title }}
       </ULink>
       <template #item="{ item }">
@@ -17,7 +17,7 @@ const { data } = await useAsyncData(
         </ULink>
       </template>
     </UDropdown>
-    <ULink v-else :to="link.to" class="p-2" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
+    <ULink v-else :to="link.to" class="p-2 text-white" active-class="border-b-2" inactive-class="border-b-2 border-transparent">
       {{ link.title }}
     </ULink>
   </template>

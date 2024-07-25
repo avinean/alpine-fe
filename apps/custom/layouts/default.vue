@@ -12,7 +12,7 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <div :ref="e => global.headerRef = e" class="border-b shadow-md bg-white/80 sticky left-0 right-0 top-0 z-10">
+    <div :ref="e => global.headerRef = e" class="shadow-lg bg-black/80 sticky left-0 right-0 top-0 z-10">
       <LHeader />
       <LSearch />
     </div>
@@ -33,12 +33,12 @@ const yearString = startYear === currentYear ? currentYear : `${startYear}-${cur
       </UseCall>
     </div> -->
 
-    <div class="border-t bg-white">
+    <div class="border-t bg-black/80">
       <div class="container flex flex-col items-center py-4 mx-auto">
         <ULink to="/" class="h-24 w-24 mx-auto">
           <CmsSection slug="logo" />
         </ULink>
-        <span>{{ yearString }}</span>
+        <span class="text-white">{{ yearString }}</span>
       </div>
     </div>
 
